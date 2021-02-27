@@ -184,7 +184,7 @@
             },
             style(item) {
                 return {
-                    backgroundImage: `url("/image/cover/${item.id}.png")`,
+                    backgroundImage: `url("/cover/${item.id}.png")`,
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat"
                 }
