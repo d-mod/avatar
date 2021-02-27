@@ -1,7 +1,7 @@
 <template>
     <div class="license">
         <p>Copyright © 2017-present <a href="//github.com/Kritsu">Kritsu</a>.All rights reserved.</p>
-        <p>DMOD Avatar Ver.1.0.0</p>
+        <p><a href="//github.com/d-mod/avatar">DMOD Avatar Ver.1.0.0</a> </p>
     </div>
 </template>
 

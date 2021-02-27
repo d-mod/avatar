@@ -44,7 +44,6 @@ export const actions = {
     commit(GET_COLLOCATION, list)
   },
   async [LOAD_COLLOCATION]({commit}, {profession, query}) {
-
     return []
   }
 }

@@ -99,9 +99,10 @@
     export default {
         name: "collocation",
         components: {ProfessionSelect},
-        mounted() {
-            return this.$store.dispatch(INIT_COLLOCATION)
-        },
+       async mounted() {
+           await this.$store.dispatch(INIT_COLLOCATION)
+           await this.refresh()
+       },
         computed: {
             $professions() {
                 return this.$store.getters.prof_array || []

@@ -12,17 +12,7 @@ export const state = {
 
 export const getters = {
   prof_array: state => state.prof_array,
-  profession: state => state.profession,
   icons: state => state.icons,
-  $profession(state) {
-    let name = state.profession
-    let index = state.prof_array.findIndex(e => e.name === name)
-    if (index > -1) {
-      return state.prof_array[index]
-    }
-    return null
-  },
-  $weapons: () => getters.$profession.weapons
 }
 
 export const actions = {
@@ -37,6 +27,7 @@ export const actions = {
     }
   },
   async [SET_PROFESSION]({commit, dispatch}, profession) {
+    localStorage.setItem('last-profession',profession)
     let tasks = []
     for (let part of PARTS) {
       tasks.push(dispatch(GET_DRESS_LIST, {profession, part}))
@@ -59,14 +50,16 @@ export const actions = {
     }
     return state.dresses[profession][part]
   },
-  async [GET_DRESS]({state, commit}, {name, query = {}}) {
+  async [GET_DRESS]({state,dispatch, commit}, {name, query = {}}) {
     let array = []
-    for (let key in query) {
-      if (state.dresses[name] && state.dresses[name][key]) {
-        //如果已存在了该数据，从参数中去除
-        let list = state.dresses[name][key]
-        let avatar = list.find(e => e.code === query[key])
-        array.push(avatar)
+    for (let part in query) {
+      if(query[part]===-1){
+        continue
+      }
+      let list = await dispatch(GET_DRESS_LIST, {profession: name, part})
+      let dress = list.find(e => e.code === query[part])
+      if(dress) {
+        array.push(dress)
       }
     }
     return array
@@ -81,6 +74,11 @@ export const mutations = {
     state.profession = profession
   },
   [GET_DRESS_LIST](state, {profession, part, list}) {
+    list = list.map(e => Object.assign(e, {
+      profession,
+      part,
+      icon: `/icon/${profession}/${part}/${e.code}.png`
+    }))
     state.dresses[profession] = state.dresses[profession] || {}
     state.dresses[profession][part] = list
   },

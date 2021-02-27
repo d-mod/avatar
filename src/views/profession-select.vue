@@ -26,6 +26,10 @@
 <script>
     export default {
         name: "profession-select",
+        model:{
+          prop:"value",
+          event:"change"
+        },
         props: {
             value: String,
             showAll: Boolean,

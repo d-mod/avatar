@@ -2,8 +2,24 @@
     <mu-container class="app">
         <mu-card class="dressing">
             <mu-card-header class="header">
-                <profession-select v-model="profession"/>
-
+                <profession-select
+                        :value="profession"
+                        @change="selectProfession"
+                />
+                <div class="tools">
+                    <mu-button flat  color="gray" @click="clear">
+                        <mu-icon value="refresh" left></mu-icon>
+                        <span>重置</span>
+                    </mu-button>
+                    <mu-button flat  color="primary" @click="imports">
+                        <mu-icon value="arrow_upward" left></mu-icon>
+                        <span>导入</span>
+                    </mu-button>
+                    <mu-button flat  color="secondary" @click="exports(null)">
+                        <mu-icon value="arrow_downward" left></mu-icon>
+                        <span>导出</span>
+                    </mu-button>
+                </div>
                 <div class="right">
                     <mu-select
                             v-if="part==='weapon'"
@@ -31,17 +47,6 @@
                             <span v-text="value"></span>
                         </template>
                     </mu-auto-complete>
-                    <mu-menu placement="bottom" open-on-hover>
-                        <mu-button color="secondary" flat>
-                            选项
-                        </mu-button>
-                        <mu-list slot="content">
-                            <mu-list-item @click="post" button>投稿</mu-list-item>
-                            <mu-list-item :to="$route.path" button>清空</mu-list-item>
-                            <mu-list-item @click="imports" button>导入</mu-list-item>
-                            <mu-list-item @click="exports(null)" button>导出</mu-list-item>
-                        </mu-list>
-                    </mu-menu>
                 </div>
             </mu-card-header>
             <mu-row class="content">
@@ -69,22 +74,47 @@
                     </loading>
                 </mu-col>
                 <mu-col class="part" span="4">
-                    <mu-col
-                            :key="p"
-                            :offset="partOffset(p)"
-                            class="item"
-                            span="3"
-                            v-for="(value,p) in parts"
-                    >
-                        <img
-                                :class="{'active':p ===part,'icon':true}"
-                                :src="value.icon || defaultSrc"
-                                :title="label(value)"
-                                @click="selectPart(p)"
-                                @contextmenu.prevent="reset(p)"
-                                @error="error"
-                                draggable="false"/>
-                    </mu-col>
+                    <div class="info" :class="{'show':showInfo}">
+                        <div class="item" @click="selectPart(p)" v-for="(value,p) in parts">
+                            <span class="title" v-text="value.title"></span>
+                            <span class="name" >{{value | name}}</span>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <mu-col class="half" span="3">
+                            <img class="icon" :src="defaultSrc"/>
+                        </mu-col>
+                        <mu-col class="half" span="9">
+                            <mu-col
+                                    :key="p"
+                                    class="item"
+                                    span="4"
+                                    v-for="(value,p) in parts"
+                            >
+                                <div
+                                        v-if="!validateCode(value.code)"
+                                        v-text="value.title"
+                                        :style="{background:`url(${emptySrc})`}"
+                                        :title="value.title"
+                                        :class="{'active':p ===part,'icon':true }"
+                                        @click="selectPart(p)"
+                                        @contextmenu.prevent="reset(p)">
+                                </div>
+                                <img
+                                        v-else
+                                        :class="{'active':p ===part,'icon':true}"
+                                        :src="value.icon || defaultSrc"
+                                        :title="label(value)"
+                                        @click="selectPart(p)"
+                                        @contextmenu.prevent="reset(p)"
+                                        @error="error"
+                                        draggable="false"/>
+                            </mu-col>
+                        </mu-col>
+                    </div>
+                    <div class="footer">
+                        <mu-button class="switch" flat color="primary" small @click="showInfo=!showInfo">切换显示方式</mu-button>
+                    </div>
                 </mu-col>
                 <mu-col class="col select" span="4" v-loading="!$list">
                     <div :style='`backgroundImage:url("${emptySrc}")`'
@@ -119,16 +149,17 @@
     import CanvasBox from "@/components/canvas-box"
     import qs from "qs"
     import clipboard from "clipboard-polyfill"
-    import {GET_DRESS, GET_DRESS_LIST, GET_ICON, GET_PROFESSION, SET_PROFESSION} from "../constants/dressing"
+    import {GET_DRESS, GET_DRESS_LIST, GET_ICON, GET_PROFESSION} from "../constants/dressing"
     import Collocation from "./collocation"
     import Fab from "./fab"
     import License from "./license"
 
-    function createDefault() {
+    function createDefault(title) {
         return {
             icon: EMPTY_SRC,
             image: [],
-            code: "-1"
+            code: "-1",
+            title
         }
     }
 
@@ -139,12 +170,15 @@
     export default {
         name: "dressing",
         components: {License, Fab, Collocation, ProfessionSelect, CanvasBox, Loading},
-        async created() {
+        async mounted() {
             const list = await this.$store.dispatch(GET_PROFESSION)
             if (list && list.length > 0) {
-                this.profession = list[0].name
+                this.profession =  list[0].name
+
+
                 let {path: name, query} = this.$route
                 name = name.replace("/", "")
+
                 let item = {}
                 if (name && name.length > 0) {
                     // 如果路由带有参数,则自动载入代码
@@ -159,8 +193,9 @@
 
         },
         methods: {
+            validateCode,
             partOffset(p) {
-                if (p === "hair" || p === "belt") {
+                if (p === "hair" || p === "belt"|| p ==="neck") {
                     return 3
                 }
                 return 0
@@ -185,11 +220,10 @@
                 let name = `${item.part}/${item.code}.png`
                 let array = this.icons || []
                 let index = array.findIndex(e => e.name === name)
-                let part = this.part === "weapon" ? this.weapon : this.part
                 if (index > -1) {
                     let info = array[index]
                     return {
-                        backgroundImage: `url("/icon/${item.profession}/${part}.png")`,
+                        backgroundImage: `url("/icon/${item.profession}/${item.part}.png")`,
                         backgroundPositionX: `${info.x}px`,
                         backgroundPositionY: `${info.y}px`
                     }
@@ -243,7 +277,7 @@
             async apply({name, query}) {
                 for (let p in this.parts) {
                     //如果该部位为武器,则替换为具体的武器子类
-                    let part = p === "weapon" ? this.weapon : p
+                    let part = p === "weapon" ? this.$weapon : p
                     if (!query[part]) {
                         //如果参数中不存在该部位代码,则重置该部位
                         this.reset(p)
@@ -251,6 +285,7 @@
                 }
                 //切换职业
                 this.profession = name
+                await this.refresh()
                 //获取每个部位的时装信息
                 let array = await this.$store.dispatch(GET_DRESS, {name, query})
                 let tasks = array.map(item => this.selectDress(item))
@@ -262,21 +297,38 @@
              *
              */
             async refresh() {
-                let {profession, part} = this.$condition
+                let profession=this.profession
+                let part = this.part
                 if (part === "weapon") {
-                    part = this.weapon
+                    part = this.$weapon
                 }
+
+                let [icons, list] = await Promise.all([
+                    this.$store.dispatch(GET_ICON, {profession, part}),
+                    this.$store.dispatch(GET_DRESS_LIST, {profession, part})
+                ])
                 //根据职业和部位,获取时装列表
-                this.list = await this.$store.dispatch(GET_DRESS_LIST, {profession, part})
-                this.icons = await this.$store.dispatch(GET_ICON, {profession, part})
+                this.icons = icons
+                this.list = list
             },
+            async selectProfession(name) {
+                let profession = this.prof_array.find(e=>e.name===name)
+                if(!!profession) {
+                    console.log(profession)
+                    await this.apply(profession)
+                }
+            },
+
             /**
              *
              * 选择部位
              *
              */
-            selectPart(part) {
-                this.part = part
+            async selectPart(part) {
+                if (this.part !== part) {
+                    this.part = part
+                    await this.refresh()
+                }
             },
             /**
              *
@@ -286,22 +338,27 @@
             async selectDress(item) {
                 let {code, part} = item
                 if (isNaN(code) || code === -1) {
-                    this.reset(item.part)
+                    this.reset(part)
                     return
                 }
-                if (!this.parts[part] && part !== "custom") {
-                    this.currentWeapon = part
+                if (!this.parts[part]) {
+                    //确认具体的子武器种类
                     part = "weapon"
                 }
-                this.parts[part] = Object.assign({}, item)
+                this.parts[part] = Object.assign({title:this.parts[part].title}, item)
             },
             /**
              * 重置部位
              *
              */
             reset(part) {
-                this.parts[part] = createDefault()
+                this.parts[part] = createDefault(this.parts[part].title)
             },
+
+            async clear(){
+               await this.apply(this.$profession)
+            },
+
             /**
              * 导入时装代码
              */
@@ -347,27 +404,9 @@
                 }
                 await clipboard.writeText(result)
                 await this.$alert("导出成功，已复制到剪贴板", "导出")
-            },
-            /**
-             *
-             * 投稿
-             *
-             */
-            post() {
-                this.$alert("很抱歉,投稿功能已下线", "提示")
             }
         },
         watch: {
-            $profession(val) {
-                if (val.weapons && val.weapons.length) {
-                    this.weapon = val.weapons[0].name
-                }
-                this.currentWeapon = this.weapon
-                this.apply(val)
-            },
-            $condition() {
-                this.refresh()
-            },
             images(val) {
                 let array = []
                 this.count = 0
@@ -379,7 +418,6 @@
                 this.hash = hash
                 for (let image of val) {
                     let img = new Image
-                    img.src = image.url
                     img.onload = () => {
                         if (hash !== this.hash) {
                             return
@@ -390,12 +428,13 @@
                             this.array = array.sort((a, b) => a.z - b.z)
                         }
                     }
+                    img.src = image.url
                 }
             }
         },
         computed: {
             $weapons() {
-                return this.$profession["weapons"]
+                return this.$profession?this.$profession["weapons"]:[]
             },
             prof_array() {
                 return this.$store.getters.prof_array || []
@@ -406,23 +445,9 @@
                 let y = prof.y + 100
                 return {x, y}
             },
-            profession: {
-                async set(val) {
-                    await this.$store.dispatch(SET_PROFESSION, val)
-                    this.selectPart(this.part)
-                },
-                get() {
-                    return this.$store.getters.profession
-                }
-            },
             $profession() {
-                return this.$store.getters.$profession
-            },
-            $condition() {
-                return {
-                    profession: this.profession,
-                    part: this.part
-                }
+                //@ts-ignore
+                return this.prof_array.find(e => e.name === this.profession)
             },
             images() {
                 let images = []
@@ -430,7 +455,10 @@
                     let array = this.parts[part].images || []
                     let p = part
                     if (p === "weapon") {
-                        p = this.currentWeapon
+                        p = this.$weapon
+                    }
+                    if(!p){
+                        continue
                     }
                     array.forEach(e => e.url = `/image/${this.profession}/${p}/${e.name}`)
                     images = images.concat(array)
@@ -443,7 +471,7 @@
             $values() {
                 let values = []
                 for (let key in this.parts) {
-                    let value = key === "weapon" ? this.currentWeapon : key
+                    let value = key === "weapon" ? this.$weapon : key
                     values.push({
                         value,
                         label: value
@@ -460,12 +488,6 @@
                 }
                 list.sort((a, b) => parseInt(a.code) - parseInt(b.code))
                 return list
-            },
-            $avatar() {
-                return {
-                    part: this.part,
-                    profession: this.profession
-                }
             },
             $keyword() {
                 let arr = this.keyword.split(" ")
@@ -487,9 +509,20 @@
                     this.selectPart("weapon")
                 },
                 get() {
+                    if(!this.weapon&&this.$weapons.length){
+                        this.weapon = this.$weapons[0].name
+                    }
                     return this.weapon
                 }
             }
+        },
+        filters:{
+          name(value){
+              if(!validateCode(value.code)){
+                return "无"
+              }
+              return `${value.name||'未知'}[${value.code}]`
+          }
         },
         data() {
             return {
@@ -506,20 +539,21 @@
                 list: [],
                 icons: [],
                 part: "skin",
+                profession:"swordman",
                 loading: false,
                 weapon: null,
-                currentWeapon: null,
+                showInfo:false,
                 parts: {
-                    hair: createDefault(),
-                    cap: createDefault(),
-                    face: createDefault(),
-                    weapon: createDefault(),
-                    neck: createDefault(),
-                    coat: createDefault(),
-                    skin: createDefault(),
-                    belt: createDefault(),
-                    pants: createDefault(),
-                    shoes: createDefault()
+                    hair: createDefault("头部"),
+                    cap: createDefault("帽子"),
+                    face: createDefault("脸部"),
+                 //   weapon: createDefault("武器"),
+                    neck: createDefault("胸部"),
+                    coat: createDefault("上衣"),
+                    skin: createDefault("皮肤"),
+                    belt: createDefault("腰部"),
+                    pants: createDefault("下装"),
+                    shoes: createDefault("鞋")
                 }
             }
         }
@@ -528,6 +562,10 @@
 
 <style lang="scss" scoped>
     @import "../style/theme";
+
+    .app{
+        padding: 12px 0;
+    }
 
     .dressing {
         width: 100%;
@@ -545,9 +583,14 @@
                 align-items: center;
             }
 
+            .tools{
+                height: 72px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
             .right {
-                float: right;
-                width: 50%;
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
@@ -564,10 +607,78 @@
         }
 
         .part {
-            min-height: 320px;
-            align-items: center;
-            display: flex;
-            flex-wrap: wrap;
+            position: relative;
+            height: 330px;
+
+            .center{
+                height: 300px;
+                display: flex;
+                .half{
+                    min-height: 280px;
+                    align-items: center;
+                    justify-content: center;
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+            }
+
+            .info {
+                position: absolute;
+                width: 100%;
+                height: 280px;
+                visibility: hidden;
+                z-index: 1;
+                background-color: white;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 12px 0;
+                justify-content: center;
+
+                .item{
+                    width: 280px;
+                    height: 32px;
+                    line-height: 32px;
+                    display: flex;
+                    user-focus: none;
+                    user-select: none;
+                    cursor: pointer;
+                    padding:0 12px;
+
+                    &:hover{
+                        background-color: rgba(0,0,0,0.06);
+                    }
+
+                    .title{
+                        color: $text-inner-color;
+                        width: 40px;
+                        margin-right: 12px;
+                        display: inline-block;
+                    }
+                    .name{
+                        color: $pink;
+                        width: 180px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        display: inline-block;
+                    }
+                }
+
+                &.show {
+                    visibility: visible;
+                }
+            }
+
+            .footer{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .switch{
+                    width: 100%;
+                }
+            }
+
         }
 
         .content {
@@ -575,14 +686,19 @@
         }
 
         .icon {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             margin: 10px;
-            border: 1px solid transparent;
+            border: 2px solid transparent;
             box-sizing: border-box;
             float: left;
             user-select: none;
             user-focus: none;
+            font-size: 9px;
+            color: $text-inner-color;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             &:hover {
                 transition-duration: 100ms;
@@ -599,8 +715,17 @@
         }
 
         .select {
-            overflow: auto;
+            overflow-y: scroll;
             max-height: 320px;
+
+            &::-webkit-scrollbar { //滚动条的宽度
+                width: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $light-blue;
+                border-radius: 2em;
+            }
         }
 
     }
