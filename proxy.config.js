@@ -15,6 +15,12 @@ module.exports = {
       "/image": "/image"
     }
   },
+  "/cover": {
+    target: "http://localhost",
+    pathRewrite: {
+      "/cover": "/cover"
+    }
+  },
   "/icon": {
     target: "http://localhost",
     pathRewrite: {

@@ -1,5 +1,5 @@
 <template>
-    <mu-card style="width: 100%" class="collocation">
+    <mu-card class="collocation">
         <mu-card-header class="header">
             <mu-container>
                 <mu-flex>
@@ -83,9 +83,12 @@
             </mu-col>
         </mu-row>
         <mu-row>
-            <mu-button large class="load-more" color="secondary" @click="load" full-width>
+            <mu-button large class="load-more"
+                       color="white"
+                       text-color="secondary"
+                       title="加载更多"
+                       @click="load" full-width>
                 <mu-icon left value="expand_more"></mu-icon>
-                <span>加载更多</span>
             </mu-button>
         </mu-row>
     </mu-card>
@@ -101,7 +104,9 @@
         components: {ProfessionSelect},
        async mounted() {
            await this.$store.dispatch(INIT_COLLOCATION)
-           await this.refresh()
+           if (process.env.NODE_ENV !== "development") {
+               await this.refresh()
+           }
        },
         computed: {
             $professions() {
@@ -196,6 +201,8 @@
     @import "../style/theme";
 
     .collocation {
+        margin: auto;
+
         .header {
             background: $theme-color;
         }

@@ -1,144 +1,161 @@
 <template>
-    <mu-container class="app">
-        <mu-card class="dressing">
-            <mu-card-header class="header">
-                <profession-select
-                        :value="profession"
-                        @change="selectProfession"
-                />
-                <div class="tools">
-                    <mu-button flat  color="gray" @click="clear">
-                        <mu-icon value="refresh" left></mu-icon>
-                        <span>重置</span>
-                    </mu-button>
-                    <mu-button flat  color="primary" @click="imports">
-                        <mu-icon value="arrow_upward" left></mu-icon>
-                        <span>导入</span>
-                    </mu-button>
-                    <mu-button flat  color="secondary" @click="exports(null)">
-                        <mu-icon value="arrow_downward" left></mu-icon>
-                        <span>导出</span>
-                    </mu-button>
-                </div>
-                <div class="right">
-                    <mu-select
-                            v-if="part==='weapon'"
-                            v-model="$weapon"
-                            label="武器"
-                            label-float
-                    >
-                        <mu-option :key="weapon.name"
-                                   :label="weapon.label"
-                                   :value="weapon.name"
-                                   v-for="weapon in $weapons"
-                        ></mu-option>
-                    </mu-select>
-                    <mu-auto-complete
-                            :action-click="()=>this.keyword=''"
-                            :action-icon="keyword?'clear':'search'"
-                            :data="$list"
-                            :filter="filter"
-                            @select="handleSelect"
-                            label="搜索"
-                            label-float
-                            v-model="keyword"
-                    >
-                        <template slot-scope="{value,item}">
-                            <span v-text="value"></span>
-                        </template>
-                    </mu-auto-complete>
-                </div>
-            </mu-card-header>
-            <mu-row class="content">
-                <mu-col span="4">
-                    <loading :total="images.length" :value="count">
-                        <canvas-box
-                                :height="height"
-                                :images="array"
-                                :offset="$offset"
-                                :scale="$scale"
-                                :width="width"
-                                canvas-style="margin:auto"
-                        >
-                        </canvas-box>
-                        <mu-slider
-                                :format="e=>`${e}%`"
-                                :max="500"
-                                :min="50"
-                                :step="5"
-                                class="slider"
-                                label="比例"
-                                v-model="scale"
-                        >
-                        </mu-slider>
-                    </loading>
-                </mu-col>
-                <mu-col class="part" span="4">
-                    <div class="info" :class="{'show':showInfo}">
-                        <div class="item" @click="selectPart(p)" v-for="(value,p) in parts">
-                            <span class="title" v-text="value.title"></span>
-                            <span class="name" >{{value | name}}</span>
-                        </div>
-                    </div>
-                    <div class="center">
-                        <mu-col class="half" span="3">
-                            <img class="icon" :src="defaultSrc"/>
-                        </mu-col>
-                        <mu-col class="half" span="9">
-                            <mu-col
-                                    :key="p"
-                                    class="item"
-                                    span="4"
-                                    v-for="(value,p) in parts"
-                            >
-                                <div
-                                        v-if="!validateCode(value.code)"
-                                        v-text="value.title"
-                                        :style="{background:`url(${emptySrc})`}"
-                                        :title="value.title"
-                                        :class="{'active':p ===part,'icon':true }"
-                                        @click="selectPart(p)"
-                                        @contextmenu.prevent="reset(p)">
-                                </div>
-                                <img
-                                        v-else
-                                        :class="{'active':p ===part,'icon':true}"
-                                        :src="value.icon || defaultSrc"
-                                        :title="label(value)"
-                                        @click="selectPart(p)"
-                                        @contextmenu.prevent="reset(p)"
-                                        @error="error"
-                                        draggable="false"/>
-                            </mu-col>
-                        </mu-col>
-                    </div>
-                    <div class="footer">
-                        <mu-button class="switch" flat color="primary" small @click="showInfo=!showInfo">切换显示方式</mu-button>
-                    </div>
-                </mu-col>
-                <mu-col class="col select" span="4" v-loading="!$list">
-                    <div :style='`backgroundImage:url("${emptySrc}")`'
-                         @click.prevent="reset(part)"
-                         class="icon"
-                    ></div>
-                    <div
-                            :key="avatar.hash"
-                            :style="style(avatar)"
-                            :title="label(avatar)"
-                            @click="selectDress(avatar)"
-                            class="icon"
-                            v-for="avatar in $list"
-                    ></div>
-                </mu-col>
-            </mu-row>
+    <div class="app">
+        <mu-card class="profs">
+            <div class="top">职业</div>
+            <div :class="{'active' : prof.name ===profession}" :key="index"
+                 @click="selectProfession(prof.name)"
+                 class="item"
+                 v-for="(prof,index) in prof_array"
+            >
+                <div :style="profIcon(index)"></div>
+                <div class="label">{{prof.label}}</div>
+            </div>
+            <fab/>
         </mu-card>
-        <collocation
-                @import="apply"
-                @export="exports"
-        />
-        <fab/>
-        <license/>
-    </mu-container>
+        <div class="main">
+            <mu-card class="dressing">
+                <mu-card-header class="header">
+                    <div class="tools">
+                        <mu-button @click="clear" color="gray" flat>
+                            <mu-icon left value="refresh"></mu-icon>
+                            <span>重置</span>
+                        </mu-button>
+                        <mu-button @click="imports" color="primary" flat>
+                            <mu-icon left value="arrow_upward"></mu-icon>
+                            <span>导入</span>
+                        </mu-button>
+                        <mu-button @click="exports(null)" color="secondary" flat>
+                            <mu-icon left value="arrow_downward"></mu-icon>
+                            <span>导出</span>
+                        </mu-button>
+                    </div>
+                    <div class="right">
+                        <mu-select
+                                label="武器"
+                                label-float
+                                v-if="part==='weapon'"
+                                v-model="$weapon"
+                        >
+                            <mu-option :key="weapon.name"
+                                       :label="weapon.label"
+                                       :value="weapon.name"
+                                       v-for="weapon in $weapons"
+                            ></mu-option>
+                        </mu-select>
+                        <mu-auto-complete
+                                :action-click="()=>this.keyword=''"
+                                :action-icon="keyword?'clear':'search'"
+                                :data="$list"
+                                :filter="filter"
+                                @select="handleSelect"
+                                label="搜索"
+                                label-float
+                                v-model="keyword"
+                        >
+                            <template slot-scope="{value,item}">
+                                <span v-text="value"></span>
+                            </template>
+                        </mu-auto-complete>
+                    </div>
+                </mu-card-header>
+                <mu-row class="content">
+                    <mu-col span="4">
+                        <loading :total="images.length" :value="count">
+                            <canvas-box
+                                    :height="height"
+                                    :images="array"
+                                    :offset="$offset"
+                                    :scale="$scale"
+                                    :width="width"
+                                    canvas-style="margin:auto"
+                            >
+                            </canvas-box>
+                            <mu-slider
+                                    :format="e=>`${e}%`"
+                                    :max="500"
+                                    :min="50"
+                                    :step="5"
+                                    class="slider"
+                                    label="比例"
+                                    v-model="scale"
+                            >
+                            </mu-slider>
+                        </loading>
+                    </mu-col>
+                    <mu-col class="part" span="4">
+                        <div :class="{'show':showInfo}" class="info">
+                            <div :class="{'active':p===part}" class="item" v-for="(value,p) in parts">
+                                <div @click.left="selectPart(p)"
+                                     @contextmenu.prevent="reset(p)"
+                                     class="content"
+                                >
+                                    <span class="title" v-text="value.title"></span>
+                                    <span class="name">{{value | name}}</span>
+                                </div>
+                                <mu-icon @click="reset(p)" class="close" value="close"></mu-icon>
+                            </div>
+                        </div>
+                        <div class="center">
+                            <mu-col class="half" span="3">
+                                <img :src="defaultSrc" class="icon"/>
+                            </mu-col>
+                            <mu-col class="half" span="9">
+                                <mu-col
+                                        :key="p"
+                                        class="item"
+                                        span="4"
+                                        v-for="(value,p) in parts"
+                                >
+                                    <div
+                                            :class="{'active':p ===part,'icon':true }"
+                                            :style="{background:`url(${emptySrc})`}"
+                                            :title="value.title"
+                                            @click.left="selectPart(p)"
+                                            @contextmenu.prevent="reset(p)"
+                                            v-if="!validateCode(value.code)"
+                                            v-text="value.title">
+                                    </div>
+                                    <img
+                                            :class="{'active':p ===part,'icon':true}"
+                                            :src="value.icon || defaultSrc"
+                                            :title="label(value)"
+                                            @click.left="selectPart(p)"
+                                            @contextmenu.prevent="reset(p)"
+                                            @error="error"
+                                            draggable="false"
+                                            v-else/>
+                                </mu-col>
+                            </mu-col>
+                        </div>
+                        <div class="footer">
+                            <mu-button @click="showInfo=!showInfo" class="switch" color="primary" flat small>切换显示方式
+                            </mu-button>
+                        </div>
+                    </mu-col>
+                    <mu-col class="select" span="4" v-loading="!$list">
+                        <div :style='`backgroundImage:url("${emptySrc}")`'
+                             @click.prevent="reset(part)"
+                             class="icon"
+                        ></div>
+                        <div
+                                :class="{'active':isActive(dress)}"
+                                :key="dress.hash"
+                                :style="style(dress)"
+                                :title="label(dress)"
+                                @click="selectDress(dress)"
+                                class="icon"
+                                v-for="dress in $list"
+                        ></div>
+                    </mu-col>
+                </mu-row>
+            </mu-card>
+            <collocation
+                    @export="exports"
+                    @import="apply"
+            />
+            <license/>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -213,6 +230,18 @@
                 this.keyword = item.name
                 this.selectDress(item)
             },
+            profIcon(index) {
+                return {
+                    width: "26px",
+                    height: "26px",
+                    margin: "0 7px",
+                    position: "absolute",
+                    backgroundImage: `url("/icon/profession.png")`,
+                    backgroundPositionX: `-${index * 26}px`,
+                    backgroundPositionY: `${0}px`
+                }
+            },
+
             label(item) {
                 return `${item.name || ""}[${item.code}]`
             },
@@ -228,8 +257,13 @@
                         backgroundPositionY: `${info.y}px`
                     }
                 }
+                let background = `url("${this.defaultSrc}") `
+                if (process.env.NODE_ENV === "development") {
+                    background = `url(/icon/${item.profession}/${item.part}/${item.code}.png),`.concat(background)
+                }
+
                 return {
-                    backgroundImage: `url("${this.defaultSrc}")`
+                    background
                 }
             },
             /**
@@ -269,6 +303,12 @@
                 }
                 return true
             },
+
+            isActive(dress) {
+                let {code, part} = dress
+                return code === this.parts[part].code
+            },
+
             /**
              *
              * 加载时装
@@ -328,6 +368,8 @@
                 if (this.part !== part) {
                     this.part = part
                     await this.refresh()
+                } else {
+
                 }
             },
             /**
@@ -563,19 +605,79 @@
 <style lang="scss" scoped>
     @import "../style/theme";
 
-    .app{
-        padding: 12px 0;
+    .app {
+        padding: 24px 48px;
+        margin: auto;
+        display: flex;
+
+        .main {
+            max-width: 1000px;
+            margin-left: 200px;
+        }
+
+        .profs {
+            top: 36px;
+            position: fixed;
+            width: 160px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+
+            $primary: $blue;
+
+            .top {
+                color: gray;
+                text-align: center;
+                font-size: 12px;
+                height: 20px;
+                line-height: 20px;
+            }
+
+            .item {
+                width: 100%;
+                line-height: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                color: $text-inner-color;
+                user-select: none;
+
+                .label {
+                    width: 100%;
+                    text-align: center;
+                }
+
+                &:nth-child(odd) {
+                    flex-direction: row-reverse;
+                }
+
+
+                &:hover {
+                    color: $primary;
+                    background: rgba($primary, 0.12);
+                }
+
+                &.active {
+                    transition: 0.3s all ease-in;
+
+                    background: $primary;
+                    color: white;
+                }
+            }
+        }
     }
 
+
     .dressing {
-        width: 100%;
-        height: 436px;
+        height: 408px;
 
         .header {
             width: 100%;
-            height: 96px;
+            height: 72px;
             background: $theme-color;
             display: flex;
+            align-items: center;
             justify-content: space-between;
 
             .left {
@@ -583,7 +685,7 @@
                 align-items: center;
             }
 
-            .tools{
+            .tools {
                 height: 72px;
                 display: flex;
                 justify-content: center;
@@ -634,28 +736,50 @@
                 padding: 12px 0;
                 justify-content: center;
 
-                .item{
+                .item {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     width: 280px;
                     height: 32px;
                     line-height: 32px;
-                    display: flex;
                     user-focus: none;
                     user-select: none;
                     cursor: pointer;
-                    padding:0 12px;
+                    padding: 0 12px;
 
-                    &:hover{
-                        background-color: rgba(0,0,0,0.06);
+                    .content {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                     }
 
-                    .title{
+                    &:hover {
+                        background-color: rgba(0, 0, 0, 0.06);
+                    }
+
+                    &.active {
+                        transition: 0.3s background-color ease-in;
+                        background-color: rgba($blue, 0.18);
+                    }
+
+                    .close {
+                        color: lightgray;
+
+                        &:hover {
+                            color: rgba($blue, 0.6);
+                        }
+                    }
+
+                    .title {
                         color: $text-inner-color;
                         width: 40px;
                         margin-right: 12px;
                         display: inline-block;
                     }
-                    .name{
-                        color: $pink;
+
+                    .name {
+                        color: $blue;
                         width: 180px;
                         text-overflow: ellipsis;
                         overflow: hidden;

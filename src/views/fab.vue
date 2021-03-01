@@ -4,12 +4,11 @@
 -->
 <template>
     <mu-flex class="fab">
-        <mu-button @click="screenToTop"
-                   color="red"
-                   fab
-                   title="回到顶端"
-                   v-if="backToTop">
-            <mu-icon value="arrow_upward"></mu-icon>
+        <mu-button full-width @click="screenToTop"
+                   color="white"
+                   text-color="primary"
+                   title="回到顶端">
+            <mu-icon value="keyboard_arrow_up"></mu-icon>
         </mu-button>
     </mu-flex>
 </template>
@@ -18,23 +17,7 @@
 
     export default {
         name: "fab",
-        data() {
-            return {
-                backToTop: false
-            }
-        },
-        mounted() {
-            window.addEventListener("scroll", this.scroll)
-        },
         methods: {
-            scroll() {
-                let scrollTop =
-                    window.pageYOffset ||
-                    document.documentElement.scrollTop ||
-                    document.body.scrollTop
-                let offsetHeight = document.documentElement.offsetHeight
-                this.backToTop = scrollTop > offsetHeight
-            },
             screenToTop() {
                 window.scrollTo(0, 0)
             },
@@ -46,9 +29,6 @@
     .fab {
         user-select: none;
         outline: none;
-        position: fixed;
-        right: 96px;
-        bottom: 96px;
         z-index: 101;
 
         & > * {
