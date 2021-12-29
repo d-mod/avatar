@@ -1,0 +1,51 @@
+$theme-color: rgba(77, 208, 225, 0.32);
+
+$theme-darken-color: darken($theme-color, 0.2);
+
+$theme-light-color: fade_out($theme-color, 0.2);
+
+$theme-support-color: white;
+
+$blue: #4fb3ff;
+
+$sky-blue: fade_out($blue, 0.2);
+
+$tint-blue: #6ec3f0;
+
+$light-blue: #8de6f0;
+
+$depth-blue: darken($blue, 0.2);
+
+$text-color: $theme-support-color;
+
+$text-color-hover: white;
+
+$text-inner-color: #d0b275;
+
+$select-color-hover: rgba(79, 179, 255, 0.8);
+
+$pink: #ff84cb;
+
+$light-pink: darken($pink, 15);
+
+$button-color: $theme-support-color;
+
+$button-text-color: $theme-darken-color;
+
+$button-hover-color: darken($button-color, 0.2);
+
+$button-active-color: darken($button-color, 0.3);
+
+$scroll-color: $theme-light-color;
+
+$scroll-hover-color: $theme-darken-color;
+
+$background-color: $theme-color;
+
+$card-background: #fdfdfd;
+
+$header-color: rgb(0, 0, 0);
+
+$title-background: $theme-color;
+
+$border-color: $blue;
