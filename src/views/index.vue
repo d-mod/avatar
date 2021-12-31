@@ -1,32 +1,20 @@
 <template>
     <profession @apply="apply" />
-    <div class="main">
-        <div class="dressing card">
-            <div class="header">
+    <div class="flex h-full p-4 flex-wrap justify-center items-center overflow-y-auto">
+        <div class="card flex flex-wrap justify-center">
+            <div class="left">
                 <div class="tools">
                     <apt-button title="重置" @click="clear" size="normal" color="gray">
-                        <icon>refresh</icon>
-                    </apt-button>
-                    <apt-button title="导出" @click="exports()" type="info" size="normal">
-                        <icon>arrow_downward</icon>
+                        <div class="i-mdi-refresh text-xl"></div>
                     </apt-button>
                     <apt-button title="导入" @click="imports" size="normal" type="primary">
-                        <icon>arrow_upward</icon>
+                        <div class="i-mdi-arrow-left-bold-box-outline text-xl"> </div>
+                    </apt-button>
+                    <apt-button title="导出" @click="exports()" type="info" size="normal">
+                        <div class="i-mdi-arrow-right-bold-box-outline text-xl"></div>
                     </apt-button>
                 </div>
-                <div class="right">
-                    <apt-select placeholder="武器" v-if="code_query.part === 'weapon'" v-model="$weapon">
-                        <apt-option :key="weapon.name" :label="weapon.label" :value="weapon.name" v-for="weapon in $weapon_list" />
-                    </apt-select>
-                    <apt-input placeholder="搜索" v-model="keyword">
-                        <!-- <template v-slot="{ value, item }">
-                                <span v-text="value"></span>
-                            </template> -->
-                    </apt-input>
-                </div>
-            </div>
-            <div class="cols">
-                <canvas-box :height="canvas_props.height" :width="canvas_props.width" :images="images" :offset="base_offset" :scale="scale" canvas-style="margin:auto"></canvas-box>
+                <canvas-box :height="canvas_props.height" :width="canvas_props.width" :images="images" :offset="base_offset" :scale="scale"></canvas-box>
                 <div class="part">
                     <div
                         :key="p"
@@ -40,6 +28,14 @@
                         <img class="icon" :src="value.icon || DEFAULT_SRC" :title="label(value)" @error="error" draggable="false" v-else />
                     </div>
                 </div>
+            </div>
+            <div class="right">
+                <div class="tools">
+                    <apt-select placeholder="武器" v-if="code_query.part === 'weapon'" v-model="$weapon">
+                        <apt-option :key="weapon.name" :label="weapon.label" :value="weapon.name" v-for="weapon in $weapon_list" />
+                    </apt-select>
+                    <apt-input placeholder="搜索" v-model="keyword"> </apt-input>
+                </div>
                 <div class="select">
                     <div @click.prevent="reset(code_query.part)" class="icon default"></div>
                     <div :class="{ active: isActive(dress) }" :key="dress.hash" :style="style(dress)" :title="label(dress)" @click="selectDress(dress)" class="icon" v-for="dress in show_list"></div>
@@ -48,8 +44,8 @@
         </div>
 
         <collocation class="card" @export="exports" @import="apply" />
+        <license />
     </div>
-    <license />
     <apt-dialog dialogClass="import-dialog" v-model:visible="showDialog">
         <div class="title">导入</div>
         <apt-input v-model="code" placeholder="请输入代码" class="input"></apt-input>
@@ -62,9 +58,8 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, ref, onMounted, reactive, watch } from "vue"
+    import { computed, ref, onMounted, reactive } from "vue"
     import { useRoute, useRouter } from "vue-router"
-    import { writeText, readText } from "clipboard-polyfill"
     import qs from "qs"
 
     import DEFAULT_SRC from "@/assets/default.png"
@@ -74,7 +69,6 @@
     import Profession from "./profession.vue"
 
     import Collocation from "./collocation.vue"
-    import Icon from "@/components/icon.vue"
     import License from "./license.vue"
 
     import { CodeTemplate, Dress, DressIcon, DressImage } from "@/model"
@@ -388,11 +382,14 @@
      * 导入时装代码
      */
     async function imports() {
-        let text = await readText()
-        if (text.match(code_regex)) {
-            code.value = text
+        try {
+            let text = await navigator.clipboard.readText()
+            if (text.match(code_regex)) {
+                code.value = text
+            }
+        } finally {
+            showDialog.value = true
         }
-        showDialog.value = true
     }
 
     async function imports_done() {
@@ -424,7 +421,7 @@
             }
             result = `${name}?${qs.stringify(query)}`
         }
-        await writeText(result)
+        await navigator.clipboard.writeText(result)
         showToast("导出成功，已复制到剪贴板")
         //Snackbar({ content: "导出成功，已复制到剪贴板", type: "success" })
     }
@@ -463,13 +460,9 @@
 <style lang="scss" var>
     @import "../style/theme";
 
-    .main {
-        overflow: hidden;
-        padding: 0 20px;
-    }
-
     .card {
-        margin: 12px 0;
+        margin-bottom: 12px;
+        width: 100%;
         background-color: white;
 
         box-shadow: 0 1px 3px rgb(18 18 18 / 10%);
@@ -505,105 +498,100 @@
         }
     }
 
-    .dressing {
+    .tools {
+        width: 100%;
+        height: 72px;
+        display: flex;
+        justify-content: center;
         align-items: center;
+    }
 
-        .header {
-            width: 100%;
-            padding: 0 24px;
+    .right {
+        justify-self: flex-end;
+        height: 400px;
+        overflow: hidden;
+        padding: 12px;
+        .tools {
+            justify-content: flex-end;
+        }
+    }
+
+    .left {
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .part {
+        width: 300px;
+        height: 300px;
+        position: relative;
+
+        .item {
+            color: $text-inner-color;
+            font-size: 12px;
+
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border: 2px solid transparent;
             box-sizing: border-box;
-            height: 72px;
+
+            background-image: url("@/assets/empty.png");
+            .icon {
+                margin: 0;
+                width: 28px;
+                height: 28px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
+            }
+
+            &:hover {
+                transition-duration: 100ms;
+                transform: scale(1.3);
+            }
+
+            &.active {
+                border: #ff4081 2px solid;
+            }
+        }
+    }
+
+    .content {
+        width: 100%;
+        display: flex;
+    }
+
+    .select {
+        overflow-y: scroll;
+        max-width: 400px;
+        width: 300px;
+        height: 300px;
+
+        .icon {
+            width: 32px;
+            height: 32px;
+            border: 2px solid transparent;
+            margin: 10px;
+            box-sizing: border-box;
+            float: left;
+            user-select: none;
+            font-size: 12px;
+            color: $text-inner-color;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
 
-            .tools {
-                height: 72px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            &:hover {
+                transition-duration: 100ms;
+                transform: scale(1.3);
             }
 
-            .right {
-                justify-self: flex-end;
-            }
-        }
-
-        .cols {
-            width: 100%;
-            height: 300px;
-            display: flex;
-        }
-
-        .part {
-            width: 20%;
-            height: 100%;
-            position: relative;
-
-            .item {
-                color: $text-inner-color;
-                font-size: 12px;
-
-                position: absolute;
-                width: 32px;
-                height: 32px;
-                border: 2px solid transparent;
-                box-sizing: border-box;
-
-                background-image: url("@/assets/empty.png");
-                .icon {
-                    margin: 0;
-                    width: 28px;
-                    height: 28px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    user-select: none;
-                }
-
-                &:hover {
-                    transition-duration: 100ms;
-                    transform: scale(1.3);
-                }
-
-                &.active {
-                    border: #ff4081 2px solid;
-                }
-            }
-        }
-
-        .content {
-            width: 100%;
-            display: flex;
-        }
-
-        .select {
-            width: 60%;
-            overflow-y: scroll;
-            height: 100%;
-
-            .icon {
-                width: 32px;
-                height: 32px;
-                border: 2px solid transparent;
-                margin: 10px;
-                box-sizing: border-box;
-                float: left;
-                user-select: none;
-                font-size: 12px;
-                color: $text-inner-color;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                &:hover {
-                    transition-duration: 100ms;
-                    transform: scale(1.3);
-                }
-
-                &.default {
-                    background-image: url("@/assets/default.png");
-                }
+            &.default {
+                background-image: url("@/assets/default.png");
             }
         }
     }

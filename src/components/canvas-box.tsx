@@ -54,8 +54,8 @@ export default defineComponent({
             type: Number,
             default: () => 0
         },
-        canvasStyle: {
-            type: [String, Object],
+        canvasClass: {
+            type: [String, Array],
             default: ""
         },
         scale: {
@@ -132,11 +132,19 @@ export default defineComponent({
             }
         }
 
+        const canvasStyle = computed(() => {
+            return {
+                width: props.width ? `${props.width}px` : "0",
+                height: props.height ? `${props.height}px` : "0"
+            }
+        })
+
         return () => {
             return (
                 <canvas
                     ref={canvas}
-                    style={props.canvasStyle}
+                    style={canvasStyle.value}
+                    class={props.canvasClass}
                     width={props.width}
                     height={props.height}
                     onMouseleave={mouseUp}

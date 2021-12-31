@@ -1,22 +1,23 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@iconify-json/mdi': ^1.0.12
   '@types/lodash': ^4.14.178
   '@types/node': ^16.11.14
   '@types/qs': ^6.9.7
+  '@unocss/preset-icons': ^0.20.0
+  '@unocss/preset-uno': ^0.20.0
   '@vitejs/plugin-vue': ^1.9.2
   '@vitejs/plugin-vue-jsx': ^1.3.3
   '@vueuse/core': ^7.4.1
   axios: ^0.22.0
-  clipboard-polyfill: ^3.0.3
   lodash: ^4.17.21
-  material-icons: ^1.10.4
   pinia: ^2.0.6
   prettier: ^2.5.1
-  primevue: 3.10.0
   qs: ^6.10.1
   sass: ^1.45.0
   typescript: ^4.4.3
+  unocss: ^0.20.0
   vite: ^2.6.0
   vue: ^3.2.16
   vue-router: ^4.0.11
@@ -24,27 +25,34 @@ specifiers:
 dependencies:
   '@vueuse/core': 7.4.1_vue@3.2.26
   axios: 0.22.0
-  clipboard-polyfill: 3.0.3
   lodash: 4.17.21
-  material-icons: 1.10.4
   pinia: 2.0.6_typescript@4.5.4+vue@3.2.26
-  primevue: 3.10.0_vue@3.2.26
   qs: 6.10.2
   vue: 3.2.26
   vue-router: 4.0.12_vue@3.2.26
 
 devDependencies:
+  '@iconify-json/mdi': 1.0.12
   '@types/lodash': 4.14.178
   '@types/node': 16.11.14
   '@types/qs': 6.9.7
+  '@unocss/preset-icons': 0.20.0
+  '@unocss/preset-uno': 0.20.0
   '@vitejs/plugin-vue': 1.10.2_vite@2.7.4
   '@vitejs/plugin-vue-jsx': 1.3.3
   prettier: 2.5.1
   sass: 1.45.0
   typescript: 4.5.4
+  unocss: 0.20.0
   vite: 2.7.4_sass@1.45.0
 
 packages:
+
+  /@antfu/utils/0.3.0:
+    resolution: {integrity: sha1-YwbEO1Kog72Olz4+2N1kJIQYvMQ=, tarball: '@antfu/utils/download/@antfu/utils-0.3.0.tgz'}
+    dependencies:
+      '@types/throttle-debounce': 2.1.0
+    dev: true
 
   /@babel/code-frame/7.16.0:
     resolution: {integrity: sha1-DfyAMJvuyEEeZecGRhxAiwu5tDE=, tarball: '@babel/code-frame/download/@babel/code-frame-7.16.0.tgz'}
@@ -340,6 +348,47 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
+  /@iconify-json/mdi/1.0.12:
+    resolution: {integrity: sha512-smYQpxDqSCUdySFSYZpH0BAEVbgFnU4IE/Hb36zavseOl3zFlKDvGOEFPC7djkEabrIWi9KDAUdbtIREcgVE8A==, tarball: '@iconify-json/mdi/download/@iconify-json/mdi-1.0.12.tgz'}
+    dependencies:
+      '@iconify/types': 1.0.12
+    dev: true
+
+  /@iconify/types/1.0.12:
+    resolution: {integrity: sha512-6er6wSGF3hgc1JEZqiGpg21CTCjHBYOUwqLmb2Idzkjiw6ogalGP0ZMLVutCzah+0WB4yP+Zd2oVPN8jvJ+Ftg==, tarball: '@iconify/types/download/@iconify/types-1.0.12.tgz'}
+    dev: true
+
+  /@iconify/utils/1.0.20:
+    resolution: {integrity: sha512-J5IriR8KeANs8vIEFKWzOlOvNgZHkwqkmqaIwvqtuDbBeFHtXGfM/LYMDmjtRJ0AAa7f254qw6TK7gAibYfHUA==, tarball: '@iconify/utils/download/@iconify/utils-1.0.20.tgz'}
+    dependencies:
+      '@iconify/types': 1.0.12
+    dev: true
+
+  /@nodelib/fs.scandir/2.1.5:
+    resolution: {integrity: sha1-dhnC6yGyVIP20WdUi0z9WnSIw9U=, tarball: '@nodelib/fs.scandir/download/@nodelib/fs.scandir-2.1.5.tgz'}
+    engines: {node: '>= 8'}
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      run-parallel: 1.2.0
+    dev: true
+
+  /@nodelib/fs.stat/2.0.5:
+    resolution: {integrity: sha1-W9Jir5Tp0lvR5xsF3u1Eh2oiLos=, tarball: '@nodelib/fs.stat/download/@nodelib/fs.stat-2.0.5.tgz'}
+    engines: {node: '>= 8'}
+    dev: true
+
+  /@nodelib/fs.walk/1.2.8:
+    resolution: {integrity: sha1-6Vc36LtnRt3t9pxVaVNJTxlv5po=, tarball: '@nodelib/fs.walk/download/@nodelib/fs.walk-1.2.8.tgz'}
+    engines: {node: '>= 8'}
+    dependencies:
+      '@nodelib/fs.scandir': 2.1.5
+      fastq: 1.13.0
+    dev: true
+
+  /@polka/url/1.0.0-next.21:
+    resolution: {integrity: sha1-XeWiOFo1MJQn9gEZkrVEUU1VmqE=, tarball: '@polka/url/download/@polka/url-1.0.0-next.21.tgz'}
+    dev: true
+
   /@rollup/pluginutils/4.1.2:
     resolution: {integrity: sha512-ROn4qvkxP9SyPeHaf7uQC/GPFY6L/OWy9+bd9AwcjOAWQwxRscoEyAUD8qCY5o5iL4jqQwoLk2kaTKJPb/HwzQ==, tarball: '@rollup/pluginutils/download/@rollup/pluginutils-4.1.2.tgz'}
     engines: {node: '>= 8.0.0'}
@@ -358,6 +407,98 @@ packages:
 
   /@types/qs/6.9.7:
     resolution: {integrity: sha1-Y7t9Bn2xB8weRXwwO8JdUR/r9ss=, tarball: '@types/qs/download/@types/qs-6.9.7.tgz'}
+    dev: true
+
+  /@types/throttle-debounce/2.1.0:
+    resolution: {integrity: sha1-HD32JL/Eti+ZLTASuExW1B6rN3Y=, tarball: '@types/throttle-debounce/download/@types/throttle-debounce-2.1.0.tgz'}
+    dev: true
+
+  /@unocss/cli/0.20.0:
+    resolution: {integrity: sha512-AhBo17uCitGy3OLRqXprYRPKuxGUXR65SbQINMc0ZUI4LQbIr49YUKfmnwyekd5ScZUWxn4B2XzxO26VdvwsDw==, tarball: '@unocss/cli/download/@unocss/cli-0.20.0.tgz'}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@unocss/config': 0.20.0
+      '@unocss/core': 0.20.0
+      '@unocss/preset-uno': 0.20.0
+      cac: 6.7.12
+      chokidar: 3.5.2
+      colorette: 2.0.16
+      consola: 2.15.3
+      fast-glob: 3.2.7
+      pathe: 0.2.0
+    dev: true
+
+  /@unocss/config/0.20.0:
+    resolution: {integrity: sha512-E0VErPhcVDA9M+xKAOD9/Tyac9vwUFCEH2ltLU9KYVaFAv0L8OHrphumukueXLdlwLFwPcpstA9/3f7N+GOFwg==, tarball: '@unocss/config/download/@unocss/config-0.20.0.tgz'}
+    engines: {node: '>=14'}
+    dependencies:
+      '@unocss/core': 0.20.0
+      unconfig: 0.2.2
+    dev: true
+
+  /@unocss/core/0.20.0:
+    resolution: {integrity: sha512-guJaI07vSan/b+Z60/VP24+1T6wF1GpGablKJM6kIPxIPAIA8wTAQ/OWPdyaniGMSho/dPovbSNOyyApxIjLSA==, tarball: '@unocss/core/download/@unocss/core-0.20.0.tgz'}
+    dev: true
+
+  /@unocss/inspector/0.20.0:
+    resolution: {integrity: sha512-71kvHb2NUIDQtdaR1IyJG0jBfkpx/Au1FiQOELWScwzjnsN5QPxIxB6b+3kfCr+2CEN+NpkUssfNKfRstQZefw==, tarball: '@unocss/inspector/download/@unocss/inspector-0.20.0.tgz'}
+    dependencies:
+      gzip-size: 6.0.0
+      sirv: 1.0.19
+    dev: true
+
+  /@unocss/preset-attributify/0.20.0:
+    resolution: {integrity: sha512-B6p5DZMKNVkIQfFN8D0j/uCmR+qt91d8LdGCfo7JsJkIAUT/6NiHyXHXhYjvEl3ICqgmX7PUXylax959MhKDBQ==, tarball: '@unocss/preset-attributify/download/@unocss/preset-attributify-0.20.0.tgz'}
+    dependencies:
+      '@unocss/core': 0.20.0
+    dev: true
+
+  /@unocss/preset-icons/0.20.0:
+    resolution: {integrity: sha512-D+PRVOwmfoCyNnia/WEqhxmOn9at3sJOVfIMZgWA5Qoq7JOhNurLlLc5kC6ZdS4GkcPQB+mEsq/gf6uJ5LezrA==, tarball: '@unocss/preset-icons/download/@unocss/preset-icons-0.20.0.tgz'}
+    dependencies:
+      '@iconify/utils': 1.0.20
+      '@unocss/core': 0.20.0
+      local-pkg: 0.4.0
+    dev: true
+
+  /@unocss/preset-mini/0.20.0:
+    resolution: {integrity: sha512-Pw11MEgeajzX8l1X0J8h71qMhcVEOFtL7UTYpbMX5u++dul7LKxb0LM9rgBF1vBHGTQSnqBTpro38wtvMrs3nQ==, tarball: '@unocss/preset-mini/download/@unocss/preset-mini-0.20.0.tgz'}
+    dependencies:
+      '@unocss/core': 0.20.0
+    dev: true
+
+  /@unocss/preset-uno/0.20.0:
+    resolution: {integrity: sha512-cT6/FOEf5gV4tvR0d9M+dNzdRWldu6jmNgxUlsJ9TYEXkhQfO2cM9D9DmoI5b/xU0B2AC/veMMyAq/9nqZolzw==, tarball: '@unocss/preset-uno/download/@unocss/preset-uno-0.20.0.tgz'}
+    dependencies:
+      '@unocss/core': 0.20.0
+      '@unocss/preset-mini': 0.20.0
+      '@unocss/preset-wind': 0.20.0
+    dev: true
+
+  /@unocss/preset-wind/0.20.0:
+    resolution: {integrity: sha512-/LoZn/j2eAoSyWTj9R3q0tZyE4DMbGoIh5qgJg/LikhxRazDUryhvsLbIAfxIeQLqg5Db+IGcu4814QE/Uxnzg==, tarball: '@unocss/preset-wind/download/@unocss/preset-wind-0.20.0.tgz'}
+    dependencies:
+      '@unocss/core': 0.20.0
+      '@unocss/preset-mini': 0.20.0
+    dev: true
+
+  /@unocss/reset/0.20.0:
+    resolution: {integrity: sha512-KTFxcgWkHF9exjIFyahYuNEhGONM0/qNTBwTmqvFohpslS4CVLnhTU7gPgKEoxi/HTKoXuYBFmBekOU5VqLSlQ==, tarball: '@unocss/reset/download/@unocss/reset-0.20.0.tgz'}
+    dev: true
+
+  /@unocss/scope/0.20.0:
+    resolution: {integrity: sha512-XNIIU/J5wpf9xtD1a2enLGjN5CyvFBvhL8CS4s2oKPiOiBl08Gb1TM2djs0tYBGmsOoO7xi9o+7bMonrF6FraA==, tarball: '@unocss/scope/download/@unocss/scope-0.20.0.tgz'}
+    dev: true
+
+  /@unocss/vite/0.20.0:
+    resolution: {integrity: sha512-RUojjSnMhLpsv3GAWY+BTfxHhoSeY19TpLxCktAaP1ouVHeqxZa3uwDKtUVrGq2J6quI1YdbU/N0ZpbqJY8swg==, tarball: '@unocss/vite/download/@unocss/vite-0.20.0.tgz'}
+    dependencies:
+      '@rollup/pluginutils': 4.1.2
+      '@unocss/config': 0.20.0
+      '@unocss/core': 0.20.0
+      '@unocss/inspector': 0.20.0
+      '@unocss/scope': 0.20.0
     dev: true
 
   /@vitejs/plugin-vue-jsx/1.3.3:
@@ -569,6 +710,17 @@ packages:
       picocolors: 1.0.0
     dev: true
 
+  /builtins/4.0.0:
+    resolution: {integrity: sha1-qDRUIN6CBo/cTWVZ0EVkA6j7GQU=, tarball: builtins/download/builtins-4.0.0.tgz}
+    dependencies:
+      semver: 7.3.5
+    dev: true
+
+  /cac/6.7.12:
+    resolution: {integrity: sha512-rM7E2ygtMkJqD9c7WnFU6fruFcN3xe4FM5yUmgxhZzIKJk4uHl9U/fhwdajGFQbQuv43FAUo1Fe8gX/oIKDeSA==, tarball: cac/download/cac-6.7.12.tgz}
+    engines: {node: '>=8'}
+    dev: true
+
   /call-bind/1.0.2:
     resolution: {integrity: sha1-sdTonmiBGcPJqQOtMKuy9qkZvjw=, tarball: call-bind/download/call-bind-1.0.2.tgz}
     dependencies:
@@ -609,10 +761,6 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /clipboard-polyfill/3.0.3:
-    resolution: {integrity: sha1-FZ6gdo4g7cf/2kBL0TxUxz3k/0A=, tarball: clipboard-polyfill/download/clipboard-polyfill-3.0.3.tgz}
-    dev: false
-
   /color-convert/1.9.3:
     resolution: {integrity: sha1-u3GFBpDh8TZWfeYp0tVHHe2kweg=, tarball: color-convert/download/color-convert-1.9.3.tgz}
     dependencies:
@@ -621,6 +769,14 @@ packages:
 
   /color-name/1.1.3:
     resolution: {integrity: sha1-p9BVi9icQveV3UIyj3QIMcpTvCU=, tarball: color-name/download/color-name-1.1.3.tgz}
+    dev: true
+
+  /colorette/2.0.16:
+    resolution: {integrity: sha1-cTua+E/bAAE58EVGvUqT9ipQhdo=, tarball: colorette/download/colorette-2.0.16.tgz}
+    dev: true
+
+  /consola/2.15.3:
+    resolution: {integrity: sha1-LhH5jWpL5x/3LgvfB70j4Sy2FVA=, tarball: consola/download/consola-2.15.3.tgz}
     dev: true
 
   /convert-source-map/1.8.0:
@@ -643,6 +799,14 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
+    dev: true
+
+  /defu/5.0.0:
+    resolution: {integrity: sha1-V2jw1AKlVb/EwmckayD4LOi1oQs=, tarball: defu/download/defu-5.0.0.tgz}
+    dev: true
+
+  /duplexer/0.1.2:
+    resolution: {integrity: sha1-Or5DrvODX4rgd9E23c4PJ2sEAOY=, tarball: duplexer/download/duplexer-0.1.2.tgz}
     dev: true
 
   /electron-to-chromium/1.4.24:
@@ -822,6 +986,23 @@ packages:
   /estree-walker/2.0.2:
     resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=, tarball: estree-walker/download/estree-walker-2.0.2.tgz}
 
+  /fast-glob/3.2.7:
+    resolution: {integrity: sha1-/Wy3otfpqnp4RhEehaGW1rL3ZqE=, tarball: fast-glob/download/fast-glob-3.2.7.tgz}
+    engines: {node: '>=8'}
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      '@nodelib/fs.walk': 1.2.8
+      glob-parent: 5.1.2
+      merge2: 1.4.1
+      micromatch: 4.0.4
+    dev: true
+
+  /fastq/1.13.0:
+    resolution: {integrity: sha1-YWdg+Ip1Jr38WWt8q4wYk4w2uYw=, tarball: fastq/download/fastq-1.13.0.tgz}
+    dependencies:
+      reusify: 1.0.4
+    dev: true
+
   /fill-range/7.0.1:
     resolution: {integrity: sha1-GRmmp8df44ssfHflGYU12prN2kA=, tarball: fill-range/download/fill-range-7.0.1.tgz}
     engines: {node: '>=8'}
@@ -875,6 +1056,13 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /gzip-size/6.0.0:
+    resolution: {integrity: sha1-BlNn/VDCOcBnHLy61b4+LusQ5GI=, tarball: gzip-size/download/gzip-size-6.0.0.tgz}
+    engines: {node: '>=10'}
+    dependencies:
+      duplexer: 0.1.2
+    dev: true
+
   /has-flag/3.0.0:
     resolution: {integrity: sha1-tdRU3CGZriJWmfNGfloH87lVuv0=, tarball: has-flag/download/has-flag-3.0.0.tgz}
     engines: {node: '>=4'}
@@ -902,6 +1090,12 @@ packages:
 
   /immutable/4.0.0:
     resolution: {integrity: sha1-uG943mre82CDle+yaakUYnl+LCM=, tarball: immutable/download/immutable-4.0.0.tgz}
+    dev: true
+
+  /import-meta-resolve/1.1.1:
+    resolution: {integrity: sha1-JE/VQv0frnNVDU+LPN47uh17Kxg=, tarball: import-meta-resolve/download/import-meta-resolve-1.1.1.tgz}
+    dependencies:
+      builtins: 4.0.0
     dev: true
 
   /is-binary-path/2.1.0:
@@ -934,6 +1128,11 @@ packages:
     engines: {node: '>=0.12.0'}
     dev: true
 
+  /jiti/1.12.9:
+    resolution: {integrity: sha1-LORbJlz8jckevXClIEgHz5FSkbw=, tarball: jiti/download/jiti-1.12.9.tgz}
+    hasBin: true
+    dev: true
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha1-GSA/tZmR35jjoocFDUZHzerzJJk=, tarball: js-tokens/download/js-tokens-4.0.0.tgz}
     dev: true
@@ -952,9 +1151,23 @@ packages:
       minimist: 1.2.5
     dev: true
 
+  /local-pkg/0.4.0:
+    resolution: {integrity: sha1-5iIRcYE9WggS3YT6gP+xyPzABTE=, tarball: local-pkg/download/local-pkg-0.4.0.tgz}
+    engines: {node: '>=14'}
+    dependencies:
+      mlly: 0.2.10
+    dev: true
+
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==, tarball: lodash/download/lodash-4.17.21.tgz}
     dev: false
+
+  /lru-cache/6.0.0:
+    resolution: {integrity: sha1-bW/mVw69lqr5D8rR2vo7JWbbOpQ=, tarball: lru-cache/download/lru-cache-6.0.0.tgz}
+    engines: {node: '>=10'}
+    dependencies:
+      yallist: 4.0.0
+    dev: true
 
   /magic-string/0.25.7:
     resolution: {integrity: sha1-P0l9b9NMZpxnmNy4IfLvMfVEUFE=, tarball: magic-string/download/magic-string-0.25.7.tgz}
@@ -962,12 +1175,32 @@ packages:
       sourcemap-codec: 1.4.8
     dev: false
 
-  /material-icons/1.10.4:
-    resolution: {integrity: sha512-WaDhx+10PRmNcVrhXRaoTkqPeOROpUDeQPPsn68+bEmv9SkCcvEt2kPg5UTV7T3oOZG/teMcJNKRLrkdWSWz+Q==, tarball: material-icons/download/material-icons-1.10.4.tgz}
-    dev: false
+  /merge2/1.4.1:
+    resolution: {integrity: sha1-Q2iJL4hekHRVpv19xVwMnUBJkK4=, tarball: merge2/download/merge2-1.4.1.tgz}
+    engines: {node: '>= 8'}
+    dev: true
+
+  /micromatch/4.0.4:
+    resolution: {integrity: sha1-iW1Rnf6dsl/OlM63pQCRm/iB6/k=, tarball: micromatch/download/micromatch-4.0.4.tgz}
+    engines: {node: '>=8.6'}
+    dependencies:
+      braces: 3.0.2
+      picomatch: 2.3.0
+    dev: true
 
   /minimist/1.2.5:
     resolution: {integrity: sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=, tarball: minimist/download/minimist-1.2.5.tgz}
+    dev: true
+
+  /mlly/0.2.10:
+    resolution: {integrity: sha1-ZFkCyXYdxrXe0XS45xcUf+UuSJM=, tarball: mlly/download/mlly-0.2.10.tgz}
+    dependencies:
+      import-meta-resolve: 1.1.1
+    dev: true
+
+  /mrmime/1.0.0:
+    resolution: {integrity: sha1-FNOH8FhaUjPSkbq6M5sGN1KiOYs=, tarball: mrmime/download/mrmime-1.0.0.tgz}
+    engines: {node: '>=10'}
     dev: true
 
   /ms/2.1.2:
@@ -994,6 +1227,10 @@ packages:
 
   /path-parse/1.0.7:
     resolution: {integrity: sha1-+8EUtgykKzDZ2vWFjkvWi77bZzU=, tarball: path-parse/download/path-parse-1.0.7.tgz}
+    dev: true
+
+  /pathe/0.2.0:
+    resolution: {integrity: sha1-MP17vgoNkfDmC65iH10Z6eIlwzk=, tarball: pathe/download/pathe-0.2.0.tgz}
     dev: true
 
   /picocolors/1.0.0:
@@ -1036,21 +1273,16 @@ packages:
     hasBin: true
     dev: true
 
-  /primevue/3.10.0_vue@3.2.26:
-    resolution: {integrity: sha512-tZwzdg0gVOpohFAzPWuIQ7OoNZ1/g6EcY29xn6KzuZ/p8HDiGmg2ChpTUpPaLIJplD+1FyInIo8uvA4YtRulGg==, tarball: primevue/download/primevue-3.10.0.tgz}
-    peerDependencies:
-      primeicons: ^5.0.0
-      vue: ^3.0.0
-    dependencies:
-      vue: 3.2.26
-    dev: false
-
   /qs/6.10.2:
     resolution: {integrity: sha512-mSIdjzqznWgfd4pMii7sHtaYF8rx8861hBO80SraY5GT0XQibWZWJSid0avzHGkDIZLImux2S5mXO0Hfct2QCw==, tarball: qs/download/qs-6.10.2.tgz}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
     dev: false
+
+  /queue-microtask/1.2.3:
+    resolution: {integrity: sha1-SSkii7xyTfrEPg77BYyve2z7YkM=, tarball: queue-microtask/download/queue-microtask-1.2.3.tgz}
+    dev: true
 
   /readdirp/3.6.0:
     resolution: {integrity: sha1-dKNwvYVxFuJFspzJc0DNQxoCpsc=, tarball: readdirp/download/readdirp-3.6.0.tgz}
@@ -1066,12 +1298,23 @@ packages:
       path-parse: 1.0.7
     dev: true
 
+  /reusify/1.0.4:
+    resolution: {integrity: sha1-kNo4Kx4SbvwCFG6QhFqI2xKSXXY=, tarball: reusify/download/reusify-1.0.4.tgz}
+    engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+    dev: true
+
   /rollup/2.61.1:
     resolution: {integrity: sha512-BbTXlEvB8d+XFbK/7E5doIcRtxWPRiqr0eb5vQ0+2paMM04Ye4PZY5nHOQef2ix24l/L0SpLd5hwcH15QHPdvA==, tarball: rollup/download/rollup-2.61.1.tgz}
     engines: {node: '>=10.0.0'}
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  /run-parallel/1.2.0:
+    resolution: {integrity: sha1-ZtE2jae9+SHrnZW9GpIp5/IaQ+4=, tarball: run-parallel/download/run-parallel-1.2.0.tgz}
+    dependencies:
+      queue-microtask: 1.2.3
     dev: true
 
   /safe-buffer/5.1.2:
@@ -1093,6 +1336,14 @@ packages:
     hasBin: true
     dev: true
 
+  /semver/7.3.5:
+    resolution: {integrity: sha1-C2Ich5NI2JmOSw5L6Us/EuYBjvc=, tarball: semver/download/semver-7.3.5.tgz}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      lru-cache: 6.0.0
+    dev: true
+
   /side-channel/1.0.4:
     resolution: {integrity: sha1-785cj9wQTudRslxY1CkAEfpeos8=, tarball: side-channel/download/side-channel-1.0.4.tgz}
     dependencies:
@@ -1100,6 +1351,15 @@ packages:
       get-intrinsic: 1.1.1
       object-inspect: 1.12.0
     dev: false
+
+  /sirv/1.0.19:
+    resolution: {integrity: sha512-JuLThK3TnZG1TAKDwNIqNq6QA2afLOCcm+iE8D1Kj3GA40pSPsxQjjJl0J8X3tsR7T+CP1GavpzLwYkgVLWrZQ==, tarball: sirv/download/sirv-1.0.19.tgz}
+    engines: {node: '>= 10'}
+    dependencies:
+      '@polka/url': 1.0.0-next.21
+      mrmime: 1.0.0
+      totalist: 1.1.0
+    dev: true
 
   /source-map-js/1.0.1:
     resolution: {integrity: sha512-4+TN2b3tqOCd/kaGRJ/sTYA0tR0mdXx26ipdolxcwtJVqEnqNYvlCAt1q3ypy4QMlYus+Zh34RNtYLoq2oQ4IA==, tarball: source-map-js/download/source-map-js-1.0.1.tgz}
@@ -1142,10 +1402,36 @@ packages:
       is-number: 7.0.0
     dev: true
 
+  /totalist/1.1.0:
+    resolution: {integrity: sha1-pNZaPlRlF3AePlw3pHpwrJf+Vt8=, tarball: totalist/download/totalist-1.1.0.tgz}
+    engines: {node: '>=6'}
+    dev: true
+
   /typescript/4.5.4:
     resolution: {integrity: sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==, tarball: typescript/download/typescript-4.5.4.tgz}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
+
+  /unconfig/0.2.2:
+    resolution: {integrity: sha512-JN1MeYJ/POnjBj7NgOJJxPp6+NcD6Nd0hEuK0D89kjm9GvQQUq8HeE2Eb7PZgtu+64mWkDiqeJn1IZoLH7htPg==, tarball: unconfig/download/unconfig-0.2.2.tgz}
+    dependencies:
+      '@antfu/utils': 0.3.0
+      defu: 5.0.0
+      jiti: 1.12.9
+    dev: true
+
+  /unocss/0.20.0:
+    resolution: {integrity: sha512-6rh1RkqWqFWMXJqErZTEm0fp9QeGXEgFjuL9pTYh8Lf59EqFzAzET5dfyKzM6vvq70Hyp+N9CsbngyM+usGbCw==, tarball: unocss/download/unocss-0.20.0.tgz}
+    engines: {node: '>=14'}
+    dependencies:
+      '@unocss/cli': 0.20.0
+      '@unocss/core': 0.20.0
+      '@unocss/preset-attributify': 0.20.0
+      '@unocss/preset-icons': 0.20.0
+      '@unocss/preset-uno': 0.20.0
+      '@unocss/reset': 0.20.0
+      '@unocss/vite': 0.20.0
     dev: true
 
   /vite/2.7.4_sass@1.45.0:
@@ -1206,3 +1492,7 @@ packages:
       '@vue/server-renderer': 3.2.26_vue@3.2.26
       '@vue/shared': 3.2.26
     dev: false
+
+  /yallist/4.0.0:
+    resolution: {integrity: sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=, tarball: yallist/download/yallist-4.0.0.tgz}
+    dev: true

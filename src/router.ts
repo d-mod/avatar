@@ -2,10 +2,10 @@
  @author kritsu
  @date 2018/9/22 23:29
  **/
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
+import { createRouter, createWebHashHistory } from "vue-router"
 
 export default createRouter({
-    history: createWebHistory("/"),
+    history: createWebHashHistory("/"),
 
     routes: [
         {

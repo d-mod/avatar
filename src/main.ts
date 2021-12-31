@@ -5,7 +5,7 @@ import { RouterView } from "vue-router"
 import router from "@/router"
 import components from "@/components"
 import store from "@/store"
-import "material-icons/iconfont/material-icons.css"
+import "uno.css"
 import "./style"
 import "./axios.config"
 

@@ -41,12 +41,14 @@
                 </div>
             </div>
         </div>
-        <apt-button :outline="false" class="load-more material-icons" @click="load" full-width>keyboard_arrow_down</apt-button>
+        <apt-button :outline="false" class="load-more" @click="load" full-width>
+            <div class="i-mdi-chevron-down text-2xl"></div>
+        </apt-button>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { computed, nextTick, onDeactivated, onMounted, reactive, ref, watch } from "vue"
+    import { computed, nextTick, onMounted, reactive, ref, watch } from "vue"
     import { Collocation, CollocationQuery } from "@/model"
     import { useCollocationStore } from "@/store/collocation"
     import { useDressingStore } from "@/store/dressing"
@@ -177,9 +179,13 @@
         .header {
             height: auto;
             padding-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
 
             .select-col {
-                height: 32px;
+                height: auto;
+                width: 100%;
+                margin: 4px 0;
                 display: flex;
                 align-items: center;
 

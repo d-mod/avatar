@@ -1,7 +1,7 @@
 <template>
-    <div class="license">
-        <div class="line">Copyright © 2017-present <a href="//github.com/Kritsu">Kritsu</a>.All rights reserved.</div>
-        <div class="line"><a href="//github.com/d-mod/avatar">DMOD Avatar Ver.1.0.0</a> </div>
+    <div class="text-center text-black flex flex-wrap items-center">
+        <div class="w-full mt-1 h-6">Copyright © 2017-present <a class="text-blue-400" href="//gitee.com/apateat">Apateat</a>.All rights reserved.</div>
+        <div class="w-full mt-1 h-6"><a class="text-blue-400" href="//gitee.com/davatar/davatar">DAvatar Ver 2.0.0</a> </div>
     </div>
 </template>
 
@@ -12,27 +12,3 @@
         name: "license"
     })
 </script>
-
-<style lang="scss" scoped>
-    @import "@/style/theme";
-
-    .license {
-        text-align: center;
-        font-size: 14px;
-        color: black;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-
-        .line {
-            width: 100%;
-            margin-top: 12px;
-            height: 18px;
-            line-height: 18px;
-
-            a {
-                color: $blue;
-            }
-        }
-    }
-</style>
