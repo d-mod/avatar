@@ -1,6 +1,6 @@
 <template>
-    <div class="collocation">
-        <div class="header">
+    <div>
+        <div class="h-auto pt-2 px-4 flex flex-wrap">
             <div class="select-col">
                 <apt-input placeholder="搜索" @keyup.native="debounce(refresh, 20)" action-icon="search" class="search-input" v-model="refreshQuery.keyword"> </apt-input>
             </div>
@@ -23,10 +23,10 @@
                 </apt-indices>
             </div>
         </div>
-        <div ref="listRef" class="list">
-            <div :title="item.description" class="item" :style="itemStyle" v-for="item in display_list">
+        <div @touchend="load" ref="listRef" class="duration-300 overflow-y-auto h-60 flex flex-wrap">
+            <div :title="item.description" class="item relative py-3 box-border duration-400" :style="itemStyle" v-for="item in display_list">
                 <div :style="style(item)" class="layer"> </div>
-                <div class="board">
+                <div class="w-full h-full relative z-1">
                     <div class="name" v-text="item.name"></div>
                     <div class="info">
                         <span>作者:</span>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <apt-button :outline="false" class="load-more" @click="load" full-width>
+        <apt-button :outline="false" class="w-full text-xl" @click="load" full-width>
             <div class="i-mdi-chevron-down text-2xl"></div>
         </apt-button>
     </div>
@@ -174,114 +174,75 @@
 <style scoped lang="scss">
     @import "../style/theme";
 
-    .collocation {
-        margin: auto;
-        .header {
-            height: auto;
-            padding-top: 12px;
-            display: flex;
-            flex-wrap: wrap;
+    .select-col {
+        height: auto;
+        width: 100%;
+        margin: 4px 0;
+        display: flex;
+        align-items: center;
 
-            .select-col {
-                height: auto;
-                width: 100%;
-                margin: 4px 0;
-                display: flex;
-                align-items: center;
-
-                .search-input {
-                    width: 240px;
-                    height: 32px;
-                    border-radius: 4px 0 0 4px;
-                }
-            }
-        }
-
-        .list {
-            transition: all 0.3s;
-            overflow-y: auto;
-            height: 240px;
-            display: flex;
-            flex-wrap: wrap;
-
-            .item {
-                position: relative;
-                padding: 12px 0;
-                box-sizing: border-box;
-                transition: all 0.4s ease;
-
-                .layer {
-                    position: absolute;
-                    width: 100%;
-                    background-position: bottom;
-                    background-repeat: no-repeat;
-                    height: calc(100% - 48px);
-                    z-index: 0;
-                    top: 0;
-                }
-
-                .board {
-                    width: 100%;
-                    height: 100%;
-                    z-index: 1;
-                    position: relative;
-
-                    .info {
-                        font-size: 14px;
-                        width: 100%;
-                        display: block;
-                        color: white;
-                        text-align: center;
-                        visibility: hidden;
-
-                        .text {
-                            color: $light-blue;
-                        }
-                    }
-
-                    .name {
-                        width: 100%;
-                        height: 24px;
-                        line-height: 24px;
-                        font-size: 12px;
-                        text-align: center;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        position: absolute;
-                        bottom: 12px;
-                    }
-
-                    button {
-                        display: block;
-                        margin: 1rem auto;
-                        border-radius: 3px;
-                        visibility: hidden;
-                        transition-duration: 0s;
-                    }
-                }
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.48);
-
-                    .board {
-                        .info,
-                        button {
-                            visibility: visible;
-                        }
-
-                        .name {
-                            color: white;
-                        }
-                    }
-                }
-            }
-        }
-
-        .load-more {
-            width: 100%;
-            font-size: 24px;
+        .search-input {
+            width: 240px;
             height: 32px;
-            line-height: 32px;
+            border-radius: 4px 0 0 4px;
+        }
+    }
+
+    .item {
+        .layer {
+            position: absolute;
+            width: 100%;
+            background-position: bottom;
+            background-repeat: no-repeat;
+            height: calc(100% - 48px);
+            z-index: 0;
+            top: 0;
+        }
+
+        .info {
+            font-size: 14px;
+            width: 100%;
+            display: block;
+            color: white;
+            text-align: center;
+            visibility: hidden;
+
+            .text {
+                color: $light-blue;
+            }
+        }
+
+        .name {
+            width: 100%;
+            height: 24px;
+            line-height: 24px;
+            font-size: 12px;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            position: absolute;
+            bottom: 12px;
+        }
+
+        button {
+            display: block;
+            margin: 1rem auto;
+            border-radius: 3px;
+            visibility: hidden;
+            transition-duration: 0s;
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.48);
+
+            .info,
+            button {
+                visibility: visible;
+            }
+
+            .name {
+                color: white;
+            }
         }
     }
 </style>

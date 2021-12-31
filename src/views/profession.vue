@@ -5,9 +5,16 @@
                 <div :class="hidden ? 'i-mdi-add' : 'i-mdi-remove'" />
             </apt-button>
         </div>
-        <div :title="prof.label" :class="{ active: prof == store.profession }" :key="index" @click="apply(prof)" class="item text-base" v-for="(prof, index) in store.profession_list">
-            <div :style="profIcon(index)"></div>
-            <div class="w-full text-center" :class="{ hidden }">{{ prof.label }}</div>
+        <div
+            :title="prof.label"
+            :class="{ active: prof == store.profession }"
+            :key="index"
+            @click="apply(prof)"
+            class="item text-sm w-full h-10 flex items-center cursor-pointer select-none duration-200"
+            v-for="(prof, index) in store.profession_list"
+        >
+            <div class="absolute" :style="profIcon(index)"></div>
+            <div class="w-full text-center" :class="{ hidden }" v-text="prof.label"></div>
         </div>
     </div>
 </template>
@@ -35,7 +42,6 @@
             width: "26px",
             height: "26px",
             margin: "0 7px",
-            position: "absolute",
             backgroundImage: `url("/icon/profession.png")`,
             backgroundPositionX: `-${index * 26}px`,
             backgroundPositionY: `${0}px`
@@ -46,16 +52,6 @@
     @import "@/style/theme";
 
     .item {
-        font-size: 14px;
-        width: 100%;
-        line-height: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        user-select: none;
-        transition: 0.2s all ease-in;
-
         &:nth-child(odd) {
             flex-direction: row-reverse;
         }

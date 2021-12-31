@@ -1,8 +1,8 @@
 <template>
     <profession @apply="apply" />
-    <div class="flex h-full p-4 flex-wrap justify-center items-center overflow-y-auto">
+    <div class="flex h-full p-2 flex-wrap justify-center items-start overflow-y-auto">
         <div class="card flex flex-wrap justify-center">
-            <div class="left">
+            <div class="h-auto flex flex-wrap justify-center">
                 <div class="tools">
                     <apt-button title="重置" @click="clear" size="normal" color="gray">
                         <div class="i-mdi-refresh text-xl"></div>
@@ -43,15 +43,25 @@
             </div>
         </div>
 
-        <collocation class="card" @export="exports" @import="apply" />
+        <collocation class="card mt-2" @export="exports" @import="apply" />
         <license />
     </div>
-    <apt-dialog dialogClass="import-dialog" v-model:visible="showDialog">
+
+    <apt-dialog dialogClass="dialog" v-model:visible="showDialog.exports">
+        <div class="title">导出</div>
+        <div v-if="!copy_success" class="text-red-400">复制失败,请自行复制到剪贴板</div>
+        <div v-text="code" class="input text-blue-300 select-text"></div>
+
+        <div class="actions">
+            <apt-button @click="showDialog.exports = false" :outline="false">确定</apt-button>
+        </div>
+    </apt-dialog>
+    <apt-dialog dialogClass="dialog" v-model:visible="showDialog.imports">
         <div class="title">导入</div>
         <apt-input v-model="code" placeholder="请输入代码" class="input"></apt-input>
 
         <div class="actions">
-            <apt-button @click="showDialog = false" class="cancel" :outline="false">取消</apt-button>
+            <apt-button @click="showDialog.imports = false" class="cancel" :outline="false">取消</apt-button>
             <apt-button @click="imports_done" :outline="false">确定</apt-button>
         </div>
     </apt-dialog>
@@ -73,7 +83,6 @@
 
     import { CodeTemplate, Dress, DressIcon, DressImage } from "@/model"
     import { useDressingStore } from "@/store"
-    import { showToast } from "@/components/toast"
 
     interface PartValue extends Dress {
         title?: string
@@ -220,16 +229,14 @@
             }
         }
 
-        let backgroundImage = `url("${DEFAULT_SRC}") `
-
         return {
-            backgroundImage
+            backgroundImage: `url("${DEFAULT_SRC}") `
         }
     }
 
     function partStyle(index: number) {
-        let x = 60
-        let y = 60
+        let x = 40
+        let y = 40
         let step = 28 + 40
         x += Math.floor(index / 3) * step
         y += (index % 3) * step
@@ -372,7 +379,12 @@
         await apply(store.profession)
     }
 
-    const showDialog = ref(false)
+    const showDialog = reactive({
+        imports: false,
+        exports: false
+    })
+
+    const copy_success = ref(false)
 
     const code = ref("")
 
@@ -388,12 +400,12 @@
                 code.value = text
             }
         } finally {
-            showDialog.value = true
+            showDialog.imports = true
         }
     }
 
     async function imports_done() {
-        showDialog.value = false
+        showDialog.imports = false
 
         const text = code.value
         if (text.match(code_regex)) {
@@ -420,9 +432,16 @@
                 }
             }
             result = `${name}?${qs.stringify(query)}`
+            code.value = result
         }
-        await navigator.clipboard.writeText(result)
-        showToast("导出成功，已复制到剪贴板")
+        copy_success.value = true
+        try {
+            await navigator.clipboard.writeText(result)
+        } catch {
+            copy_success.value = false
+        } finally {
+            showDialog.exports = true
+        }
         //Snackbar({ content: "导出成功，已复制到剪贴板", type: "success" })
     }
 
@@ -461,19 +480,13 @@
     @import "../style/theme";
 
     .card {
-        margin-bottom: 12px;
         width: 100%;
         background-color: white;
-
         box-shadow: 0 1px 3px rgb(18 18 18 / 10%);
-        .header {
-            padding: 0 24px;
-        }
     }
 
-    .import-dialog {
-        position: relative;
-        height: 120px;
+    .dialog {
+        width: 300px;
         .title {
             width: 100%;
             height: 36px;
@@ -483,14 +496,14 @@
 
         .input {
             width: 100%;
+            height: auto;
+            word-wrap: break-word;
         }
 
         .actions {
-            position: absolute;
-            bottom: 0px;
-            right: 0px;
             display: flex;
-            padding: 0 12px 12px 0;
+            justify-content: flex-end;
+            margin-top: 12px;
 
             .cancel {
                 color: gray;
@@ -500,7 +513,7 @@
 
     .tools {
         width: 100%;
-        height: 72px;
+        height: 48px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -508,24 +521,16 @@
 
     .right {
         justify-self: flex-end;
-        height: 400px;
+        height: 372px;
         overflow: hidden;
-        padding: 12px;
         .tools {
             justify-content: flex-end;
         }
     }
 
-    .left {
-        height: auto;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
     .part {
-        width: 300px;
-        height: 300px;
+        width: 240px;
+        height: 240px;
         position: relative;
 
         .item {
