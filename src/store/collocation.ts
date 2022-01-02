@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import { Collocation, CollocationQuery, CollocationType } from "@/model"
-import axios from "axios"
 
 interface CollocationState {
     list: Collocation[]
@@ -20,7 +19,7 @@ export const useCollocationStore = defineStore("collocation", {
 
     actions: {
         async fetchData() {
-            let { list = [], types = [] } = await axios.$get("/collocation.json")
+            let { list = [], types = [] } = await fetch("/api/collocation.json").then(r => r.json())
             this.list = list
             this.collocation_types = types
         },

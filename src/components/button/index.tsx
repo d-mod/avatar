@@ -22,10 +22,6 @@ export default defineComponent({
         to: {
             type: String,
             default: null
-        },
-        outline: {
-            type: Boolean,
-            default: true
         }
     },
     setup(props, { slots }) {
@@ -38,8 +34,7 @@ export default defineComponent({
                     class: {
                         "i-button": true,
                         disabled: props.disabled,
-                        small: props.small,
-                        outline: props.outline
+                        small: props.small
                     }
                 },
                 renderSlot(slots, "default")

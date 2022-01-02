@@ -11,12 +11,12 @@ export default createRouter({
         {
             name: "index",
             path: "/",
-            component: () => import("@/views/index.vue")
+            component: () => import("@/views/index")
         },
         {
             name: "character",
             path: "/:id",
-            component: () => import("@/views/index.vue")
+            component: () => import("@/views/index")
         }
     ]
 })

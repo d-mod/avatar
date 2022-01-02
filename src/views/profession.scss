@@ -1,0 +1,17 @@
+@import "@/style/theme";
+
+.prof-item {
+    &:nth-child(odd) {
+        flex-direction: row-reverse;
+    }
+
+    &:hover {
+        color: $blue;
+        background: rgba($blue, 0.12);
+    }
+
+    &.active {
+        color: $blue;
+        background: rgba($blue, 0.36);
+    }
+}

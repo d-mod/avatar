@@ -1,7 +1,5 @@
 import { defineStore } from "pinia"
-import { GET_DRESS_LIST, GET_ICON, GET_PROFESSION } from "@/constants/dressing"
-import { Dress, DressingState, Profession } from "@/model"
-import axios from "axios"
+import { Dress, DressIcon, DressingState, Profession } from "@/model"
 
 const PARTS = ["hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes"]
 
@@ -22,7 +20,7 @@ export const useDressingStore = defineStore("dressing", {
     actions: {
         async loadProfession(): Promise<Profession[]> {
             if (this.profession_list.length === 0) {
-                let list = await axios.$get("/profession.json")
+                let list: Profession[] = await fetch("/api/profession.json").then(r => r.json())
                 this.profession_list = list
                 this.profession = list[0]
                 return list
@@ -45,9 +43,7 @@ export const useDressingStore = defineStore("dressing", {
         async getIcon(part: string) {
             let profession = this.profession_name
             if (!this.icons[profession] || !this.icons[profession][part]) {
-                let list = await axios.$get(`/${profession}/${part}.json`, {
-                    baseURL: "/icon"
-                })
+                let list: DressIcon[] = await fetch(`/icon/${profession}/${part}.json`).then(r => r.json())
                 this.icons[profession] = this.icons[profession] || {}
                 this.icons[profession][part] = list
             }
@@ -57,7 +53,7 @@ export const useDressingStore = defineStore("dressing", {
             let profession = this.profession_name
 
             if (!this.dresses[profession] || !this.dresses[profession][part]) {
-                let list = await axios.$get(`/${profession}/${part}.json`)
+                let list: Dress[] = await fetch(`/api/${profession}/${part}.json`).then(r => r.json())
                 list = list.map((e: Dress) =>
                     Object.assign(e, {
                         profession,
