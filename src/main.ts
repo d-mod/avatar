@@ -6,8 +6,7 @@ import router from "@/router"
 import components from "@/components"
 import store from "@/store"
 import "uno.css"
-import "./style"
-import "./axios.config"
+import "./style/app.scss"
 
 const app = createApp(RouterView)
 app.use(router)

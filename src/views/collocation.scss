@@ -1,0 +1,69 @@
+.select-col {
+    height: auto;
+    width: 100%;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+
+    .search-input {
+        width: 240px;
+        height: 32px;
+        border-radius: 4px 0 0 4px;
+    }
+}
+
+.collocations {
+    .item {
+        .layer {
+            position: absolute;
+            width: 100%;
+            background-position: bottom;
+            background-repeat: no-repeat;
+            height: calc(100% - 48px);
+            z-index: 0;
+            top: 0;
+        }
+
+        .info {
+            font-size: 14px;
+            width: 100%;
+            display: block;
+            color: white;
+            text-align: center;
+            visibility: hidden;
+        }
+
+        .name {
+            width: 100%;
+            height: 24px;
+            line-height: 24px;
+            font-size: 12px;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            position: absolute;
+            bottom: 12px;
+        }
+
+        button {
+            display: block;
+            margin: 1rem auto;
+            border-radius: 3px;
+            visibility: hidden;
+            transition-duration: 0s;
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.48);
+
+            .info,
+            button {
+                visibility: visible;
+            }
+
+            .name {
+                color: white;
+            }
+        }
+    }
+}
