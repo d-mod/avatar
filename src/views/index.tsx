@@ -145,15 +145,7 @@ export default defineComponent({
             }
         }
 
-        const keyword_list = computed(() => {
-            let arr = keyword.value.split(" ")
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] === "") {
-                    arr.splice(i--, 1)
-                }
-            }
-            return arr
-        })
+        const keyword_list = computed(() => keyword.value.split(" ").filter(e => e.length > 0))
 
         const show_list = computed(() => {
             let list: Dress[] = []
