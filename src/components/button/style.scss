@@ -15,7 +15,7 @@ $primary_color: $blue;
 
     font-size: 12px;
     color: $primary_color;
-    background: white;
+    background: var(--content-color);
     border-radius: 2px;
     display: flex;
     justify-content: center;

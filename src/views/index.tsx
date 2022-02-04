@@ -190,7 +190,7 @@ export default defineComponent({
          * 加载时装
          *
          */
-        async function apply({ name, query }: CodeTemplate = {}) {
+        async function apply({ name, query = {} }: CodeTemplate = {}) {
             for (let p in parts) {
                 //如果该部位为武器,则替换为具体的武器子类
                 if (!query || !query[p]) {
@@ -267,10 +267,6 @@ export default defineComponent({
          *
          */
         function reset(part: string) {
-            let title = undefined
-            if (!!part) {
-                title = parts[part].title
-            }
             parts[part] = createDefault(part)
         }
 
@@ -424,7 +420,7 @@ export default defineComponent({
                             </div>
                         </div>
                         <collocation class="card mt-2" onExport={exports} onImport={apply} />
-                        <div class="text-center text-sm text-black flex flex-wrap items-center">
+                        <div class="text-center text-sm text-color flex flex-wrap items-center">
                             <p class="w-full m-0">
                                 <a class="text-blue-400" href="//gitee.com/davatar/davatar">
                                     DAvatar&nbsp;Ver&nbsp;2.0.0

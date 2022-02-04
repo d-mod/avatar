@@ -1,4 +1,5 @@
 import { useDressingStore } from "@/store"
+import { useDark } from "@vueuse/core"
 import { CSSProperties, ref, defineComponent } from "vue"
 import "./profession.scss"
 
@@ -22,9 +23,16 @@ export default defineComponent((props, { emit }) => {
         }
     }
 
+    const isDark = useDark()
+
+    function switchMode() {
+        isDark.value = !isDark.value
+        document.body.classList.toggle("dark-mode")
+    }
+
     return () => {
         return (
-            <div class={"h-full bg-white text-hex-212121 float-left duration-300 shadow".concat(" ").concat(hidden.value ? "w-10" : "w-48")}>
+            <div class={"h-full content text-color float-left duration-300 shadow".concat(" ").concat(hidden.value ? "w-10" : "w-48")}>
                 <div class="h-8 text-center">
                     <apt-button class="w-full duration-300 text-xl font-bold select-none" onClick={change}>
                         <div class={hidden.value ? "i-mdi-add" : "i-mdi-remove"} />
@@ -41,6 +49,11 @@ export default defineComponent((props, { emit }) => {
                         <div class={"w-full text-center".concat(" ").concat(hidden.value ? "hidden" : "")} v-text={prof.label}></div>
                     </div>
                 ))}
+                <div>
+                    <apt-button onClick={switchMode} class="w-full duration-300 text-xl font-bold select-none">
+                        <div class={isDark.value ? "dark icon" : "light icon"}></div>
+                    </apt-button>
+                </div>
             </div>
         )
     }

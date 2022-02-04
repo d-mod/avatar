@@ -1,5 +1,32 @@
 @import "theme";
 
+@mixin light {
+    --background-color: #e0e0e0;
+    --content-color: white;
+    --text-color: #202020;
+}
+
+@mixin dark {
+    --background-color: #202020;
+    --content-color: #020202;
+    --text-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+:root {
+    @include light;
+}
+
+.dark-mode {
+    @include dark;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    :root {
+        @include dark;
+    }
+}
+
 * {
     font-family: Consolas, sans-serif, "Microsoft YaHei";
 }
@@ -16,7 +43,15 @@ body,
     height: 100%;
     margin: 0;
     overflow: hidden;
-    background-color: #e0e0e0;
+    background-color: var(--background-color);
+}
+
+.content {
+    background-color: var(--content-color);
+}
+
+.text-color {
+    color: var(--text-color);
 }
 
 ::-webkit-scrollbar {

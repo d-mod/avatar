@@ -12,16 +12,19 @@ $text-color: pink;
 .i-indices {
     user-select: none;
     outline: none;
-    font-size: 12px;
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 2px;
     padding: 0;
     margin: 0;
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    line-height: 1.5;
+    color: var(--text-color);
+
     .i-indices-label,
     .i-option {
-        padding-right: 8px;
+        padding-right: 0.5em;
     }
 
     .i-option {

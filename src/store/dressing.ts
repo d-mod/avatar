@@ -54,7 +54,7 @@ export const useDressingStore = defineStore("dressing", {
 
             if (!this.dresses[profession] || !this.dresses[profession][part]) {
                 let list: Dress[] = await fetch(`/api/${profession}/${part}.json`).then(r => r.json())
-                list = list.map((e: Dress) =>
+                list = list.map(e =>
                     Object.assign(e, {
                         profession,
                         part,
@@ -66,10 +66,10 @@ export const useDressingStore = defineStore("dressing", {
             }
             return this.dresses[profession][part]
         },
-        async getDress(query: any) {
+        async getDress(query: Record<string, string>) {
             let array = []
             for (let part in query) {
-                if (query[part] === -1) {
+                if (query[part] === "-1") {
                     continue
                 }
                 let list: Dress[] = await this.getDressList(part)
