@@ -1,5 +1,5 @@
 import { useDressingStore } from "@/store"
-import { useDark } from "@vueuse/core"
+import { useDark, useToggle } from "@vueuse/core"
 import { CSSProperties, ref, defineComponent } from "vue"
 import "./profession.scss"
 
@@ -8,9 +8,7 @@ export default defineComponent((props, { emit }) => {
 
     const hidden = ref(true)
 
-    function change() {
-        hidden.value = !hidden.value
-    }
+    const hide = useToggle(hidden)
 
     function profIcon(index: number): CSSProperties {
         return {
@@ -23,18 +21,20 @@ export default defineComponent((props, { emit }) => {
         }
     }
 
-    const isDark = useDark()
+    const isDark = useDark({
+        selector: "html",
+        attribute: "data-theme",
+        valueLight: "light",
+        valueDark: "dark"
+    })
 
-    function switchMode() {
-        isDark.value = !isDark.value
-        document.body.classList.toggle("dark-mode")
-    }
+    const toggleDark = useToggle(isDark)
 
     return () => {
         return (
             <div class={"h-full content text-color float-left duration-300 shadow".concat(" ").concat(hidden.value ? "w-10" : "w-48")}>
                 <div class="h-8 text-center">
-                    <apt-button class="w-full duration-300 text-xl font-bold select-none" onClick={change}>
+                    <apt-button class="w-full duration-300 text-xl font-bold select-none" onClick={hide}>
                         <div class={hidden.value ? "i-mdi-add" : "i-mdi-remove"} />
                     </apt-button>
                 </div>
@@ -50,7 +50,7 @@ export default defineComponent((props, { emit }) => {
                     </div>
                 ))}
                 <div>
-                    <apt-button onClick={switchMode} class="w-full duration-300 text-xl font-bold select-none">
+                    <apt-button onClick={toggleDark} class="w-full duration-300 text-xl font-bold select-none">
                         <div class={isDark.value ? "dark icon" : "light icon"}></div>
                     </apt-button>
                 </div>

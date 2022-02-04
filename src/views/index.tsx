@@ -374,66 +374,68 @@ export default defineComponent({
             return (
                 <>
                     <profession onApply={apply} />
-                    <div class="flex h-full p-2 flex-wrap justify-center items-start overflow-y-auto">
-                        <div class="card flex flex-wrap justify-center">
-                            <div class="h-auto flex flex-wrap justify-center">
-                                <div class="w-full h-12 flex items-center justify-center">
-                                    <apt-button class="border-1" title="重置" onClick={clear} size="normal" color="gray">
-                                        <div class="i-mdi-refresh text-xl"></div>
-                                    </apt-button>
-                                    <apt-button class="border-1" title="导入" onClick={imports} size="normal" type="primary">
-                                        <div class="i-mdi-arrow-left-bold-box-outline text-xl"> </div>
-                                    </apt-button>
-                                    <apt-button class="border-1" title="导出" onClick={() => exports()} type="info" size="normal">
-                                        <div class="i-mdi-arrow-right-bold-box-outline text-xl"></div>
-                                    </apt-button>
+                    <div class="h-full overflow-y-auto flex justify-center">
+                        <div class="max-w-450 mx-2 my-4 flex flex-wrap justify-center items-start">
+                            <div class="card flex flex-wrap justify-center">
+                                <div class="h-auto flex flex-wrap justify-center">
+                                    <div class="w-full h-12 flex items-center justify-center">
+                                        <apt-button class="border-1" title="重置" onClick={clear} size="normal" color="gray">
+                                            <div class="i-mdi-refresh text-xl"></div>
+                                        </apt-button>
+                                        <apt-button class="border-1" title="导入" onClick={imports} size="normal" type="primary">
+                                            <div class="i-mdi-arrow-left-bold-box-outline text-xl"> </div>
+                                        </apt-button>
+                                        <apt-button class="border-1" title="导出" onClick={() => exports()} type="info" size="normal">
+                                            <div class="i-mdi-arrow-right-bold-box-outline text-xl"></div>
+                                        </apt-button>
+                                    </div>
+                                    <canvas-box height={canvas_props.height} width={canvas_props.width} images={images.value} offset={base_offset.value} scale={scale.value}></canvas-box>
+                                    <div class="part w-60 h-60 relative">
+                                        {mapWith(parts, (part, value, index) => (
+                                            <div
+                                                onClick={() => selectPart(part)}
+                                                onContextmenu={onContextmenu(part)}
+                                                key={part}
+                                                style={partStyle(index)}
+                                                class={{ active: part === code_query.part, item: true }}
+                                            >
+                                                {validateCode(value.code) ? (
+                                                    <img class="icon" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} draggable="false" />
+                                                ) : (
+                                                    <div class="icon" title={value.title} v-text={value.title}></div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <canvas-box height={canvas_props.height} width={canvas_props.width} images={images.value} offset={base_offset.value} scale={scale.value}></canvas-box>
-                                <div class="part w-60 h-60 relative">
-                                    {mapWith(parts, (part, value, index) => (
-                                        <div
-                                            onClick={() => selectPart(part)}
-                                            onContextmenu={onContextmenu(part)}
-                                            key={part}
-                                            style={partStyle(index)}
-                                            class={{ active: part === code_query.part, item: true }}
-                                        >
-                                            {validateCode(value.code) ? (
-                                                <img class="icon" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} draggable="false" />
-                                            ) : (
-                                                <div class="icon" title={value.title} v-text={value.title}></div>
-                                            )}
-                                        </div>
-                                    ))}
+                                <div class="justify-end overflow-hidden h-93">
+                                    <div class="h-12 flex items-center justify-center">
+                                        <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
+                                    </div>
+                                    <div class="select w-75 h-75 overflow-y-auto">
+                                        <div onClick={() => reset(code_query.part)} class="icon default"></div>
+                                        {show_list.value.map(dress => (
+                                            <div class={{ active: isActive(dress), icon: true }} key={dress.hash} style={style(dress)} title={label(dress)} onClick={() => selectDress(dress)}></div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="justify-end overflow-hidden h-93">
-                                <div class="h-12 flex items-center justify-center">
-                                    <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
-                                </div>
-                                <div class="select w-75 h-75 overflow-y-auto">
-                                    <div onClick={() => reset(code_query.part)} class="icon default"></div>
-                                    {show_list.value.map(dress => (
-                                        <div class={{ active: isActive(dress), icon: true }} key={dress.hash} style={style(dress)} title={label(dress)} onClick={() => selectDress(dress)}></div>
-                                    ))}
-                                </div>
+                            <collocation class="card mt-4" onExport={exports} onImport={apply} />
+                            <div class="my-4 text-center text-sm text-color flex flex-wrap items-center">
+                                <p class="w-full m-0">
+                                    <a class="text-blue-400" href="//gitee.com/davatar/davatar">
+                                        DAvatar&nbsp;Ver&nbsp;2.0.0
+                                    </a>
+                                </p>
+                                <p class="w-full m-0">
+                                    Copyright&nbsp;©&nbsp;2017-present&nbsp;
+                                    <a class="text-blue-400" href="//gitee.com/apateat">
+                                        Apateat
+                                    </a>
+                                    .
+                                </p>
+                                <p class="w-full m-0">All&nbsp;rights&nbsp;reserved.</p>
                             </div>
-                        </div>
-                        <collocation class="card mt-2" onExport={exports} onImport={apply} />
-                        <div class="text-center text-sm text-color flex flex-wrap items-center">
-                            <p class="w-full m-0">
-                                <a class="text-blue-400" href="//gitee.com/davatar/davatar">
-                                    DAvatar&nbsp;Ver&nbsp;2.0.0
-                                </a>
-                            </p>
-                            <p class="w-full m-0">
-                                Copyright&nbsp;©&nbsp;2017-present&nbsp;
-                                <a class="text-blue-400" href="//gitee.com/apateat">
-                                    Apateat
-                                </a>
-                                .
-                            </p>
-                            <p class="w-full m-0">All&nbsp;rights&nbsp;reserved.</p>
                         </div>
                     </div>
 

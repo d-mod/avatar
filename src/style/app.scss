@@ -7,8 +7,8 @@
 }
 
 @mixin dark {
-    --background-color: #202020;
-    --content-color: #020202;
+    --background-color: #000;
+    --content-color: #16161a;
     --text-color: #fafafa;
     transition: all 0.3s ease;
 }
@@ -17,7 +17,7 @@
     @include light;
 }
 
-.dark-mode {
+:root[data-theme="dark"] {
     @include dark;
 }
 
