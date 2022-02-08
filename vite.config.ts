@@ -1,6 +1,8 @@
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import jsx from "@vitejs/plugin-vue-jsx"
+import { VitePWA } from "vite-plugin-pwa"
+
 import uno from "unocss/vite"
 import presetDefault from "@unocss/preset-uno"
 import presetIcons from "@unocss/preset-icons"
@@ -23,6 +25,14 @@ export default defineConfig({
         jsx(),
         uno({
             presets: [presetDefault(), presetIcons()]
+        }),
+        VitePWA({
+            registerType: "autoUpdate",
+            injectRegister: "script",
+            manifest: {
+                name: "davatar",
+                short_name: "davatar"
+            }
         })
     ],
     server: {

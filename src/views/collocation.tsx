@@ -118,7 +118,7 @@ export default defineComponent((props, { emit }) => {
     return () => {
         return (
             <div>
-                <div class="h-auto pt-2 px-4 flex flex-wrap">
+                <div class="flex flex-wrap h-auto px-4 pt-2">
                     <div class="select-col">
                         <apt-input placeholder="搜索" onKeyup_native={debounce(refresh, 20)} action-icon="search" class="search-input" v-model={refreshQuery.keyword}></apt-input>
                     </div>
@@ -147,11 +147,11 @@ export default defineComponent((props, { emit }) => {
                         </apt-indices>
                     </div>
                 </div>
-                <div onTouchend={load} ref={listRef} class="collocations duration-300 overflow-y-auto h-60 flex flex-wrap">
+                <div onTouchend={load} ref={listRef} class="flex flex-wrap h-60 duration-300 collocations overflow-y-auto">
                     {collocationStore.display_list.map(item => (
-                        <div title={item.description} class="item relative py-3 box-border duration-400" style={itemStyle}>
+                        <div title={item.description} class="py-3 duration-400 item relative box-border" style={itemStyle}>
                             <div style={style(item)} class="layer"></div>
-                            <div class="w-full h-full relative z-1">
+                            <div class="h-full w-full z-1 relative">
                                 <div class="name" v-text={item.name}></div>
                                 <div class="info">
                                     <span>作者:</span>
@@ -173,8 +173,8 @@ export default defineComponent((props, { emit }) => {
                         </div>
                     ))}
                 </div>
-                <apt-button class="w-full text-xl" onClick={load} full-width>
-                    <div class="i-mdi-chevron-down text-2xl"></div>
+                <apt-button class="text-xl w-full" onClick={load} full-width>
+                    <div class="text-2xl i-mdi-chevron-down"></div>
                 </apt-button>
             </div>
         )
