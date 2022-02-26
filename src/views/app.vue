@@ -1,5 +1,5 @@
 <script lang="tsx">
-	import { computed, ref, onMounted, reactive, defineComponent, renderList } from "vue"
+	import { computed, ref, onMounted, reactive, defineComponent, renderList, watch } from "vue"
 	import { useRoute, useRouter } from "vue-router"
 	import qs from "qs"
 
@@ -13,7 +13,7 @@
 
 	import { CodeTemplate, Dress, DressIcon, DressImage } from "@/model"
 	import { useDressingStore } from "@/store"
-	import { useMediaQuery } from "@vueuse/core"
+	import { useMediaQuery, useSwipe } from "@vueuse/core"
 
 	export default defineComponent({
 		name: "app",
@@ -367,6 +367,20 @@
 
 			const isCollapsed = ref(true)
 
+			const { isSwiping, direction } = useSwipe(document.documentElement)
+
+			watch(isSwiping, val => {
+				if (val) {
+					switch (direction.value) {
+						case "LEFT":
+							isCollapsed.value = true
+							return
+						case "RIGHT":
+							isCollapsed.value = false
+							return
+					}
+				}
+			})
 			return () => {
 				return (
 					<>

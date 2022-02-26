@@ -57,7 +57,7 @@
 					<div class={"h-full fixed left-0 top-0 content float-left  text-color duration-300 shadow z-999".concat(" ").concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}>
 						<div class="h-8 text-center">
 							<apt-button title={isCollapsed.value ? "展开" : "收起"} class="font-bold text-xl w-full duration-300 select-none" onClick={toggle}>
-								<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-minus"} />
+								<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-baseline-minus"} />
 							</apt-button>
 						</div>
 						{renderList(store.profession_list, (prof, index) => (
