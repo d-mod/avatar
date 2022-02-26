@@ -1,0 +1,102 @@
+<script lang="tsx">
+	import { Profession } from "@/model"
+	import { useDressingStore } from "@/store"
+	import { useDark, useMediaQuery, useToggle, useVModel } from "@vueuse/core"
+	import { CSSProperties, ref, defineComponent, renderList } from "vue"
+
+	export default defineComponent({
+		props: {
+			collapsed: {
+				type: Boolean,
+				default: () => true
+			}
+		},
+		setup(props, { emit }) {
+			const store = useDressingStore()
+
+			const isCollapsed = useVModel(props, "collapsed", emit)
+
+			const toggle = useToggle(isCollapsed)
+
+			function profIcon(index: number): CSSProperties {
+				return {
+					width: "26px",
+					height: "26px",
+					margin: "0 11px",
+					backgroundImage: `url("/icon/profession.png")`,
+					backgroundPositionX: `-${index * 26}px`,
+					backgroundPositionY: `${0}px`
+				}
+			}
+
+			const isDark = useDark({
+				selector: "html",
+				attribute: "data-theme",
+				valueLight: "light",
+				valueDark: "dark"
+			})
+
+			const toggleDark = useToggle(isDark)
+
+			const isMobile = useMediaQuery("(max-width: 640px)")
+
+			function changeProfssion(prof: Profession) {
+				return () => {
+					emit("apply", prof)
+
+					gtag("event", "select-profession", { label: prof.label, name: prof.name })
+
+					if (isMobile.value) {
+						toggle(true)
+					}
+				}
+			}
+
+			return () => {
+				return (
+					<div class={"h-full fixed left-0 top-0 content float-left  text-color duration-300 shadow z-999".concat(" ").concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}>
+						<div class="h-8 text-center">
+							<apt-button title={isCollapsed.value ? "展开" : "收起"} class="font-bold text-xl w-full duration-300 select-none" onClick={toggle}>
+								<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-minus"} />
+							</apt-button>
+						</div>
+						{renderList(store.profession_list, (prof, index) => (
+							<div
+								title={prof.label}
+								key={index}
+								onClick={changeProfssion(prof)}
+								class={["prof-item odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative "].concat(
+									prof == store.profession ? "active" : ""
+								)}
+							>
+								<div class="absolute" style={profIcon(index)}></div>
+								<div class={["flex-1", "text-center"].concat(isCollapsed.value ? "hidden" : "")}>{prof.label}</div>
+							</div>
+						))}
+
+						<div>
+							<apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={toggleDark} class="font-bold text-xl  w-full duration-300 select-none">
+								<div class={["w-6 h-6 bg-center bg-no-repeat text-color"].concat(isDark.value ? "i-mdi-outline-dark-mode" : "i-mdi-outline-light-mode")}></div>
+							</apt-button>
+						</div>
+					</div>
+				)
+			}
+		}
+	})
+</script>
+<style lang="scss" scoped>
+	@import "@/assets/style/theme";
+
+	.prof-item {
+		&:hover {
+			color: $blue;
+			background: rgba($blue, 0.12);
+		}
+
+		&.active {
+			color: $blue;
+			background: rgba($blue, 0.36);
+		}
+	}
+</style>

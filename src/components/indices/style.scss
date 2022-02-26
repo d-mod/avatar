@@ -7,31 +7,31 @@
 $primary_color: rgb(58, 122, 254);
 $text-color: pink;
 
-@import "@/style/theme";
+@import "@/assets/style/theme";
 
 .i-indices {
-    user-select: none;
-    outline: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    line-height: 1.5;
-    color: var(--text-color);
+	user-select: none;
+	outline: none;
+	background-color: transparent;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	line-height: 1.5;
+	color: var(--text-color);
 
-    .i-indices-label,
-    .i-option {
-        padding-right: 0.5em;
-    }
+	.i-indices-label,
+	.i-option {
+		padding-right: 0.5em;
+	}
 
-    .i-option {
-        cursor: pointer;
+	.i-option {
+		cursor: pointer;
 
-        &.active {
-            color: $blue;
-        }
-    }
+		&.active {
+			color: $blue;
+		}
+	}
 }

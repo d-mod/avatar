@@ -4,19 +4,20 @@
  **/
 import { createRouter, createWebHashHistory } from "vue-router"
 
-export default createRouter({
-    history: createWebHashHistory("/"),
+import App from "@/views/app.vue"
 
-    routes: [
-        {
-            name: "index",
-            path: "/",
-            component: () => import("@/views/index")
-        },
-        {
-            name: "character",
-            path: "/:id",
-            component: () => import("@/views/index")
-        }
-    ]
+export default createRouter({
+	history: createWebHashHistory("/"),
+	routes: [
+		{
+			name: "index",
+			path: "/",
+			component: App
+		},
+		{
+			name: "character",
+			path: "/:id",
+			component: App
+		}
+	]
 })
