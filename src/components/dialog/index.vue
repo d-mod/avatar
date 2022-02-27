@@ -1,6 +1,6 @@
 <script lang="tsx">
 	import { onClickOutside } from "@vueuse/core"
-	import { defineComponent, h, ref, renderSlot, Teleport } from "vue"
+	import { defineComponent, h, ref, renderSlot, Teleport, Transition } from "vue"
 
 	import IButton from "@/components/button"
 
@@ -52,7 +52,7 @@
 					}
 					if (props.yesButton) {
 						buttons.push(
-							<i-button class="bg-blue-300 text-white" onClick={onYesClick}>
+							<i-button class="primary" onClick={onYesClick}>
 								{props.yesButton}
 							</i-button>
 						)
@@ -63,20 +63,33 @@
 
 			return () => {
 				return renderTeleport("body", [
-					<div
-						v-show={props.visible}
-						class={["bounce-in-down bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300  "].concat(props.visible ? " " : "hidden")}
-					>
-						<div ref={dialogRef} class={["bg-white h-auto shadow-sm round-1 p-4", props.class]}>
-							<div class="w-full">
-								<div class="h-auto"> {renderSlot(slots, "default")}</div>
-								{renderAction()}
+					<Transition name="dialog" mode="out-in">
+						<div v-show={props.visible} class={["dialog-mask bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300 ease-in-out"]}>
+							<div ref={dialogRef} class={["bg-light h-auto shadow-sm round-1 p-4 dialog", props.class]}>
+								<div class="w-full">
+									<div class="h-auto"> {renderSlot(slots, "default")}</div>
+									{renderAction()}
+								</div>
 							</div>
 						</div>
-					</div>
+					</Transition>
 				])
 			}
 		}
 	})
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.dialog-enter-active {
+		animation: fade-in 400ms;
+	}
+	.dialog-leave-active {
+		animation: fade-in reverse 400ms;
+	}
+
+	.dialog-enter-active > .dialog {
+		animation: zoom-in 400ms;
+	}
+	.dialog-leave-active > .dialog {
+		animation: zoom-out 400ms;
+	}
+</style>

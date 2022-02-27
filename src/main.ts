@@ -5,8 +5,9 @@ import { RouterView } from "vue-router"
 import router from "@/router"
 import components from "@/components"
 import store from "@/store"
-import "uno.css"
+
 import "@/assets/style/app.scss"
+import "uno.css"
 
 const app = createApp(RouterView)
 app.use(router)

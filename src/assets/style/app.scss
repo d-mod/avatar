@@ -1,31 +1,8 @@
 @import "theme";
-
-@mixin light {
-	--background-color: #e0e0e0;
-	--content-color: white;
-	--text-color: #202020;
-}
-
-@mixin dark {
-	--background-color: #000;
-	--content-color: #16161a;
-	--text-color: #fafafa;
-	transition: all 0.3s ease;
-}
+@import "animate";
 
 :root {
-	@include light;
 	font-size: 16px;
-}
-
-:root[data-theme="dark"] {
-	@include dark;
-}
-
-@media screen and (prefers-color-scheme: dark) {
-	:root {
-		@include dark;
-	}
 }
 
 * {
@@ -40,31 +17,15 @@ html {
 body,
 #app {
 	margin: 0;
-	background-color: var(--background-color);
-}
-
-.content {
-	background-color: var(--content-color);
-}
-
-.text-color {
-	color: var(--text-color);
+	background-color: var(--neutral);
 }
 
 ::-webkit-scrollbar {
 	//滚动条的宽度
-	width: 8px;
+	width: 0.25rem;
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: $blue;
-	border-radius: 2em;
-}
-
-.mu-select {
-	margin-bottom: 0;
-	padding-bottom: 0;
-	padding-top: 0;
-	display: flex;
-	align-items: center;
+	background-color: var(--primary-color);
+	border-radius: 1rem;
 }

@@ -1,5 +1,5 @@
 <script lang="tsx">
-	import { computed, ref, onMounted, reactive, defineComponent, renderList, watch } from "vue"
+	import { computed, ref, onMounted, reactive, defineComponent, renderList, watch, onUnmounted } from "vue"
 	import { useRoute, useRouter } from "vue-router"
 	import qs from "qs"
 
@@ -11,9 +11,9 @@
 
 	import Collocation from "./collocation.vue"
 
-	import { CodeTemplate, Dress, DressIcon, DressImage } from "@/model"
+	import { CodeQuery, CodeTemplate, Dress, DressIcon, DressImage, PartList, PartValue } from "@/model"
 	import { useDressingStore } from "@/store"
-	import { useMediaQuery, useSwipe } from "@vueuse/core"
+	import { useSwipe } from "@vueuse/core"
 
 	export default defineComponent({
 		name: "app",
@@ -27,7 +27,7 @@
 				part: "skin"
 			})
 
-			const canvas_props = reactive<CanvasProps>({
+			const canvas_props = reactive({
 				width: 300,
 				height: 300,
 				scale: 100
@@ -381,24 +381,27 @@
 					}
 				}
 			})
+
 			return () => {
 				return (
 					<>
 						<profession v-model:collapsed={isCollapsed.value} onApply={apply} />
-						<div class={["flex justify-center duration-300 pr-4"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
-							<div class="flex flex-wrap my-4 mx-2 max-w-400 justify-center items-start overflow-x-hidden ">
+						<div class={["flex justify-center duration-300 pr-4 pt-8"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
+							<div class="flex flex-wrap max-w-400 justify-center items-start overflow-x-hidden ">
 								<div class="flex flex-wrap">
 									<div class="flex-wrap flex card justify-center items-center ">
 										<div class="flex h-20 w-full items-center justify-center">
-											<apt-button class="border-1" title="重置" onClick={clear} size="normal" color="gray">
-												<div class="text-xl i-mdi-refresh"></div>
-											</apt-button>
-											<apt-button class="border-1" onClick={imports} size="normal" type="primary">
-												导入
-											</apt-button>
-											<apt-button class="border-1" onClick={() => exports()} type="info" size="normal">
-												导出
-											</apt-button>
+											<div class="border-primary cursor-pointer flex border-1 rounded-1 overflow-hidden items-center">
+												<apt-button class="border-r-primary border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
+													<div class="text-xl i-mdi-refresh"></div>
+												</apt-button>
+												<apt-button class="border-r-primary border-r-1 border-0" title="导入" onClick={imports} size="normal" type="primary">
+													导入
+												</apt-button>
+												<apt-button class="" onClick={() => exports()} title="导出" type="info" size="normal">
+													导出
+												</apt-button>
+											</div>
 										</div>
 										<canvas-box height={canvas_props.height} width={canvas_props.width} images={images.value} scale={scale.value}></canvas-box>
 										<div class="h-60 w-60 part relative">
@@ -443,15 +446,15 @@
 									<collocation class="mt-4 card" onExport={exports} onImport={apply} />
 								</div>
 
-								<div class="flex flex-wrap mt-4 text-center text-sm text-color mb-12 items-center">
+								<div class="flex flex-wrap my-8 text-center text-base text-dark items-center">
 									<p class="m-0 w-full">
-										<a class="text-blue-400" href="//gitee.com/davatar/davatar">
+										<a class="text-primary" href="//gitee.com/davatar/davatar">
 											DAvatar&nbsp;Ver&nbsp;2.0.0
 										</a>
 									</p>
 									<p class="m-0 w-full">
 										Copyright&nbsp;©&nbsp;2017-present&nbsp;
-										<a class="text-blue-400" href="//gitee.com/apateat">
+										<a class="text-primary" href="//gitee.com/apateat">
 											Apateat
 										</a>
 										.
@@ -462,14 +465,14 @@
 						</div>
 
 						<apt-dialog class="h-30 p-4 w-80 relative" onYes={() => (showDialog.exports = false)} cancel-button={false} v-model:visible={showDialog.exports}>
-							<div class="h-8 w-full leading-8">导出</div>
+							<div class="h-8 text-dark w-full leading-8">导出</div>
 							<div v-show={!copy_success.value} class="text-red-400">
 								复制失败,请自行复制到剪贴板
 							</div>
-							<div class=" text-blue-300 break-all select-all ">{code.value}</div>
+							<div class=" text-primary break-all select-all ">{code.value}</div>
 						</apt-dialog>
 						<apt-dialog onYes={imports_done} onCancel={() => (showDialog.imports = false)} class="p-4 w-80" v-model:visible={showDialog.imports}>
-							<div class="h-8 w-full leading-8">导入</div>
+							<div class="h-8 text-dark w-full leading-8">导入</div>
 							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
 						</apt-dialog>
 					</>
@@ -477,26 +480,6 @@
 			}
 		}
 	})
-
-	interface PartValue extends Dress {
-		title?: string
-	}
-
-	interface PartList {
-		[key: string]: PartValue
-	}
-
-	interface CodeQuery {
-		part: string
-		code?: string
-		weapon?: string
-	}
-
-	interface CanvasProps {
-		width: number
-		height: number
-		scale: number
-	}
 
 	const part_titles: Record<string, string> = {
 		hair: "头部",
@@ -522,17 +505,15 @@
 	}
 </script>
 <style scoped lang="scss">
-	@import "@/assets/style/theme";
-
 	.card {
 		width: 100%;
-		background-color: var(--content-color);
+		background-color: var(--white);
 		box-shadow: 0 1px 3px rgb(18 18 18 / 10%);
 	}
 
 	.part {
 		.item {
-			color: $text-inner-color;
+			color: var(--black);
 
 			.icon {
 				margin: 0;
@@ -565,7 +546,7 @@
 			float: left;
 			user-select: none;
 			font-size: 12px;
-			color: $text-inner-color;
+			color: var(--black);
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -578,12 +559,6 @@
 			&.default {
 				background-image: url("@/assets/default.png");
 			}
-		}
-	}
-
-	@media screen and (min-width: 320px) and (max-width: 750px) {
-		.dress-list {
-			height: auto;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="tsx">
-	import { computed, CSSProperties, defineComponent, PropType, reactive, ref, watch } from "vue"
+	import { computed, defineComponent, PropType, reactive, ref, watch } from "vue"
 	import { debounce } from "lodash"
 	interface Point {
 		x: number
@@ -179,8 +179,8 @@
 			return () => {
 				return (
 					<div class="relative">
-						<div class={"bg-white h-full w-full z-99 absolute items-center justify-center".concat(" ").concat(loading.value ? "flex" : "hidden")}>
-							<div class="text-blue-300 loading"></div>
+						<div class={"bg-light h-full w-full z-99 absolute items-center justify-center".concat(" ").concat(loading.value ? "flex" : "hidden")}>
+							<div class="text-primary loading"></div>
 						</div>
 						<canvas
 							ref={canvas}

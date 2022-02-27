@@ -4,10 +4,6 @@
  * @Last Modified by:   Kritsu
  * @Last Modified time: 2021/11/17 18:03:08
  */
-$primary_color: rgb(58, 122, 254);
-$text-color: pink;
-
-@import "@/assets/style/theme";
 
 .i-indices {
 	user-select: none;
@@ -20,18 +16,12 @@ $text-color: pink;
 	display: flex;
 	flex-wrap: wrap;
 	line-height: 1.5;
-	color: var(--text-color);
-
-	.i-indices-label,
-	.i-option {
-		padding-right: 0.5em;
-	}
 
 	.i-option {
 		cursor: pointer;
 
 		&.active {
-			color: $blue;
+			color: var(--primary-color);
 		}
 	}
 }

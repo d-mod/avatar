@@ -54,7 +54,7 @@
 
 			return () => {
 				return (
-					<div class={"h-full fixed left-0 top-0 content float-left  text-color duration-300 shadow z-999".concat(" ").concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}>
+					<div class={"h-full fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999".concat(" ").concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}>
 						<div class="h-8 text-center">
 							<apt-button title={isCollapsed.value ? "展开" : "收起"} class="font-bold text-xl w-full duration-300 select-none" onClick={toggle}>
 								<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-baseline-minus"} />
@@ -76,7 +76,7 @@
 
 						<div>
 							<apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={toggleDark} class="font-bold text-xl  w-full duration-300 select-none">
-								<div class={["w-6 h-6 bg-center bg-no-repeat text-color"].concat(isDark.value ? "i-mdi-outline-dark-mode" : "i-mdi-outline-light-mode")}></div>
+								<div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "i-mdi-outline-dark-mode" : "i-mdi-outline-light-mode")}></div>
 							</apt-button>
 						</div>
 					</div>
@@ -86,17 +86,15 @@
 	})
 </script>
 <style lang="scss" scoped>
-	@import "@/assets/style/theme";
-
 	.prof-item {
 		&:hover {
-			color: $blue;
-			background: rgba($blue, 0.12);
+			color: var(--primary-color);
+			background: rgba(var(--primary-color), 0.12);
 		}
 
 		&.active {
-			color: $blue;
-			background: rgba($blue, 0.36);
+			color: var(--primary-color);
+			background: rgba(var(--primary-color), 0.36);
 		}
 	}
 </style>

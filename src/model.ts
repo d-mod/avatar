@@ -75,3 +75,20 @@ export interface CollocationQuery {
 	year: number
 	type: string | false
 }
+export interface PartValue extends Dress {
+	title?: string
+}
+
+export type PartList = Record<string, PartValue>
+
+export interface CodeQuery {
+	part: string
+	code?: string
+	weapon?: string
+}
+
+export interface CanvasProps {
+	width: number
+	height: number
+	scale: number
+}

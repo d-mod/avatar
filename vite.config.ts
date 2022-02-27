@@ -28,8 +28,20 @@ export default defineConfig({
 		vue(),
 		jsx(),
 		uno({
+			theme: {
+				colors: {
+					primary: "var(--primary-color)",
+					light: "var(--white)",
+					dark: "var(--black)",
+					neutral: "var(--neutral)"
+				}
+			},
 			presets: [
-				presetDefault(),
+				presetDefault({
+					themeExtend(theme) {
+						console.log(theme)
+					}
+				}),
 				presetIcons({
 					collections: { mdi: icons }
 				})

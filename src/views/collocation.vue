@@ -128,7 +128,7 @@
 							<apt-indices size="small" v-model={refreshQuery.type}>
 								<apt-option value={false} label="全部" />
 								{renderList(collocationStore.collocation_types, type => (
-									<apt-option text-color="black" key={type.name} label={type.label} value={type.name}></apt-option>
+									<apt-option text-dark="black" key={type.name} label={type.label} value={type.name}></apt-option>
 								))}
 							</apt-indices>
 						</div>
@@ -149,7 +149,7 @@
 									<div class="name" v-text={item.name}></div>
 									<div class="info">
 										<span>作者:</span>
-										<span class="text-blue-400" v-text={item.author}></span>
+										<span class="text-primary" v-text={item.author}></span>
 									</div>
 									<div class="info">
 										<span>热度:</span>
@@ -219,7 +219,7 @@
 				white-space: nowrap;
 				position: absolute;
 				bottom: 12px;
-				color: var(--text-color);
+				color: var(--black);
 			}
 
 			button {
