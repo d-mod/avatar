@@ -1,6 +1,6 @@
 <script lang="tsx">
+	import { debouncedWatch } from "@vueuse/core"
 	import { computed, defineComponent, PropType, reactive, ref, watch } from "vue"
-	import { debounce } from "lodash"
 	interface Point {
 		x: number
 		y: number
@@ -59,7 +59,7 @@
 
 			const movable = ref(false)
 
-			watch([() => props.images, () => props.scale], debounce(draw, 10))
+			debouncedWatch([() => props.images, () => props.scale], draw, { debounce: 10 })
 
 			const loading = ref(false)
 

@@ -14,6 +14,7 @@
 	import { CodeQuery, CodeTemplate, Dress, DressIcon, DressImage, PartList, PartValue } from "@/model"
 	import { useDressingStore } from "@/store"
 	import { useSwipe } from "@vueuse/core"
+	import { useRegisterSW } from "virtual:pwa-register/vue"
 
 	export default defineComponent({
 		name: "app",
@@ -302,8 +303,6 @@
 			}
 
 			async function imports_done() {
-				showDialog.imports = false
-
 				const text = code.value
 				if (text.match(code_regex)) {
 					let index = text.indexOf("?")
@@ -382,6 +381,17 @@
 				}
 			})
 
+			const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
+				immediate: true,
+				onRegistered(r) {
+					r &&
+						setInterval(async () => {
+							console.log("Checking for sw update")
+							await r.update()
+						}, 20000 /* 20s for testing purposes */)
+				}
+			})
+
 			return () => {
 				return (
 					<>
@@ -389,36 +399,42 @@
 						<div class={["flex justify-center duration-300 pr-4 pt-8"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
 							<div class="flex flex-wrap max-w-400 justify-center items-start overflow-x-hidden ">
 								<div class="flex flex-wrap">
-									<div class="flex-wrap flex card justify-center items-center ">
+									<div class="bg-light flex-wrap flex shadow w-full justify-center items-center ">
 										<div class="flex h-20 w-full items-center justify-center">
-											<div class="border-primary cursor-pointer flex border-1 rounded-1 overflow-hidden items-center">
-												<apt-button class="border-r-primary border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
+											<div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
+												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
 													<div class="text-xl i-mdi-refresh"></div>
 												</apt-button>
-												<apt-button class="border-r-primary border-r-1 border-0" title="导入" onClick={imports} size="normal" type="primary">
+												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
 													导入
 												</apt-button>
-												<apt-button class="" onClick={() => exports()} title="导出" type="info" size="normal">
+												<apt-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
 													导出
 												</apt-button>
 											</div>
 										</div>
 										<canvas-box height={canvas_props.height} width={canvas_props.width} images={images.value} scale={scale.value}></canvas-box>
-										<div class="h-60 w-60 part relative">
+										<div class="h-60 w-60 relative">
 											{renderList(parts, (value, part, index) => (
 												<div
 													onClick={() => selectPart(part as string)}
 													onContextmenu={onContextmenu(part as string)}
 													key={part}
 													style={partStyle(index)}
-													class={["item", "text-xs", "absolute", "w-8", "h-8", "border-2", "border-transparent", "box-border"].concat(
-														part === code_query.part ? "active" : ""
+													class={["text-dark", "text-xs", "absolute", "w-8", "h-8", "border-2", "border-solid", "box-border", "hover:scale-130"].concat(
+														part === code_query.part ? "border-#ff4081" : "border-transparent"
 													)}
 												>
 													{validateCode(value.code) ? (
-														<img class="flex h-7 m-0 w-7 icon" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} draggable="false" />
+														<img
+															class="flex h-7 m-0  w-7 duration-100 select-none "
+															src={value.icon ?? DEFAULT_SRC}
+															title={label(value)}
+															onError={error}
+															draggable="false"
+														/>
 													) : (
-														<div class="icon" title={value.title}>
+														<div class="flex h-7 m-0 text-xs  text-green-200 w-7  duration-100 items-center justify-center select-none" title={value.title}>
 															{value.title}
 														</div>
 													)}
@@ -429,21 +445,27 @@
 											<div class="flex h-12 items-center justify-center">
 												<apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
 											</div>
-											<div class="flex flex-wrap h-auto w-75 select overflow-y-auto justify-start sm:h-75 ">
-												<div onClick={() => reset(code_query.part)} class="icon default"></div>
+											<div class=" h-auto  grid  w-75 grid-cols-6  overflow-y-auto  sm:h-75 ">
+												<span
+													onClick={() => reset(code_query.part)}
+													class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
+													style={`background-image:url(${DEFAULT_SRC})`}
+												></span>
 												{renderList(show_list.value, dress => (
-													<div
-														class={{ active: isActive(dress), icon: true }}
+													<span
+														class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 duration-100"].concat(
+															isActive(dress) ? "border-primary" : "border-transparent"
+														)}
 														key={dress.hash}
 														style={style(dress)}
 														title={label(dress)}
 														onClick={() => selectDress(dress)}
-													></div>
+													></span>
 												))}
 											</div>
 										</div>
 									</div>
-									<collocation class="mt-4 card" onExport={exports} onImport={apply} />
+									<collocation class="bg-light shadow mt-4 w-full" onExport={exports} onImport={apply} />
 								</div>
 
 								<div class="flex flex-wrap my-8 text-center text-base text-dark items-center">
@@ -464,14 +486,14 @@
 							</div>
 						</div>
 
-						<apt-dialog class="h-30 p-4 w-80 relative" onYes={() => (showDialog.exports = false)} cancel-button={false} v-model:visible={showDialog.exports}>
+						<apt-dialog class="h-30 p-4 w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
 							<div class="h-8 text-dark w-full leading-8">导出</div>
 							<div v-show={!copy_success.value} class="text-red-400">
 								复制失败,请自行复制到剪贴板
 							</div>
 							<div class=" text-primary break-all select-all ">{code.value}</div>
 						</apt-dialog>
-						<apt-dialog onYes={imports_done} onCancel={() => (showDialog.imports = false)} class="p-4 w-80" v-model:visible={showDialog.imports}>
+						<apt-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
 							<div class="h-8 text-dark w-full leading-8">导入</div>
 							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
 						</apt-dialog>
@@ -504,61 +526,4 @@
 		}
 	}
 </script>
-<style scoped lang="scss">
-	.card {
-		width: 100%;
-		background-color: var(--white);
-		box-shadow: 0 1px 3px rgb(18 18 18 / 10%);
-	}
-
-	.part {
-		.item {
-			color: var(--black);
-
-			.icon {
-				margin: 0;
-				width: 28px;
-				height: 28px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				user-select: none;
-			}
-
-			&:hover {
-				transition-duration: 100ms;
-				transform: scale(1.3);
-			}
-
-			&.active {
-				border: #ff4081 2px solid;
-			}
-		}
-	}
-
-	.select {
-		.icon {
-			width: 32px;
-			height: 32px;
-			border: 2px solid transparent;
-			margin: 10px;
-			box-sizing: border-box;
-			float: left;
-			user-select: none;
-			font-size: 12px;
-			color: var(--black);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			&:hover {
-				transition-duration: 100ms;
-				transform: scale(1.3);
-			}
-
-			&.default {
-				background-image: url("@/assets/default.png");
-			}
-		}
-	}
-</style>
+<style scoped lang="scss"></style>

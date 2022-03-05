@@ -7,29 +7,30 @@
 		"serve": "vite preview"
 	},
 	"dependencies": {
-		"@vueuse/core": "^7.6.2",
-		"lodash": "^4.17.21",
+		"@vueuse/core": "^7.7.0",
 		"pinia": "^2.0.11",
 		"qs": "^6.10.3",
 		"vue": "^3.2.31",
-		"vue-router": "^4.0.12"
+		"vue-router": "^4.0.13"
 	},
 	"devDependencies": {
 		"@iconify-json/ic": "^1.1.1",
-		"@iconify-json/mdi": "^1.1.0",
-		"@types/lodash": "^4.14.178",
 		"@types/node": "^16.11.26",
 		"@types/qs": "^6.9.7",
-		"@unocss/preset-icons": "^0.26.2",
-		"@unocss/preset-uno": "^0.26.2",
+		"@unocss/preset-icons": "^0.27.0",
+		"@unocss/preset-uno": "^0.27.0",
 		"@vitejs/plugin-vue": "^1.10.2",
-		"@vitejs/plugin-vue-jsx": "^1.3.7",
+		"@vitejs/plugin-vue-jsx": "^1.3.8",
 		"prettier": "^2.5.1",
 		"rimraf": "^3.0.2",
 		"sass": "^1.49.9",
-		"typescript": "^4.5.5",
-		"unocss": "^0.26.2",
-		"vite": "^2.8.4",
-		"vite-plugin-pwa": "^0.11.13"
+		"typescript": "^4.6.2",
+		"unocss": "^0.27.0",
+		"vite": "^2.8.5",
+		"vite-plugin-pwa": "^0.11.13",
+		"workbox-core": "6.4.2",
+		"workbox-precaching": "6.4.2",
+		"workbox-routing": "^6.4.2",
+		"workbox-window": "^6.4.2"
 	}
 }

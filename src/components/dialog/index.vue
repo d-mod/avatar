@@ -1,5 +1,5 @@
 <script lang="tsx">
-	import { onClickOutside } from "@vueuse/core"
+	import { onClickOutside, useVModel } from "@vueuse/core"
 	import { defineComponent, h, ref, renderSlot, Teleport, Transition } from "vue"
 
 	import IButton from "@/components/button"
@@ -28,20 +28,36 @@
 			cancelButton: {
 				type: [String, Boolean],
 				default: "取消"
+			},
+			closeOnYes: {
+				type: Boolean,
+				default: () => true
+			},
+			closeOnCancel: {
+				type: Boolean,
+				default: () => true
 			}
 		},
 		emits: ["close", "yes", "cancel", "update:visible"],
 		setup(props, { emit, slots }) {
 			const dialogRef = ref<HTMLElement>()
 
+			const visible = useVModel(props, "visible", emit)
+
 			onClickOutside(dialogRef, () => emit("update:visible", false))
 
 			function onYesClick() {
 				emit("yes")
+				if (props.closeOnYes) {
+					visible.value = false
+				}
 			}
 
 			function onCancelClick() {
 				emit("cancel")
+				if (props.closeOnCancel) {
+					visible.value = false
+				}
 			}
 
 			function renderAction() {
@@ -52,7 +68,7 @@
 					}
 					if (props.yesButton) {
 						buttons.push(
-							<i-button class="primary" onClick={onYesClick}>
+							<i-button type="primary" onClick={onYesClick}>
 								{props.yesButton}
 							</i-button>
 						)
@@ -64,7 +80,7 @@
 			return () => {
 				return renderTeleport("body", [
 					<Transition name="dialog" mode="out-in">
-						<div v-show={props.visible} class={["dialog-mask bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300 ease-in-out"]}>
+						<div v-show={visible.value} class={["dialog-mask bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300 ease-in-out"]}>
 							<div ref={dialogRef} class={["bg-light h-auto shadow-sm round-1 p-4 dialog", props.class]}>
 								<div class="w-full">
 									<div class="h-auto"> {renderSlot(slots, "default")}</div>

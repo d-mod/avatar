@@ -3,8 +3,7 @@
 	import { Collocation, CollocationQuery } from "@/model"
 	import { useCollocationStore } from "@/store/collocation"
 	import { useDressingStore } from "@/store/dressing"
-	import { useResizeObserver, useWindowScroll } from "@vueuse/core"
-	import { debounce } from "lodash"
+	import { useResizeObserver, useWindowScroll, debouncedWatch } from "@vueuse/core"
 	import qs from "qs"
 
 	export default defineComponent((props, { emit }) => {
@@ -12,8 +11,8 @@
 		const collocationStore = useCollocationStore()
 
 		const itemSize = {
-			width: 156,
-			height: 240
+			width: 150,
+			height: 232
 		}
 
 		const itemStyle = {
@@ -83,7 +82,8 @@
 
 		function style(item: Collocation) {
 			return {
-				backgroundImage: `url("/cover/${item.id}.png")`
+				backgroundImage: `url("/cover/${item.id}.png")`,
+				height: "calc(100% - 48px)"
 			}
 		}
 
@@ -96,7 +96,10 @@
 			}
 		)
 
-		watchEffect(refresh)
+		debouncedWatch(refreshQuery, refresh, {
+			debounce: 100,
+			immediate: true
+		})
 
 		const listRef = ref<HTMLElement>()
 
@@ -113,59 +116,58 @@
 			return (
 				<div>
 					<div class="flex flex-wrap h-auto px-4 pt-2">
-						<div class="select-col justify-center sm:justify-start">
-							<apt-input placeholder="搜索" onKeyup_native={debounce(refresh, 20)} action-icon="search" class="search-input" v-model={refreshQuery.keyword}></apt-input>
+						<div class=" mx-auto my-1 sm:mx-0">
+							<apt-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></apt-input>
 						</div>
-						<div class="select-col">
-							<apt-indices size="small" v-model={refreshQuery.profession}>
-								<apt-option value={false} label="全部" />
-								{renderList(dressingStore.profession_list, profession => (
-									<apt-option key={profession.name} label={profession.label} value={profession.name} />
-								))}
-							</apt-indices>
-						</div>
-						<div class="select-col">
-							<apt-indices size="small" v-model={refreshQuery.type}>
-								<apt-option value={false} label="全部" />
-								{renderList(collocationStore.collocation_types, type => (
-									<apt-option text-dark="black" key={type.name} label={type.label} value={type.name}></apt-option>
-								))}
-							</apt-indices>
-						</div>
-						<div class="select-col">
-							<apt-indices size="small" v-model={refreshQuery.year}>
-								<apt-option value={0} label="全部" />
-								{renderList(collocationStore.years, year => (
-									<apt-option key={year} label={`${year}年`} value={year} />
-								))}
-							</apt-indices>
-						</div>
+						<apt-indices class="my-1" v-model={refreshQuery.profession}>
+							<apt-item value={0} label="全部" />
+							{renderList(dressingStore.profession_list, profession => (
+								<apt-item key={profession.name} label={profession.label} value={profession.name} />
+							))}
+						</apt-indices>
+						<apt-indices class="my-1" v-model={refreshQuery.type}>
+							<apt-item value={0} label="全部" />
+							{renderList(collocationStore.collocation_types, type => (
+								<apt-item text-dark="black" key={type.name} label={type.label} value={type.name}></apt-item>
+							))}
+						</apt-indices>
+						<apt-indices class="my-1" v-model={refreshQuery.year}>
+							<apt-item value={0}>全部</apt-item>
+							{renderList(collocationStore.years, year => (
+								<apt-item key={year} label={`${year}年`} value={year} />
+							))}
+						</apt-indices>
 					</div>
 					<div onTouchend={load} ref={listRef} class="flex flex-wrap duration-300 collocations">
 						{renderList(collocationStore.display_list, item => (
 							<div title={item.description} class="py-3 duration-400 item relative box-border" style={itemStyle}>
-								<div style={style(item)} class="bg-bottom bg-no-repeat w-full layer absolute"></div>
+								<div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
 								<div class="h-full w-full z-1 relative">
-									<div class="name" v-text={item.name}></div>
-									<div class="info">
-										<span>作者:</span>
-										<span class="text-primary" v-text={item.author}></span>
+									<div class="h-6 text-xs text-center text-dark w-full bottom-3 leading-6 name overflow-hidden whitespace-nowrap" v-text={item.name}></div>
+									<div class="text-sm text-white text-center w-full block invisible info">
+										<div>
+											<span>作者:</span>
+											<span class="text-primary" v-text={item.author}></span>
+										</div>
+										<div>
+											<span>热度:</span>
+											<span v-text={item.amount}></span>
+										</div>
+
+										<div class="flex flex-col mx-auto items-center">
+											<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={() => imports(item)} v-text={item.custom ? "下载" : "导入"}></apt-button>
+											{!item.custom && (
+												<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={() => exports(item)}>
+													导出
+												</apt-button>
+											)}
+										</div>
 									</div>
-									<div class="info">
-										<span>热度:</span>
-										<span v-text={item.amount}></span>
-									</div>
-									<apt-button class="border-1" onClick={() => imports(item)} type="primary" v-text={item.custom ? "下载" : "导入"}></apt-button>
-									{!item.custom && (
-										<apt-button class="border-1" onClick={() => exports(item)} type="primary">
-											导出
-										</apt-button>
-									)}
 								</div>
 							</div>
 						))}
 					</div>
-					<apt-button class="text-xl w-full" onClick={load} full-width>
+					<apt-button class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
 						<div class="text-2xl i-mdi-baseline-keyboard-arrow-down"></div>
 					</apt-button>
 				</div>
@@ -174,67 +176,12 @@
 	})
 </script>
 <style lang="scss" scoped>
-	.select-col {
-		height: auto;
-		width: 100%;
-		margin: 4px 0;
-		display: flex;
-		align-items: center;
-
-		.search-input {
-			width: 240px;
-			height: 32px;
-			border-radius: 4px 0 0 4px;
-		}
-	}
-
 	.collocations {
 		.item {
-			.layer {
-				position: absolute;
-				width: 100%;
-				background-position: bottom;
-				background-repeat: no-repeat;
-				height: calc(100% - 48px);
-				z-index: 0;
-				top: 0;
-			}
-
-			.info {
-				font-size: 14px;
-				width: 100%;
-				display: block;
-				color: white;
-				text-align: center;
-				visibility: hidden;
-			}
-
-			.name {
-				width: 100%;
-				height: 24px;
-				line-height: 24px;
-				font-size: 12px;
-				text-align: center;
-				overflow: hidden;
-				white-space: nowrap;
-				position: absolute;
-				bottom: 12px;
-				color: var(--black);
-			}
-
-			button {
-				display: block;
-				margin: 1rem auto;
-				border-radius: 3px;
-				visibility: hidden;
-				transition-duration: 0s;
-			}
-
 			&:hover {
 				background-color: rgba(0, 0, 0, 0.48);
 
-				.info,
-				button {
+				.info {
 					visibility: visible;
 				}
 

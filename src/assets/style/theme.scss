@@ -1,8 +1,9 @@
 @mixin light {
-	--primary-color: #4fb3ff;
-	--secondary-color: #ff4081;
-	--white: #f7f8f9;
-	--black: #000;
+	--primary: 79, 179, 255;
+	--primary-color: rgb(79, 179, 255);
+	--secondary-color: rgb(255, 64, 129);
+	--white: rgb(247, 248, 249);
+	--black: #1a1a1a;
 	--neutral: #e3e4e5;
 }
 

@@ -22,7 +22,6 @@
 				return {
 					width: "26px",
 					height: "26px",
-					margin: "0 11px",
 					backgroundImage: `url("/icon/profession.png")`,
 					backgroundPositionX: `-${index * 26}px`,
 					backgroundPositionY: `${0}px`
@@ -41,60 +40,43 @@
 			const isMobile = useMediaQuery("(max-width: 640px)")
 
 			function changeProfssion(prof: Profession) {
-				return () => {
-					emit("apply", prof)
+				emit("apply", prof)
 
-					gtag("event", "select-profession", { label: prof.label, name: prof.name })
-
-					if (isMobile.value) {
-						toggle(true)
-					}
+				gtag("event", "select-profession", { label: prof.label, name: prof.name })
+				if (isMobile.value) {
+					toggle(true)
 				}
 			}
 
 			return () => {
 				return (
-					<div class={"h-full fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999".concat(" ").concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}>
-						<div class="h-8 text-center">
-							<apt-button title={isCollapsed.value ? "展开" : "收起"} class="font-bold text-xl w-full duration-300 select-none" onClick={toggle}>
-								<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-baseline-minus"} />
-							</apt-button>
-						</div>
+					<apt-selection
+						value={store.profession}
+						onChange={changeProfssion}
+						item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
+						active-class="text-primary bg-primary-36"
+						class={["h-full fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
+					>
+						<apt-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={toggle}>
+							<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-baseline-minus"} />
+						</apt-button>
+
 						{renderList(store.profession_list, (prof, index) => (
-							<div
-								title={prof.label}
-								key={index}
-								onClick={changeProfssion(prof)}
-								class={["prof-item odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative "].concat(
-									prof == store.profession ? "active" : ""
-								)}
-							>
-								<div class="absolute" style={profIcon(index)}></div>
-								<div class={["flex-1", "text-center"].concat(isCollapsed.value ? "hidden" : "")}>{prof.label}</div>
-							</div>
+							<apt-item title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
+								<div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
+								<div class="flex-1 text-center" v-show={!isCollapsed.value}>
+									{prof.label}
+								</div>
+							</apt-item>
 						))}
 
-						<div>
-							<apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={toggleDark} class="font-bold text-xl  w-full duration-300 select-none">
-								<div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "i-mdi-outline-dark-mode" : "i-mdi-outline-light-mode")}></div>
-							</apt-button>
-						</div>
-					</div>
+						<apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={toggleDark} class="font-bold text-xl  w-full duration-300 select-none">
+							<div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "i-mdi-outline-dark-mode" : "i-mdi-outline-light-mode")}></div>
+						</apt-button>
+					</apt-selection>
 				)
 			}
 		}
 	})
 </script>
-<style lang="scss" scoped>
-	.prof-item {
-		&:hover {
-			color: var(--primary-color);
-			background: rgba(var(--primary-color), 0.12);
-		}
-
-		&.active {
-			color: var(--primary-color);
-			background: rgba(var(--primary-color), 0.36);
-		}
-	}
-</style>
+<style lang="scss" scoped></style>
