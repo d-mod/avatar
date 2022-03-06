@@ -53,15 +53,17 @@
 		const loading = ref(false)
 
 		function imports(collocation: Collocation) {
-			const { profession, code } = collocation
-			gtag("event", "select_template", collocation)
-			let query = qs.parse(code)
-			emit("import", { name: profession, query })
-			window.scrollTo(0, 0)
+			return () => {
+				const { profession, code } = collocation
+				gtag("event", "select_template", collocation)
+				let query = qs.parse(code)
+				emit("import", { name: profession, query })
+				window.scrollTo(0, 0)
+			}
 		}
 
 		function exports({ profession, code }: Collocation) {
-			emit("export", `${profession}?${code}`)
+			return () => emit("export", `${profession}?${code}`)
 		}
 
 		const { x, y } = useWindowScroll()
@@ -140,7 +142,7 @@
 					</div>
 					<div onTouchend={load} ref={listRef} class="flex flex-wrap duration-300 collocations">
 						{renderList(collocationStore.display_list, item => (
-							<div title={item.description} class="py-3 duration-400 item relative box-border" style={itemStyle}>
+							<div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-12" style={itemStyle}>
 								<div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
 								<div class="h-full w-full z-1 relative">
 									<div class="h-6 text-xs text-center text-dark w-full bottom-3 leading-6 name overflow-hidden whitespace-nowrap" v-text={item.name}></div>
@@ -155,9 +157,9 @@
 										</div>
 
 										<div class="flex flex-col mx-auto items-center">
-											<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={() => imports(item)} v-text={item.custom ? "下载" : "导入"}></apt-button>
+											<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={imports(item)} v-text={item.custom ? "下载" : "导入"}></apt-button>
 											{!item.custom && (
-												<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={() => exports(item)}>
+												<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
 													导出
 												</apt-button>
 											)}
@@ -167,7 +169,7 @@
 							</div>
 						))}
 					</div>
-					<apt-button class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
+					<apt-button title="查看更多" class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
 						<div class="text-2xl icon-mdi-baseline-keyboard-arrow-down"></div>
 					</apt-button>
 				</div>
@@ -179,8 +181,6 @@
 	.collocations {
 		.item {
 			&:hover {
-				background-color: rgba(0, 0, 0, 0.48);
-
 				.info {
 					visibility: visible;
 				}

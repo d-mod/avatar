@@ -471,7 +471,7 @@
 								<div class="flex flex-wrap my-8 text-center text-base text-dark items-center">
 									<p class="m-0 w-full">
 										<a class="text-primary" href="//gitee.com/davatar/davatar">
-											DAvatar&nbsp;Ver&nbsp;2.0.0
+											DAvatar&nbsp;Ver&nbsp;{__APP_VERSION__}
 										</a>
 									</p>
 									<p class="m-0 w-full">
@@ -495,7 +495,7 @@
 						</apt-dialog>
 						<apt-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
 							<div class="h-8 text-dark w-full leading-8">导入</div>
-							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap select-all"></apt-input>
+							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
 						</apt-dialog>
 					</div>
 				)

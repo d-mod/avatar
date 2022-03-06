@@ -9,6 +9,7 @@ import { icons } from "@iconify-json/ic"
 
 import { resolve } from "path"
 import presetPalette from "unocss-preset-palette"
+import { version } from "./package.json"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,6 +24,9 @@ export default defineConfig({
 		alias: {
 			"@": resolve(__dirname, "./src")
 		}
+	},
+	define: {
+		__APP_VERSION__: `"${version}"`
 	},
 	plugins: [
 		vue(),
@@ -43,7 +47,7 @@ export default defineConfig({
 						},
 						dark: {
 							light: "#1a1a1a",
-							dark: "#ffffffde"
+							dark: "#f7f8f9"
 						},
 						neutral: {
 							light: "#e3e4e5",

@@ -18,3 +18,5 @@ declare module "virtual:pwa-register/vue" {
 		updateServiceWorker: (reloadPage?: boolean) => Promise<void>
 	}
 }
+
+declare const __APP_VERSION__: string
