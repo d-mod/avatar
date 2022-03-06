@@ -1,29 +1,17 @@
 @mixin light {
-	--primary: 79, 179, 255;
-	--primary-color: rgb(79, 179, 255);
-	--secondary-color: rgb(255, 64, 129);
-	--white: rgb(247, 248, 249);
+	--primary: #4fb3ff;
+	--secondary-color: #ff4081;
+	--white: #f7f8f9;
 	--black: #1a1a1a;
 	--neutral: #e3e4e5;
 }
 
 @mixin dark {
 	--white: #1a1a1a;
-	--black: rgba(255, 255, 255, 0.87);
+	--black: #ffffffde;
 	--neutral: #232323;
-	transition: all 0.3s ease;
 }
 
 :root {
-	@include light;
-}
-
-:root[data-theme="dark"] {
-	@include dark;
-}
-
-@media screen and (prefers-color-scheme: dark) {
-	:root {
-		@include dark;
-	}
+	transition: all 0.3s ease;
 }

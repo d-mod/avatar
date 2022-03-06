@@ -12,7 +12,7 @@
 	line-height: 32px;
 
 	font-size: 12px;
-	color: var(--primary-color);
+	color: var(--primary);
 	background: var(--white);
 	border-radius: 2px;
 	display: flex;
@@ -39,7 +39,7 @@
 	}
 
 	&.outline {
-		border: 1px solid var(--primary-color);
+		border: 1px solid var(--primary);
 	}
 }
 

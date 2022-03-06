@@ -168,7 +168,7 @@
 						))}
 					</div>
 					<apt-button class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
-						<div class="text-2xl i-mdi-baseline-keyboard-arrow-down"></div>
+						<div class="text-2xl icon-mdi-baseline-keyboard-arrow-down"></div>
 					</apt-button>
 				</div>
 			)

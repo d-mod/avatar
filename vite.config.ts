@@ -4,11 +4,11 @@ import jsx from "@vitejs/plugin-vue-jsx"
 import { VitePWA } from "vite-plugin-pwa"
 
 import uno from "unocss/vite"
-import presetDefault from "@unocss/preset-uno"
-import presetIcons from "@unocss/preset-icons"
+import { presetIcons, presetUno } from "unocss"
 import { icons } from "@iconify-json/ic"
 
 import { resolve } from "path"
+import presetPalette from "unocss-preset-palette"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,53 +28,31 @@ export default defineConfig({
 		vue(),
 		jsx(),
 		uno({
-			rules: [
-				[
-					/^bg-(.*)-([1-9]|[1-9]\d)$/,
-					([, c, o], { theme }: { theme: any }) => {
-						console.log(c, o)
-						let opacity = Number(o)
-						if (!!opacity && opacity > 0 && opacity < 100) {
-							if (theme.colors[c] && !theme.colors[`${c}-${o}`]) {
-								let colorValue = theme.colors[c]
-								colorValue = /^rgba?\((.*)\)$/.exec(colorValue)[1] as string
-								if (colorValue) {
-									colorValue = colorValue.split(",").slice(0, 3).join(",")
-									return { background: `rgba(${colorValue}, ${opacity / 100})` }
-								}
-							}
-						}
-					}
-				],
-				[
-					/^text-(.*)-([1-9]|[1-9]\d)$/,
-					([, c, o], { theme }: { theme: any }) => {
-						console.log(c, o)
-						let opacity = Number(o)
-						if (!!opacity && opacity > 0 && opacity < 100) {
-							if (theme.colors[c] && !theme.colors[`${c}-${o}`]) {
-								let colorValue = theme.colors[c]
-								colorValue = /^rgba?\((.*)\)$/.exec(colorValue)[1] as string
-								if (colorValue) {
-									colorValue = colorValue.split(",").slice(0, 3).join(",")
-									return { color: `rgba(${colorValue}, ${opacity / 100})` }
-								}
-							}
-						}
-					}
-				]
-			],
-			theme: {
-				colors: {
-					primary: "rgb(var(--primary))",
-					light: "var(--white)",
-					dark: "var(--black)",
-					neutral: "var(--neutral)"
-				}
-			},
+			rules: [],
 			presets: [
-				presetDefault(),
+				presetUno(),
+				presetPalette({
+					cssVarName(name) {
+						return name
+					},
+					colors: {
+						primary: "#4fb3ff",
+						light: {
+							light: "#f7f8f9",
+							dark: "#1a1a1a"
+						},
+						dark: {
+							light: "#1a1a1a",
+							dark: "#ffffffde"
+						},
+						neutral: {
+							light: "#e3e4e5",
+							dark: "#232323"
+						}
+					}
+				}),
 				presetIcons({
+					prefix: "icon-",
 					collections: { mdi: icons }
 				})
 			]

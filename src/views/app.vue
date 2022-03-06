@@ -394,7 +394,7 @@
 
 			return () => {
 				return (
-					<>
+					<div class="bg-neutral">
 						<profession v-model:collapsed={isCollapsed.value} onApply={apply} />
 						<div class={["flex justify-center duration-300 pr-4 pt-8"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
 							<div class="flex flex-wrap max-w-400 justify-center items-start overflow-x-hidden ">
@@ -403,7 +403,7 @@
 										<div class="flex h-20 w-full items-center justify-center">
 											<div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
 												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
-													<div class="text-xl i-mdi-refresh"></div>
+													<div class="text-xl icon-mdi-refresh"></div>
 												</apt-button>
 												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
 													导入
@@ -495,9 +495,9 @@
 						</apt-dialog>
 						<apt-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
 							<div class="h-8 text-dark w-full leading-8">导入</div>
-							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
+							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap select-all"></apt-input>
 						</apt-dialog>
-					</>
+					</div>
 				)
 			}
 		}

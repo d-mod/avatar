@@ -30,7 +30,6 @@
 
 			const isDark = useDark({
 				selector: "html",
-				attribute: "data-theme",
 				valueLight: "light",
 				valueDark: "dark"
 			})
@@ -58,7 +57,7 @@
 						class={["h-full fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
 					>
 						<apt-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={toggle}>
-							<div class={isCollapsed.value ? "i-mdi-add" : "i-mdi-baseline-minus"} />
+							<div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
 						</apt-button>
 
 						{renderList(store.profession_list, (prof, index) => (
@@ -71,7 +70,7 @@
 						))}
 
 						<apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={toggleDark} class="font-bold text-xl  w-full duration-300 select-none">
-							<div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "i-mdi-outline-dark-mode" : "i-mdi-outline-light-mode")}></div>
+							<div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
 						</apt-button>
 					</apt-selection>
 				)
