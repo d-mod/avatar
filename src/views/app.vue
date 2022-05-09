@@ -1,5 +1,5 @@
 <script lang="tsx">
-	import { computed, ref, onMounted, reactive, defineComponent, renderList, watch, onUnmounted } from "vue"
+	import { computed, ref, reactive, defineComponent, renderList, watch } from "vue"
 	import { useRoute, useRouter } from "vue-router"
 	import qs from "qs"
 
@@ -11,7 +11,6 @@
 
 	import Collocation from "./collocation.vue"
 
-	import { CodeQuery, CodeTemplate, Dress, DressIcon, DressImage, PartList, PartValue } from "@/model"
 	import { useDressingStore } from "@/store"
 	import { useSwipe } from "@vueuse/core"
 	import { useRegisterSW } from "virtual:pwa-register/vue"
@@ -188,29 +187,36 @@
 				return !!part && code === parts[part].code
 			}
 
+			const loading = ref(false)
+
 			/**
 			 *
 			 * 加载时装
 			 *
 			 */
 			async function apply({ name, query = {} }: CodeTemplate = {}) {
-				for (let p in parts) {
-					//如果该部位为武器,则替换为具体的武器子类
-					if (!query[p]) {
-						//如果参数中不存在该部位代码,则重置该部位
-						reset(p)
+				loading.value = true
+				try {
+					for (let p in parts) {
+						//如果该部位为武器,则替换为具体的武器子类
+						if (!query[p]) {
+							//如果参数中不存在该部位代码,则重置该部位
+							reset(p)
+						}
 					}
+					if (!name) {
+						return
+					}
+					//切换职业
+					store.setProfessionName(name)
+					await refresh()
+					//获取每个部位的时装信息
+					let list = await store.getDress(query)
+					const tasks = list.map(async item => await selectDress(item))
+					await Promise.all(tasks)
+				} finally {
+					loading.value = false
 				}
-				if (!name) {
-					return
-				}
-				//切换职业
-				store.setProfessionName(name)
-				await refresh()
-				//获取每个部位的时装信息
-				let list = await store.getDress(query)
-				const tasks = list.map(async item => await selectDress(item))
-				await Promise.all(tasks)
 			}
 
 			/**
@@ -341,27 +347,24 @@
 				//Snackbar({ content: "导出成功，已复制到剪贴板", type: "success" })
 			}
 
-			onMounted(async () => {
-				const route = useRoute()
-				const router = useRouter()
-				const list = await store.loadProfession()
+			const route = useRoute()
+			const router = useRouter()
 
-				if (list && list.length > 0) {
-					let { path: name } = route
-					let query = route.query as Record<string, string>
-					name = name.replace("/", "")
+			store.loadProession().then(async () => {
+				let { path: name } = route
+				let query = route.query as Record<string, string>
+				name = name.replace("/", "")
 
-					let item: CodeTemplate = {}
-					if (name && name.length > 0) {
-						// 如果路由带有参数,则自动载入代码
-						item = { name, query }
-						await router.replace("/")
-					} else if (store.profession) {
-						//如果没有则载入默认的职业装扮
-						item = store.profession
-					}
-					await apply(item)
+				let item: CodeTemplate = {}
+				if (name && name.length > 0) {
+					// 如果路由带有参数,则自动载入代码
+					item = { name, query }
+					await router.replace("/")
+				} else if (store.profession) {
+					//如果没有则载入默认的职业装扮
+					item = store.profession
 				}
+				await apply(item)
 			})
 
 			const isCollapsed = ref(true)
@@ -402,18 +405,18 @@
 									<div class="bg-light flex-wrap flex shadow w-full justify-center items-center ">
 										<div class="flex h-20 w-full items-center justify-center">
 											<div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
-												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
+												<n-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
 													<div class="text-xl icon-mdi-refresh"></div>
-												</apt-button>
-												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
+												</n-button>
+												<n-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
 													导入
-												</apt-button>
-												<apt-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
+												</n-button>
+												<n-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
 													导出
-												</apt-button>
+												</n-button>
 											</div>
 										</div>
-										<canvas-box height={canvas_props.height} width={canvas_props.width} images={images.value} scale={scale.value}></canvas-box>
+										<canvas-box loading={loading.value} height={canvas_props.height} width={canvas_props.width} images={images.value} scale={scale.value}></canvas-box>
 										<div class="h-60 w-60 relative">
 											{renderList(parts, (value, part, index) => (
 												<div
@@ -443,7 +446,7 @@
 										</div>
 										<div class="h-auto justify-end overflow-hidden sm:h-93">
 											<div class="flex h-12 items-center justify-center">
-												<apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
+												<n-input placeholder="搜索" v-model={keyword.value}></n-input>
 											</div>
 											<div class=" h-auto  grid  w-75 grid-cols-6  overflow-y-auto  sm:h-75 ">
 												<span
@@ -486,17 +489,17 @@
 							</div>
 						</div>
 
-						<apt-dialog class="h-30 p-4 w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
+						<n-dialog class="h-30 p-4 w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
 							<div class="h-8 text-dark w-full leading-8">导出</div>
 							<div v-show={!copy_success.value} class="text-red-400">
 								复制失败,请自行复制到剪贴板
 							</div>
 							<div class=" text-primary break-all select-all ">{code.value}</div>
-						</apt-dialog>
-						<apt-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
+						</n-dialog>
+						<n-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
 							<div class="h-8 text-dark w-full leading-8">导入</div>
-							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
-						</apt-dialog>
+							<n-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></n-input>
+						</n-dialog>
 					</div>
 				)
 			}

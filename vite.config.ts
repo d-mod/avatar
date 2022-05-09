@@ -36,6 +36,9 @@ export default defineConfig({
 			presets: [
 				presetUno(),
 				presetPalette({
+					colorMode: {
+						attribute: "data-theme"
+					},
 					cssVarName(name) {
 						return name
 					},
@@ -57,7 +60,7 @@ export default defineConfig({
 				}),
 				presetIcons({
 					prefix: "icon-",
-					collections: { mdi: icons }
+					collections: { mdi: () => icons }
 				})
 			]
 		}),

@@ -1,6 +1,5 @@
 <script lang="tsx">
-	import { nextTick, defineComponent, onMounted, reactive, ref, watch, watchEffect, renderList } from "vue"
-	import { Collocation, CollocationQuery } from "@/model"
+	import { nextTick, defineComponent, onMounted, reactive, ref, watch, renderList } from "vue"
 	import { useCollocationStore } from "@/store/collocation"
 	import { useDressingStore } from "@/store/dressing"
 	import { useResizeObserver, useWindowScroll, debouncedWatch } from "@vueuse/core"
@@ -117,28 +116,28 @@
 		return () => {
 			return (
 				<div>
-					<div class="flex flex-wrap h-auto px-4 pt-2">
+					<div class="flex flex-col h-auto px-4 pt-2">
 						<div class=" mx-auto my-1 sm:mx-0">
-							<apt-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></apt-input>
+							<n-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></n-input>
 						</div>
-						<apt-indices class="my-1" v-model={refreshQuery.profession}>
-							<apt-item value={0} label="全部" />
-							{renderList(dressingStore.profession_list, profession => (
-								<apt-item key={profession.name} label={profession.label} value={profession.name} />
+						<n-indices class="my-1" v-model={refreshQuery.profession}>
+							<n-item value={0} label="全部" />
+							{renderList(dressingStore.profession_list ?? [], profession => (
+								<n-item key={profession.name} label={profession.label} value={profession.name} />
 							))}
-						</apt-indices>
-						<apt-indices class="my-1" v-model={refreshQuery.type}>
-							<apt-item value={0} label="全部" />
+						</n-indices>
+						<n-indices class="my-1" v-model={refreshQuery.type}>
+							<n-item value={0} label="全部" />
 							{renderList(collocationStore.collocation_types, type => (
-								<apt-item text-dark="black" key={type.name} label={type.label} value={type.name}></apt-item>
+								<n-item text-dark="black" key={type.name} label={type.label} value={type.name}></n-item>
 							))}
-						</apt-indices>
-						<apt-indices class="my-1" v-model={refreshQuery.year}>
-							<apt-item value={0}>全部</apt-item>
+						</n-indices>
+						<n-indices class="my-1" v-model={refreshQuery.year}>
+							<n-item value={0}>全部</n-item>
 							{renderList(collocationStore.years, year => (
-								<apt-item key={year} label={`${year}年`} value={year} />
+								<n-item key={year} label={`${year}年`} value={year} />
 							))}
-						</apt-indices>
+						</n-indices>
 					</div>
 					<div onTouchend={load} ref={listRef} class="flex flex-wrap duration-300 collocations">
 						{renderList(collocationStore.display_list, item => (
@@ -157,11 +156,11 @@
 										</div>
 
 										<div class="flex flex-col mx-auto items-center">
-											<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={imports(item)} v-text={item.custom ? "下载" : "导入"}></apt-button>
+											<n-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={imports(item)} v-text={item.custom ? "下载" : "导入"}></n-button>
 											{!item.custom && (
-												<apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
+												<n-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
 													导出
-												</apt-button>
+												</n-button>
 											)}
 										</div>
 									</div>
@@ -169,9 +168,9 @@
 							</div>
 						))}
 					</div>
-					<apt-button title="查看更多" class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
+					<n-button title="查看更多" class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
 						<div class="text-2xl icon-mdi-baseline-keyboard-arrow-down"></div>
-					</apt-button>
+					</n-button>
 				</div>
 			)
 		}

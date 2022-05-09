@@ -14,4 +14,4 @@ app.use(router)
 app.use(store)
 app.use(components)
 
-app.mount("#app")
+app.mount("#davatar")

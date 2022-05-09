@@ -2,7 +2,7 @@
 	import { onClickOutside, useVModel } from "@vueuse/core"
 	import { defineComponent, h, ref, renderSlot, Teleport, Transition } from "vue"
 
-	import IButton from "@/components/button"
+	import NButton from "@/components/button/index.vue"
 
 	function renderTeleport(to = "body", children: JSX.Element[]) {
 		return h(Teleport, { to }, children)
@@ -11,7 +11,7 @@
 	export default defineComponent({
 		name: "i-dialog",
 		components: {
-			IButton
+			NButton
 		},
 		props: {
 			visible: {
@@ -64,13 +64,13 @@
 				if (props.yesButton || props.cancelButton) {
 					const buttons: JSX.Element[] = []
 					if (props.cancelButton) {
-						buttons.push(<i-button onClick={onCancelClick}>{props.cancelButton}</i-button>)
+						buttons.push(<n-button onClick={onCancelClick}>{props.cancelButton}</n-button>)
 					}
 					if (props.yesButton) {
 						buttons.push(
-							<i-button type="primary" onClick={onYesClick}>
+							<n-button type="primary" onClick={onYesClick}>
 								{props.yesButton}
-							</i-button>
+							</n-button>
 						)
 					}
 					return <div class="flex mt-8 justify-end">{buttons}</div>
@@ -81,7 +81,7 @@
 				return renderTeleport("body", [
 					<Transition name="dialog" mode="out-in">
 						<div v-show={visible.value} class={["dialog-mask bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300 ease-in-out"]}>
-							<div ref={dialogRef} class={["bg-light h-auto shadow-sm round-1 p-4 dialog", props.class]}>
+							<div ref={dialogRef} class={["bg-light h-auto shadow-sm rounded p-4 dialog", props.class]}>
 								<div class="w-full">
 									<div class="h-auto"> {renderSlot(slots, "default")}</div>
 									{renderAction()}

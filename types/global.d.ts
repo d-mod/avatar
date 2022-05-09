@@ -1,22 +1,94 @@
-declare function gtag(category: string, event: string, data: any): void
+export {}
 
-declare module "virtual:pwa-register/vue" {
-	// @ts-ignore ignore when vue is not installed
-	import type { Ref } from "vue"
+declare global {
+	export function gtag(category: string, event: string, data: any): void
+	export const __APP_VERSION__: string
 
-	export type RegisterSWOptions = {
-		immediate?: boolean
-		onNeedRefresh?: () => void
-		onOfflineReady?: () => void
-		onRegistered?: (registration: ServiceWorkerRegistration | undefined) => void
-		onRegisterError?: (error: any) => void
+	export interface DressImage {
+		name: string
+		width: number
+		height: number
+		x: number
+		y: number
+		z: number
+		url: string
 	}
 
-	export function useRegisterSW(options?: RegisterSWOptions): {
-		needRefresh: Ref<boolean>
-		offlineReady: Ref<boolean>
-		updateServiceWorker: (reloadPage?: boolean) => Promise<void>
+	export interface Dress {
+		name: string
+		icon: string
+		code: string
+		profession?: string
+		part: string
+		images: DressImage[]
+		hash?: string
+	}
+
+	export interface DressIcon {
+		name: string
+		x: number
+		y: number
+	}
+
+	export interface Weapon {
+		name: string
+		label: string
+		aliases: string[]
+	}
+
+	export interface CodeTemplate {
+		name?: string
+		query?: Record<string, string>
+	}
+
+	export interface Profession extends CodeTemplate {
+		name: string
+		label: string
+		sortNumber: number
+		weapons: Weapon[]
+	}
+
+	export interface Collocation {
+		id: string
+		name: string
+		description: string
+		author: string
+		code: string
+		profession: string
+		type: string
+		year: number
+		amount: number
+		custom: boolean
+	}
+
+	export interface CollocationType {
+		name: string
+		label: string
+	}
+
+	export interface CollocationQuery {
+		profession: string
+		keyword: string
+		size: number
+		page: number
+		year: number
+		type: string | false
+	}
+	export interface PartValue extends Dress {
+		title?: string
+	}
+
+	export type PartList = Record<string, PartValue>
+
+	export interface CodeQuery {
+		part: string
+		code?: string
+		weapon?: string
+	}
+
+	export interface CanvasProps {
+		width: number
+		height: number
+		scale: number
 	}
 }
-
-declare const __APP_VERSION__: string

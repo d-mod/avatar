@@ -1,8 +1,7 @@
 <script lang="tsx">
-	import { Profession } from "@/model"
 	import { useDressingStore } from "@/store"
 	import { useDark, useMediaQuery, useToggle, useVModel } from "@vueuse/core"
-	import { CSSProperties, ref, defineComponent, renderList } from "vue"
+	import { CSSProperties, defineComponent, renderList } from "vue"
 
 	export default defineComponent({
 		props: {
@@ -30,6 +29,7 @@
 
 			const isDark = useDark({
 				selector: "html",
+				attribute: "data-theme",
 				valueLight: "light",
 				valueDark: "dark"
 			})
@@ -49,30 +49,30 @@
 
 			return () => {
 				return (
-					<apt-selection
+					<n-selection
 						value={store.profession}
 						onChange={changeProfssion}
 						item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
 						active-class="text-primary bg-primary-36"
 						class={["h-full fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
 					>
-						<apt-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={toggle}>
+						<n-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={() => toggle()}>
 							<div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
-						</apt-button>
+						</n-button>
 
-						{renderList(store.profession_list, (prof, index) => (
-							<apt-item title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
+						{renderList(store.profession_list ?? [], (prof, index) => (
+							<n-item title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
 								<div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
 								<div class="flex-1 text-center" v-show={!isCollapsed.value}>
 									{prof.label}
 								</div>
-							</apt-item>
+							</n-item>
 						))}
 
-						<apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={toggleDark} class="font-bold text-xl  w-full duration-300 select-none">
+						<n-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()} class="font-bold text-xl  w-full duration-300 select-none">
 							<div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
-						</apt-button>
-					</apt-selection>
+						</n-button>
+					</n-selection>
 				)
 			}
 		}

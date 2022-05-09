@@ -1,6 +1,7 @@
 <script lang="tsx">
-	import { debouncedWatch } from "@vueuse/core"
-	import { computed, defineComponent, PropType, reactive, ref, watch } from "vue"
+	import { debouncedWatch, syncRef } from "@vueuse/core"
+	import { computed, defineComponent, PropType, reactive, ref } from "vue"
+
 	interface Point {
 		x: number
 		y: number
@@ -17,9 +18,9 @@
 	}
 
 	/**
- @author kritsu
- @date 2018/9/20 12:03
- */
+	@author kritsu
+	@date 2018/9/20 12:03
+	*/
 	export default defineComponent({
 		name: "canvas-box",
 		props: {
@@ -42,6 +43,10 @@
 			scale: {
 				type: Number,
 				default: () => 1.0
+			},
+			loading: {
+				type: Boolean,
+				default: () => false
 			}
 		},
 		setup(props) {
@@ -61,7 +66,15 @@
 
 			debouncedWatch([() => props.images, () => props.scale], draw, { debounce: 10 })
 
-			const loading = ref(false)
+			const loading = ref(props.loading)
+
+			syncRef(
+				computed(() => props.loading),
+				loading,
+				{
+					direction: "ltr"
+				}
+			)
 
 			const time = ref(0)
 
@@ -128,6 +141,11 @@
 					let offsetX = Math.round((props.width - w) / 2 + location.x)
 					let offsetY = Math.round((props.height - h) / 2 + location.y)
 
+					offsetX = Math.max(0, offsetX)
+					offsetX = Math.min(props.width - w, offsetX)
+					offsetY = Math.max(0, offsetY)
+					offsetY = Math.min(props.height - h, offsetY)
+
 					const context = canvas.value?.getContext("2d")
 
 					if (context) {
@@ -163,8 +181,12 @@
 				if (movable.value) {
 					location.x += (e.clientX - startOffset.x) / props.scale
 					location.y += (e.clientY - startOffset.y) / props.scale
+
+					console.log(location)
+
 					startOffset.x = e.clientX
 					startOffset.y = e.clientY
+
 					draw()
 				}
 			}
@@ -178,10 +200,8 @@
 
 			return () => {
 				return (
-					<div class="relative">
-						<div class={"bg-light h-full w-full z-99 absolute items-center justify-center".concat(" ").concat(loading.value ? "flex" : "hidden")}>
-							<div class="text-primary loading"></div>
-						</div>
+					<div style={canvasStyle.value} class="border-solid border-1 border-blue-400 relative">
+						<n-loading loading={loading.value} />
 						<canvas
 							ref={canvas}
 							style={canvasStyle.value}
@@ -199,22 +219,4 @@
 		}
 	})
 </script>
-<style>
-	.loading {
-		border: 4px solid transparent;
-		border-radius: 50%;
-		border-top: 4px solid currentColor;
-		width: 48px;
-		height: 48px;
-		animation: spin 1.2s linear infinite;
-	}
-
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-</style>
+<style></style>

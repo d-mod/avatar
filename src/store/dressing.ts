@@ -1,12 +1,18 @@
 import { defineStore } from "pinia"
-import { Dress, DressIcon, DressingState, Profession } from "@/model"
+import { request } from "@/request"
 
 const PARTS = ["hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes"]
+export interface DressingState {
+	profession_list?: Profession[]
+	profession?: Profession
+	dresses: any
+	icons: Record<string, Record<string, DressIcon[]>>
+}
 
 export const useDressingStore = defineStore("dressing", {
-	state(): DressingState {
+	state: (): DressingState => {
 		return {
-			profession_list: [],
+			profession_list: undefined,
 			profession: undefined,
 			dresses: {},
 			icons: {}
@@ -18,14 +24,12 @@ export const useDressingStore = defineStore("dressing", {
 		}
 	},
 	actions: {
-		async loadProfession(): Promise<Profession[]> {
-			if (this.profession_list.length === 0) {
-				let list: Profession[] = await fetch("/api/profession.json").then(r => r.json())
-				this.profession_list = list
-				this.profession = list[0]
-				return list
+		async loadProession() {
+			if (!this.profession_list?.length) {
+				this.profession_list = await request("/api/profession.json").then(r => r.json())
+				this.profession = this.profession_list?.[0]
 			}
-			return []
+			return this.profession_list ?? []
 		},
 		async setProfession(profession: Profession) {
 			this.profession = profession
@@ -38,12 +42,12 @@ export const useDressingStore = defineStore("dressing", {
 			await Promise.all(tasks)
 		},
 		setProfessionName(name: string) {
-			this.profession = this.profession_list.find(e => e.name == name)
+			this.profession = this.profession_list?.find(e => e.name == name)
 		},
 		async getIcon(part: string) {
 			let profession = this.profession_name
 			if (!this.icons[profession] || !this.icons[profession][part]) {
-				let list: DressIcon[] = await fetch(`/icon/${profession}/${part}.json`).then(r => r.json())
+				let list: DressIcon[] = await request(`/icon/${profession}/${part}.json`).then(r => r.json())
 				this.icons[profession] = this.icons[profession] || {}
 				this.icons[profession][part] = list
 			}
@@ -53,7 +57,7 @@ export const useDressingStore = defineStore("dressing", {
 			let profession = this.profession_name
 
 			if (!this.dresses[profession] || !this.dresses[profession][part]) {
-				let list: Dress[] = await fetch(`/api/${profession}/${part}.json`).then(r => r.json())
+				let list: Dress[] = await request(`/api/${profession}/${part}.json`).then(r => r.json())
 				list = list.map(e =>
 					Object.assign(e, {
 						profession,
