@@ -1,6 +1,6 @@
 {
 	"name": "davatar",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"scripts": {
 		"dev": "vite",
 		"build": "rimraf dist/assets/* && vite build",
