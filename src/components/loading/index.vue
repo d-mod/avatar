@@ -25,7 +25,7 @@
 	})
 </script>
 <style lang="scss">
-	.n-loading-default-spinloading {
+	.n-loading-default-spin {
 		border: 4px solid transparent;
 		border-radius: 50%;
 		border-top: 4px solid currentColor;

@@ -55,23 +55,22 @@
 			const weapon = ref("")
 
 			const images = computed(() => {
-				const profession_name = store.profession?.name
+				const profession_name = store.profession_name
 
 				let images: DressImage[] = []
-				if (profession_name) {
-					for (let part in parts) {
-						let array = parts[part].images || []
-						let p: string | undefined = part
-						if (p === "weapon") {
-							p = code_query.weapon
-						}
-						if (!p) {
-							continue
-						}
-						array.forEach(e => (e.url = `/image/${profession_name}/${p}/${e.name}`))
-						images.push(...array)
+				for (let part in parts) {
+					let array = parts[part].images || []
+					let p: string | undefined = part
+					if (p === "weapon") {
+						p = code_query.weapon
 					}
+					if (!p) {
+						continue
+					}
+					array.forEach(e => (e.url = `/image/${profession_name}/${p}/${e.name}`))
+					images.push(...array)
 				}
+
 				return images
 			})
 
@@ -195,28 +194,23 @@
 			 *
 			 */
 			async function apply({ name, query = {} }: CodeTemplate = {}) {
-				loading.value = true
-				try {
-					for (let p in parts) {
-						//如果该部位为武器,则替换为具体的武器子类
-						if (!query[p]) {
-							//如果参数中不存在该部位代码,则重置该部位
-							reset(p)
-						}
+				for (let p in parts) {
+					//如果该部位为武器,则替换为具体的武器子类
+					if (!query[p]) {
+						//如果参数中不存在该部位代码,则重置该部位
+						reset(p)
 					}
-					if (!name) {
-						return
-					}
-					//切换职业
-					store.setProfessionName(name)
-					await refresh()
-					//获取每个部位的时装信息
-					let list = await store.getDress(query)
-					const tasks = list.map(async item => await selectDress(item))
-					await Promise.all(tasks)
-				} finally {
-					loading.value = false
 				}
+				if (!name) {
+					return
+				}
+				//切换职业
+				store.setProfessionName(name)
+				await refresh()
+				//获取每个部位的时装信息
+				let list = await store.getDress(query)
+				const tasks = list.map(async item => await selectDress(item))
+				await Promise.all(tasks)
 			}
 
 			/**

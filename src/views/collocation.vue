@@ -1,5 +1,5 @@
 <script lang="tsx">
-	import { nextTick, defineComponent, onMounted, reactive, ref, watch, renderList } from "vue"
+	import { nextTick, defineComponent, onMounted, reactive, ref, watch, renderList, computed } from "vue"
 	import { useCollocationStore } from "@/store/collocation"
 	import { useDressingStore } from "@/store/dressing"
 	import { useResizeObserver, useWindowScroll, debouncedWatch } from "@vueuse/core"
@@ -19,9 +19,7 @@
 			height: `${itemSize.height}px`
 		}
 
-		onMounted(async () => {
-			await collocationStore.fetchData()
-		})
+		collocationStore.fetchData()
 
 		const refreshing = ref(false)
 
@@ -42,12 +40,34 @@
 		async function refresh() {
 			refreshing.value = true
 
-			await collocationStore.load(refreshQuery)
-
 			loadQuery.page = 0
+
+			refreshQuery.page = 0
 
 			refreshing.value = false
 		}
+
+		const list = computed(() => {
+			let { profession, keyword, size, page, type, year } = Object.assign({}, refreshQuery, loadQuery)
+			const keywords = keyword.split(" ")
+			return collocationStore.list
+				.filter(e => {
+					if (!keywords.every(kw => e.name?.includes(kw) || e.description?.includes(kw))) {
+						return false
+					}
+					if (profession && e.profession !== profession) {
+						return false
+					}
+					if (type && e.type !== type) {
+						return false
+					}
+					if (year && e.year !== year) {
+						return false
+					}
+					return true
+				})
+				.slice(0, (page + 1) * size)
+		})
 
 		const loading = ref(false)
 
@@ -70,11 +90,11 @@
 		async function load() {
 			const page = Math.floor(y.value / itemSize.height) + 1
 
+			console.log(page, loadQuery.page)
+
 			if (page > loadQuery.page * 2) {
 				loading.value = true
-				loadQuery.page = page / 2
-				let query = Object.assign({}, refreshQuery, loadQuery)
-				await collocationStore.load(query)
+				loadQuery.page = Math.floor(page / 2)
 				loading.value = false
 			}
 
@@ -140,7 +160,7 @@
 						</n-indices>
 					</div>
 					<div onTouchend={load} ref={listRef} class="flex flex-wrap duration-300 collocations">
-						{renderList(collocationStore.display_list, item => (
+						{renderList(list.value, item => (
 							<div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-12" style={itemStyle}>
 								<div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
 								<div class="h-full w-full z-1 relative">
