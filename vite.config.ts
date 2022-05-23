@@ -7,9 +7,10 @@ import uno from "unocss/vite"
 import { presetIcons, presetUno } from "unocss"
 import { icons } from "@iconify-json/ic"
 
-import { resolve } from "path"
+import path, { resolve } from "path"
 import presetPalette from "unocss-preset-palette"
 import { version } from "./package.json"
+import fourze from "@fourze/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -31,6 +32,16 @@ export default defineConfig({
 	plugins: [
 		vue(),
 		jsx(),
+		fourze({
+			logLevel: "info",
+			base: "",
+			proxy: {
+				"/api": path.resolve(__dirname, "./dist/api"),
+				"/cover": path.resolve(__dirname, "./dist/cover"),
+				"/image": path.resolve(__dirname, "./dist/image"),
+				"/icon": path.resolve(__dirname, "./dist/icon")
+			}
+		}),
 		uno({
 			rules: [],
 			presets: [
@@ -100,13 +111,6 @@ export default defineConfig({
 		open: true,
 		fs: {
 			deny: ["dist/**"]
-		},
-
-		proxy: {
-			"^/(api|icon|image|cover)/.*": {
-				target: "https://davatar.gitee.io",
-				changeOrigin: true
-			}
 		}
 	}
 })
