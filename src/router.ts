@@ -4,7 +4,7 @@
  **/
 import { createRouter, createWebHistory } from "vue-router"
 
-import App from "@/views/app.vue"
+import App from "@/pages/app.vue"
 
 export default createRouter({
 	history: createWebHistory("/"),
