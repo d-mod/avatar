@@ -33,6 +33,7 @@ jobs:
           git clone https://github.com/d-mod/avatar.git -b gh-pages
           git config user.email "kritsu@qq.com"
           git config user.name "Kritsu"
+          git config advice.ignoredHook false
           git add -A
           git commit -m "deploy"
           git push origin gh-pages --force
