@@ -30,7 +30,7 @@ jobs:
       - run: pnpm run build
       - run: |
           cd dist
-          git clone https://github.com/d-mod/avatar.git -b gh-pages
+          git clone https://github.com/d-mod/avatar.git -b gh-pages .
           git config user.email "kritsu@qq.com"
           git config user.name "Kritsu"
           git config advice.ignoredHook false
