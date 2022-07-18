@@ -1,7 +1,7 @@
 <script lang="tsx">
 	import { computed, ref, reactive, defineComponent, renderList, watch } from "vue"
 	import { useRoute, useRouter } from "vue-router"
-	import qs from "qs"
+	import qs from "query-string"
 
 	import DEFAULT_SRC from "@/assets/default.png"
 	import EMPTY_SRC from "@/assets/empty.png"
@@ -348,12 +348,14 @@
 				let { path: name } = route
 				let query = route.query as Record<string, string>
 				name = name.replace("/", "")
+				if (Object.keys(query).length == 0) {
+					query = store.profession?.query ?? {}
+				}
 
 				let item: CodeTemplate = {}
-				if (name && name.length > 0) {
+				if (!!name?.length) {
 					// 如果路由带有参数,则自动载入代码
 					item = { name, query }
-					await router.replace("/")
 				} else if (store.profession) {
 					//如果没有则载入默认的职业装扮
 					item = store.profession
@@ -399,15 +401,15 @@
 									<div class="bg-light flex-wrap flex shadow w-full justify-center items-center ">
 										<div class="flex h-20 w-full items-center justify-center">
 											<div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
-												<n-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
+												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
 													<div class="text-xl icon-mdi-refresh"></div>
-												</n-button>
-												<n-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
+												</apt-button>
+												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
 													导入
-												</n-button>
-												<n-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
+												</apt-button>
+												<apt-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
 													导出
-												</n-button>
+												</apt-button>
 											</div>
 										</div>
 										<canvas-box loading={loading.value} height={canvas_props.height} width={canvas_props.width} images={images.value} scale={scale.value}></canvas-box>
@@ -440,7 +442,7 @@
 										</div>
 										<div class="h-auto justify-end overflow-hidden sm:h-93">
 											<div class="flex h-12 items-center justify-center">
-												<n-input placeholder="搜索" v-model={keyword.value}></n-input>
+												<apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
 											</div>
 											<div class=" h-auto  grid  w-75 grid-cols-6  overflow-y-auto  sm:h-75 ">
 												<span
@@ -483,17 +485,17 @@
 							</div>
 						</div>
 
-						<n-dialog class="h-30 p-4 w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
+						<apt-dialog class="h-30 p-4 w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
 							<div class="h-8 text-dark w-full leading-8">导出</div>
 							<div v-show={!copy_success.value} class="text-red-400">
 								复制失败,请自行复制到剪贴板
 							</div>
 							<div class=" text-primary break-all select-all ">{code.value}</div>
-						</n-dialog>
-						<n-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
+						</apt-dialog>
+						<apt-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
 							<div class="h-8 text-dark w-full leading-8">导入</div>
-							<n-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></n-input>
-						</n-dialog>
+							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
+						</apt-dialog>
 					</div>
 				)
 			}

@@ -10,13 +10,8 @@ export default createRouter({
 	history: createWebHistory("/"),
 	routes: [
 		{
-			name: "index",
-			path: "/",
-			component: App
-		},
-		{
 			name: "character",
-			path: "/:id",
+			path: "/:id?",
 			component: App
 		}
 	]

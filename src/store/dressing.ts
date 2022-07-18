@@ -1,5 +1,4 @@
 import { defineStore } from "pinia"
-import { request } from "@/request"
 
 const PARTS = ["hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes"]
 export interface DressingState {
@@ -26,7 +25,7 @@ export const useDressingStore = defineStore("dressing", {
 	actions: {
 		async loadProession() {
 			if (!this.profession_list?.length) {
-				this.profession_list = await request("/api/profession.json").then(r => r.json())
+				this.profession_list = await fetch("/api/profession.json").then(r => r.json())
 				this.profession = this.profession_list?.[0]
 			}
 			return this.profession_list ?? []
@@ -47,7 +46,7 @@ export const useDressingStore = defineStore("dressing", {
 		async getIcon(part: string) {
 			let profession = this.profession_name
 			if (!this.icons[profession] || !this.icons[profession][part]) {
-				let list: DressIcon[] = await request(`/icon/${profession}/${part}.json`).then(r => r.json())
+				let list: DressIcon[] = await fetch(`/icon/${profession}/${part}.json`).then(r => r.json())
 				this.icons[profession] = this.icons[profession] || {}
 				this.icons[profession][part] = list
 			}
@@ -57,7 +56,7 @@ export const useDressingStore = defineStore("dressing", {
 			let profession = this.profession_name
 
 			if (!this.dresses[profession] || !this.dresses[profession][part]) {
-				let list: Dress[] = await request(`/api/${profession}/${part}.json`).then(r => r.json())
+				let list: Dress[] = await fetch(`/api/${profession}/${part}.json`).then(r => r.json())
 				list = list.map(e =>
 					Object.assign(e, {
 						profession,

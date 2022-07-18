@@ -201,7 +201,7 @@
 			return () => {
 				return (
 					<div style={canvasStyle.value} class="border-solid border-1 border-blue-400 relative">
-						<n-loading loading={loading.value} />
+						<apt-loading loading={loading.value} />
 						<canvas
 							ref={canvas}
 							style={canvasStyle.value}

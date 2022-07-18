@@ -1,16 +1,17 @@
-import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import jsx from "@vitejs/plugin-vue-jsx"
+import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 
-import uno from "unocss/vite"
-import { presetIcons, presetUno } from "unocss"
 import { icons } from "@iconify-json/ic"
+import { presetIcons, presetUno } from "unocss"
+import uno from "unocss/vite"
 
+import fourze from "@fourze/vite"
 import path, { resolve } from "path"
 import presetPalette from "unocss-preset-palette"
+import uncomponents from "unplugin-vue-components/vite"
 import { version } from "./package.json"
-import fourze from "@fourze/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -41,6 +42,16 @@ export default defineConfig({
 				"/image": path.resolve(__dirname, "./dist/image"),
 				"/icon": path.resolve(__dirname, "./dist/icon")
 			}
+		}),
+		uncomponents({
+			allowOverrides: true,
+			directoryAsNamespace: true,
+			types: [
+				{
+					from: "vue-router",
+					names: ["RouterLink", "RouterView"]
+				}
+			]
 		}),
 		uno({
 			rules: [],

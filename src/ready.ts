@@ -1,9 +1,3 @@
-if (!import.meta.env.DEV) {
-	// if (!location.hostname.endsWith("localhost") && !location.hostname.endsWith("gitee.io")) {
-	// 	location.href = "//davatar.gitee.io"
-	// }
-}
-
 window.addEventListener("contextmenu", e => e.preventDefault())
 
 window.addEventListener(

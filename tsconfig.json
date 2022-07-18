@@ -16,5 +16,5 @@
 		"lib": ["esnext", "dom"],
 		"experimentalDecorators": true
 	},
-	"include": ["**/*.ts", "**/*.d.ts", "**/*.vue"]
+	"include": ["**/*.ts", "**/*.d.ts", "components.d.ts", "**/*.vue"]
 }

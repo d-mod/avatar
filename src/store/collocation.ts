@@ -1,5 +1,4 @@
 import { defineStore } from "pinia"
-import { request } from "@/request"
 
 interface CollocationState {
 	list: Collocation[]
@@ -19,7 +18,7 @@ export const useCollocationStore = defineStore("collocation", {
 
 	actions: {
 		async fetchData() {
-			let { list = [], types = [] } = await request("/api/collocation.json").then(r => r.json())
+			let { list = [], types = [] } = await fetch("/api/collocation.json").then(r => r.json())
 			this.list = list
 			this.collocation_types = types
 		}
