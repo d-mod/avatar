@@ -182,8 +182,6 @@
 					location.x += (e.clientX - startOffset.x) / props.scale
 					location.y += (e.clientY - startOffset.y) / props.scale
 
-					console.log(location)
-
 					startOffset.x = e.clientX
 					startOffset.y = e.clientY
 
@@ -200,7 +198,7 @@
 
 			return () => {
 				return (
-					<div style={canvasStyle.value} class="border-solid border-1 border-blue-400 relative">
+					<div style={canvasStyle.value} class="relative">
 						<apt-loading loading={loading.value} />
 						<canvas
 							ref={canvas}

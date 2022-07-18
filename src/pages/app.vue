@@ -1,7 +1,7 @@
 <script lang="tsx">
-	import { computed, ref, reactive, defineComponent, renderList, watch } from "vue"
-	import { useRoute, useRouter } from "vue-router"
 	import qs from "query-string"
+	import { computed, defineComponent, reactive, ref, renderList, watch } from "vue"
+	import { useRoute } from "vue-router"
 
 	import DEFAULT_SRC from "@/assets/default.png"
 	import EMPTY_SRC from "@/assets/empty.png"
@@ -12,7 +12,7 @@
 	import Collocation from "./collocation.vue"
 
 	import { useDressingStore } from "@/store"
-	import { useSwipe, useDateFormat } from "@vueuse/core"
+	import { useDateFormat, useMediaQuery, useSwipe, useWindowScroll } from "@vueuse/core"
 	import { useRegisterSW } from "virtual:pwa-register/vue"
 
 	export default defineComponent({
@@ -304,14 +304,17 @@
 
 			async function imports_done() {
 				const text = code.value
+				window.scrollTo(0, 0)
+				console.log("scroll to")
 				if (text.match(code_regex)) {
 					let index = text.indexOf("?")
 					if (index < 0) {
 						index = text.length - 1
 					}
-					let name = text.substring(0, index)
-					let suffix = text.substring(index + 1)
+					let name = text.slice(0, index)
+					let suffix = text.slice(index + 1)
 					let query = qs.parse(suffix) as Record<string, string>
+
 					await apply({ name, query })
 				}
 			}
@@ -342,7 +345,6 @@
 			}
 
 			const route = useRoute()
-			const router = useRouter()
 
 			store.loadProession().then(async () => {
 				let { path: name } = route
@@ -393,15 +395,28 @@
 
 			const lastModified = useDateFormat(__LAST_MODIIFED__, "YYYY-MM-DD HH:mm:ss")
 
+			const { y } = useWindowScroll()
+			const isMobile = useMediaQuery("(max-width: 640px)")
+
 			return () => {
 				return (
 					<div class="bg-neutral">
-						<profession v-model:collapsed={isCollapsed.value} onApply={apply} />
-						<div class={["flex justify-center duration-300 pr-4 pt-8"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
-							<div class="flex flex-wrap max-w-400 justify-center items-start overflow-x-hidden ">
+						<profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
+						<div class={["flex justify-center duration-300 pr-4 pt-8 relative"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
+							<div class="flex flex-wrap  max-w-400 justify-center items-start">
 								<div class="flex flex-wrap">
 									<div class="bg-light flex-wrap flex shadow w-full justify-center items-center ">
-										<div class="flex h-20 w-full items-center justify-center">
+										<div
+											class={"flex h-16 items-center justify-center duration-300 transition"
+												.concat(" ")
+												.concat(
+													y.value > 48
+														? "z-99 fixed  bg-light shadow-md top-0 "
+																.concat(" ")
+																.concat(isCollapsed.value ? "w-[calc(100%-3rem)] left-12" : "sm:w-[calc(100%-16rem)] sm:left-64")
+														: "w-full my-4 bg-transparent"
+												)}
+										>
 											<div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
 												<apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
 													<div class="text-xl icon-mdi-refresh"></div>
@@ -414,7 +429,15 @@
 												</apt-button>
 											</div>
 										</div>
-										<canvas-box loading={loading.value} height={canvas_props.height} width={canvas_props.width} images={images.value} scale={scale.value}></canvas-box>
+
+										<canvas-box
+											class={!isMobile.value ? "border-blue-200 border-solid border-1" : ""}
+											loading={loading.value}
+											height={canvas_props.height}
+											width={canvas_props.width}
+											images={images.value}
+											scale={scale.value}
+										></canvas-box>
 										<div class="h-60 w-60 relative">
 											{renderList(parts, (value, part, index) => (
 												<div

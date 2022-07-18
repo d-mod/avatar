@@ -161,7 +161,7 @@
 					</div>
 					<div onTouchend={load} ref={listRef} class="flex flex-wrap duration-300 collocations">
 						{renderList(list.value, item => (
-							<div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-12" style={itemStyle}>
+							<div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-24" style={itemStyle}>
 								<div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
 								<div class="h-full w-full z-1 relative">
 									<div class="h-6 text-xs text-center text-dark w-full bottom-3 leading-6 name overflow-hidden whitespace-nowrap" v-text={item.name}></div>

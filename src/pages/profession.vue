@@ -1,6 +1,6 @@
 <script lang="tsx">
 	import { useDressingStore } from "@/store"
-	import { useDark, useMediaQuery, useToggle, useVModel } from "@vueuse/core"
+	import { useDark, useToggle, useVModel } from "@vueuse/core"
 	import { CSSProperties, defineComponent, renderList } from "vue"
 
 	export default defineComponent({
@@ -8,6 +8,10 @@
 			collapsed: {
 				type: Boolean,
 				default: () => true
+			},
+			isMobile: {
+				type: Boolean,
+				default: () => false
 			}
 		},
 		setup(props, { emit }) {
@@ -36,13 +40,11 @@
 
 			const toggleDark = useToggle(isDark)
 
-			const isMobile = useMediaQuery("(max-width: 640px)")
-
 			function changeProfssion(prof: Profession) {
 				emit("apply", prof)
 
 				gtag("event", "select-profession", { label: prof.label, name: prof.name })
-				if (isMobile.value) {
+				if (props.isMobile) {
 					toggle(true)
 				}
 			}
@@ -54,7 +56,7 @@
 						onChange={changeProfssion}
 						item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
 						active-class="text-primary bg-primary-36"
-						class={["h-full fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
+						class={["h-100vh overflow-y-auto fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
 					>
 						<apt-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={() => toggle()}>
 							<div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
