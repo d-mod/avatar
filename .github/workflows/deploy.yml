@@ -1,7 +1,7 @@
 name: Deploy
 
 on:
-    tag:
+    release:
         branches:
             - main
 
