@@ -1,0 +1,38 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
+
+      - name: Set node version to 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://registry.npmjs.org/
+          cache: "pnpm"
+
+      - name: Install deps
+        run: pnpm install
+
+      - run: pnpm run build
+      - run: |
+          cd dist
+          git clone https://github.com/d-mod/avatar.git -b gh-pages
+          git config user.email "kritsu@qq.com"
+          git config user.name "Kritsu"
+          git add -A
+          git commit -m "deploy"
+          git push origin gh-pages --force
