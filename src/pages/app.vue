@@ -471,15 +471,15 @@
 
 								<div class="flex flex-wrap my-8 text-center text-base text-dark items-center">
 									<p class="m-0 w-full">
-										<a class="text-primary" href="//gitee.com/davatar/davatar">
+										<a class="text-primary" href="//github.com/d-mod/avatar">
 											DAvatar&nbsp;Ver&nbsp;{__APP_VERSION__}
 										</a>
 									</p>
 									<p class="m-0 text-primary text-xs w-full">最后更新于: {lastModified.value}</p>
 									<p class="m-0 w-full">
 										Copyright&nbsp;©&nbsp;2017-present&nbsp;
-										<a class="text-primary" href="//gitee.com/apateat">
-											Apateat
+										<a class="text-primary" href="//github.com/chizukicn">
+											Chizuki
 										</a>
 										.
 									</p>
