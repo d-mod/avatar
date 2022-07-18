@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+    tag:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 7
+
+            - name: Set node version to 16.x
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
+                  registry-url: https://registry.npmjs.org/
+                  cache: "pnpm"
+
+            - name: Install deps
+              run: pnpm install
+
+            - name: Download Resource
+              run: |
+                  mkdir dist
+                  cd dist
+                  git init 
+                  git remote add origin https://d-mod:${{ secrets.GITHUB_TOKEN }}@github.com/d-mod/avatar.git
+                  git config user.email "kritsu@qq.com"
+                  git config user.name "Kritsu"
+                  git config advice.ignoredHook false
+                  git pull origin resources
+            - run: pnpm run build
+            - run: |
+                  cd dist
+                  git checkout -b gh-pages
+                  git add -A 
+                  git commit -m "deploy" 
+                  git push -f origin gh-pages
