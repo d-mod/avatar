@@ -2,7 +2,10 @@ export {}
 
 declare global {
 	export function gtag(category: string, event: string, data: any): void
+
 	export const __APP_VERSION__: string
+
+	export const __LAST_MODIIFED__: number
 
 	export interface DressImage {
 		name: string

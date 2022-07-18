@@ -12,7 +12,7 @@
 	import Collocation from "./collocation.vue"
 
 	import { useDressingStore } from "@/store"
-	import { useSwipe } from "@vueuse/core"
+	import { useSwipe, useDateFormat } from "@vueuse/core"
 	import { useRegisterSW } from "virtual:pwa-register/vue"
 
 	export default defineComponent({
@@ -380,7 +380,7 @@
 				}
 			})
 
-			const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
+			useRegisterSW({
 				immediate: true,
 				onRegistered(r) {
 					r &&
@@ -390,6 +390,8 @@
 						}, 20000 /* 20s for testing purposes */)
 				}
 			})
+
+			const lastModified = useDateFormat(__LAST_MODIIFED__, "YYYY-MM-DD HH:mm:ss")
 
 			return () => {
 				return (
@@ -473,6 +475,7 @@
 											DAvatar&nbsp;Ver&nbsp;{__APP_VERSION__}
 										</a>
 									</p>
+									<p class="m-0 text-primary text-xs w-full">最后更新于: {lastModified.value}</p>
 									<p class="m-0 w-full">
 										Copyright&nbsp;©&nbsp;2017-present&nbsp;
 										<a class="text-primary" href="//gitee.com/apateat">

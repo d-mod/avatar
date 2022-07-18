@@ -28,7 +28,8 @@ export default defineConfig({
 		}
 	},
 	define: {
-		__APP_VERSION__: `"${version}"`
+		__APP_VERSION__: `"${version}"`,
+		__LAST_MODIIFED__: `${new Date().getTime()}`
 	},
 	plugins: [
 		vue(),
