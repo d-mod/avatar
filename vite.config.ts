@@ -37,7 +37,6 @@ export default defineConfig({
 		fourze({
 			logLevel: "info",
 			base: "/",
-
 			proxy: {
 				"/cover": path.resolve(__dirname, "./dist/cover"),
 				"/image": path.resolve(__dirname, "./dist/image"),

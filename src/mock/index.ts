@@ -2,7 +2,7 @@ import { defineFourze } from "@fourze/core"
 import axios from "axios"
 
 export default defineFourze((fourze, context) => {
-	axios.defaults.baseURL = `http://${context.origin}`
+	axios.defaults.baseURL = `//${context.origin}`
 
 	console.log("server origin", context.origin)
 

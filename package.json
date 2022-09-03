@@ -3,10 +3,10 @@
 	"version": "2.3.0",
 	"scripts": {
 		"dev": "vite",
-		"dev:mock": "vite --mode production",
+		"dev:mock": "vite --mode mock",
 		"build": "rimraf dist/assets/* && vite build",
 		"serve": "vite preview",
-		"release": "bumpp package.json --commit \"release: v\" --push --tag",
+		"bump": "bumpp package.json --commit \"release: v\" --push --tag",
 		"postinstall": "husky install"
 	},
 	"dependencies": {
