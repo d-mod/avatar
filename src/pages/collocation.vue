@@ -90,8 +90,6 @@
 		async function load() {
 			const page = Math.floor(y.value / itemSize.height) + 1
 
-			console.log(page, loadQuery.page)
-
 			if (page > loadQuery.page * 2) {
 				loading.value = true
 				loadQuery.page = Math.floor(page / 2)

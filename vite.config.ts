@@ -36,9 +36,9 @@ export default defineConfig({
 		jsx(),
 		fourze({
 			logLevel: "info",
-			base: "",
+			base: "/",
+
 			proxy: {
-				"/api": path.resolve(__dirname, "./dist/api"),
 				"/cover": path.resolve(__dirname, "./dist/cover"),
 				"/image": path.resolve(__dirname, "./dist/image"),
 				"/icon": path.resolve(__dirname, "./dist/icon")

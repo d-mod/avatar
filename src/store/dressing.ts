@@ -1,10 +1,10 @@
 import { defineStore } from "pinia"
+import { stringifyUrl } from "query-string"
 
 const PARTS = ["hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes"]
 export interface DressingState {
 	profession_list?: Profession[]
 	profession?: Profession
-	dresses: any
 	icons: Record<string, Record<string, DressIcon[]>>
 }
 
@@ -13,7 +13,6 @@ export const useDressingStore = defineStore("dressing", {
 		return {
 			profession_list: undefined,
 			profession: undefined,
-			dresses: {},
 			icons: {}
 		}
 	},
@@ -25,7 +24,7 @@ export const useDressingStore = defineStore("dressing", {
 	actions: {
 		async loadProession() {
 			if (!this.profession_list?.length) {
-				this.profession_list = await fetch("/api/profession.json").then(r => r.json())
+				this.profession_list = await fetch("/api/profession/list").then(r => r.json())
 				this.profession = this.profession_list?.[0]
 			}
 			return this.profession_list ?? []
@@ -33,55 +32,24 @@ export const useDressingStore = defineStore("dressing", {
 		async setProfession(profession: Profession) {
 			this.profession = profession
 			localStorage.setItem("last-profession", profession.name)
-			let tasks = []
-			for (let part of PARTS) {
-				tasks.push(this.getDressList(part))
-				tasks.push(this.getIcon(part))
-			}
-			await Promise.all(tasks)
 		},
 		setProfessionName(name: string) {
 			this.profession = this.profession_list?.find(e => e.name == name)
 		},
-		async getIcon(part: string) {
-			let profession = this.profession_name
-			if (!this.icons[profession] || !this.icons[profession][part]) {
-				let list: DressIcon[] = await fetch(`/icon/${profession}/${part}.json`).then(r => r.json())
-				this.icons[profession] = this.icons[profession] || {}
-				this.icons[profession][part] = list
-			}
-			return this.icons[profession][part]
+		async getIcon(part: string): Promise<DressIcon[]> {
+			return fetch(`/api/icon/${this.profession_name}/${part}`).then(r => r.json())
 		},
-		async getDressList(part: string) {
+		async getDressList(part: string): Promise<Dress[]> {
 			let profession = this.profession_name
-
-			if (!this.dresses[profession] || !this.dresses[profession][part]) {
-				let list: Dress[] = await fetch(`/api/${profession}/${part}.json`).then(r => r.json())
-				list = list.map(e =>
-					Object.assign(e, {
-						profession,
-						part,
-						icon: `/icon/${profession}/${part}/${e.code}.png`
-					})
-				)
-				this.dresses[profession] = this.dresses[profession] || {}
-				this.dresses[profession][part] = list
-			}
-			return this.dresses[profession][part]
+			return await fetch(`/api/dress/${profession}/${part}`).then(r => r.json())
 		},
-		async getDress(query: Record<string, string>) {
-			let array = []
-			for (let part in query) {
-				if (query[part] === "-1") {
-					continue
-				}
-				let list: Dress[] = await this.getDressList(part)
-				let dress = list.find(e => e.code === query[part])
-				if (dress) {
-					array.push(dress)
-				}
-			}
-			return array
+		async getDress(query: Record<string, string>): Promise<Dress[]> {
+			return await fetch(
+				stringifyUrl({
+					url: `/api/dress/get/${this.profession_name}`,
+					query
+				})
+			).then(r => r.json())
 		}
 	}
 })

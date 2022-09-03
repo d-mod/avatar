@@ -7,6 +7,7 @@ import { RouterView } from "vue-router"
 import store from "@/store"
 
 import "@/assets/style/app.scss"
+import "@fourze/client"
 import "uno.css"
 
 const app = createApp(RouterView)
