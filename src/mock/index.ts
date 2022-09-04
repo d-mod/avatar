@@ -1,10 +1,25 @@
-import { defineFourze } from "@fourze/core"
+import { asyncLock, defineFourze } from "@fourze/core"
 import axios from "axios"
 
-export default defineFourze((fourze, context) => {
-	axios.defaults.baseURL = `//${context.origin}`
+export interface AsyncQueueItem {
+	state: "pending" | "done" | "error"
+	result?: any
+	error?: any
+	lastModified?: number
+	listeners: ((data: any) => void)[]
+}
 
-	console.log("server origin", context.origin)
+export default defineFourze(fourze => {
+	const axiosInstance = axios.create({
+		baseURL: "https://avatar.kritsu.net"
+	})
+
+	const asyncQueue: Record<string, AsyncQueueItem> = {}
+
+	const getCollocation = asyncLock<{
+		types: CollocationType[]
+		list: Collocation[]
+	}>(() => axiosInstance.get("/api/collocation.json").then(r => r.data))
 
 	/**
 	 *  时装列表数据缓存
@@ -14,15 +29,22 @@ export default defineFourze((fourze, context) => {
 	const icons: Record<string, Record<string, DressIcon[]>> = {}
 
 	fourze("/api/profession/list", () => {
-		return axios.get("/api/profession.json").then(r => r.data)
+		return axiosInstance.get("/api/profession.json").then(r => r.data)
 	})
-	fourze("/api/collocation/list", async (req, res) => {
-		return axios.get("/api/collocation.json").then(r => r.data)
+
+	fourze("/api/collocation/list", async () => {
+		const collecationState = await getCollocation()
+		return collecationState?.list
+	})
+
+	fourze("/api/collocation/types", async () => {
+		const collecationState = await getCollocation()
+		return collecationState?.types
 	})
 
 	async function getDressList(profession: string, part: string) {
 		if (!dressList[profession] || !dressList[profession][part]) {
-			let list: Dress[] = await axios.get(`/api/${profession}/${part}.json`).then(r => r.data)
+			let list: Dress[] = await axiosInstance.get(`/api/${profession}/${part}.json`).then(r => r.data)
 			list = list.map(e =>
 				Object.assign(e, {
 					profession,
@@ -62,7 +84,7 @@ export default defineFourze((fourze, context) => {
 	fourze("/api/icon/{profession}/{part}", async (req, res) => {
 		const { profession, part } = req.params
 		if (!icons[profession] || !icons[profession][part]) {
-			let list: DressIcon[] = await axios.get(`/icon/${profession}/${part}.json`).then(r => r.data)
+			let list: DressIcon[] = await axiosInstance.get(`/icon/${profession}/${part}.json`).then(r => r.data)
 			icons[profession] = icons[profession] || {}
 			icons[profession][part] = list
 		}

@@ -1,9 +1,9 @@
 <script lang="tsx">
 	import { useCollocationStore } from "@/store/collocation"
 	import { useDressingStore } from "@/store/dressing"
-	import { debouncedWatch, useResizeObserver, useWindowScroll } from "@vueuse/core"
+	import { asyncComputed, debouncedWatch, useResizeObserver, useWindowScroll } from "@vueuse/core"
 	import qs from "query-string"
-	import { computed, defineComponent, nextTick, onBeforeMount, reactive, ref, renderList, watch } from "vue"
+	import { computed, defineComponent, nextTick, reactive, ref, renderList, watch } from "vue"
 
 	export default defineComponent((props, { emit }) => {
 		const dressingStore = useDressingStore()
@@ -18,8 +18,6 @@
 			width: `${itemSize.width}px`,
 			height: `${itemSize.height}px`
 		}
-
-		onBeforeMount(collocationStore.fetchData)
 
 		const refreshing = ref(false)
 
@@ -47,11 +45,19 @@
 			refreshing.value = false
 		}
 
+		const alllist = asyncComputed(() => {
+			return collocationStore.getList()
+		}, [])
+
+		const types = asyncComputed(() => {
+			return collocationStore.getTypes()
+		})
+
 		const list = computed(() => {
 			let { profession, keyword, size, page, type, year } = Object.assign({}, refreshQuery, loadQuery)
 			const keywords = keyword.split(" ")
-			return collocationStore.list
-				.filter(e => {
+			return alllist.value
+				.filter((e: Collocation) => {
 					if (!keywords.every(kw => e.name?.includes(kw) || e.description?.includes(kw))) {
 						return false
 					}
@@ -146,7 +152,7 @@
 						</apt-indices>
 						<apt-indices class="my-1" v-model={refreshQuery.type}>
 							<apt-item value={0} label="全部" />
-							{renderList(collocationStore.collocation_types, type => (
+							{renderList(types.value, type => (
 								<apt-item text-dark="black" key={type.name} label={type.label} value={type.name}></apt-item>
 							))}
 						</apt-indices>

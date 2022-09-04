@@ -17,10 +17,11 @@ export const useCollocationStore = defineStore("collocation", {
 	},
 
 	actions: {
-		async fetchData() {
-			let { list = [], types = [] } = await fetch("/api/collocation/list").then(r => r.json())
-			this.list = list
-			this.collocation_types = types
+		async getList(): Promise<Collocation[]> {
+			return (this.list = await fetch("/api/collocation/list").then(r => r.json()))
+		},
+		async getTypes(): Promise<CollocationType[]> {
+			return (this.collocation_types = await fetch("/api/collocation/types").then(r => r.json()))
 		}
 	},
 
