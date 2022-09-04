@@ -1,14 +1,6 @@
 import { asyncLock, defineFourze } from "@fourze/core"
 import axios from "axios"
 
-export interface AsyncQueueItem {
-	state: "pending" | "done" | "error"
-	result?: any
-	error?: any
-	lastModified?: number
-	listeners: ((data: any) => void)[]
-}
-
 export default defineFourze(fourze => {
 	const axiosInstance = axios.create({
 		baseURL: "https://avatar.kritsu.net"
