@@ -14,8 +14,6 @@ export default defineFourze(fourze => {
 		baseURL: "https://avatar.kritsu.net"
 	})
 
-	const asyncQueue: Record<string, AsyncQueueItem> = {}
-
 	const getCollocation = asyncLock<{
 		types: CollocationType[]
 		list: Collocation[]
