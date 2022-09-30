@@ -1,8 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@fourze/core': ^0.10.11
-  '@fourze/vite': ^0.10.11
+  '@fourze/core': ^0.10.12
+  '@fourze/vite': ^0.10.12
   '@iconify-json/ic': ^1.1.3
   '@types/node': ^17.0.31
   '@unocss/preset-icons': ^0.45.26
@@ -43,8 +43,8 @@ dependencies:
   vue-router: 4.1.5_vue@3.2.40
 
 devDependencies:
-  '@fourze/core': 0.10.11
-  '@fourze/vite': 0.10.11_vite@3.1.4
+  '@fourze/core': 0.10.12
+  '@fourze/vite': 0.10.12_vite@3.1.4
   '@iconify-json/ic': 1.1.3
   '@types/node': 17.0.31
   '@unocss/preset-icons': 0.45.26
@@ -1338,28 +1338,28 @@ packages:
     dev: true
     optional: true
 
-  /@fourze/core/0.10.11:
-    resolution: {integrity: sha512-xLqKqvRwbSxEdrVhfLhhatJ1lbVk9dDjSMV7KfWHefd9T7maCse0e9hc7XXujEm4cJ4HdSWjRQqVkgu9RCC3nA==}
+  /@fourze/core/0.10.12:
+    resolution: {integrity: sha512-WomA/4gTvphkYbfA3nWr3JvVqxxVZh162PpNLlLF5wdwWPUwe4Kj8JNJ8EFNabg786ActnUMPP7pG9V04aggtA==}
     dependencies:
       dayjs: 1.11.5
       query-string: 7.1.1
     dev: true
 
-  /@fourze/server/0.10.11:
-    resolution: {integrity: sha512-f6/X+mu1BwpYUT/6uf7w2g9bOwq5wkrENeyWRg7GLxCEOUh2qHiUeX63IO2cf91xhGhpSpq5QkojV8oQndvPfQ==}
+  /@fourze/server/0.10.12:
+    resolution: {integrity: sha512-5FdccaTysI6CnPdamj0QgUZ6ho19nxL0XQ210Od2+Pc8035oPfR7GY1kRDHE8vZ0XClaosDIUhMHsZOQIsQ38w==}
     peerDependencies:
       chokidar: ^3.5.3
     dependencies:
-      '@fourze/core': 0.10.11
+      '@fourze/core': 0.10.12
       esbuild: 0.14.54
       mime: 3.0.0
     dev: true
 
-  /@fourze/unplugin/0.10.11_vite@3.1.4:
-    resolution: {integrity: sha512-K/irfbAgkSN3FHKQt5ZX9TkWeyntbPSXBzDh91aTj7RLZjgFMHAlJlhSHLeTUF/Y4FAmtNo2+IhfwVfPOEOEHA==}
+  /@fourze/unplugin/0.10.12_vite@3.1.4:
+    resolution: {integrity: sha512-VEmeJH4Kr+ORkuPUxIT7w+EOW9JQcOnk7Sq8m9x9zqWTBj0BV2QNZMTtq7h5pk+ZQhHHxYp1Oqo7yhrJvD2T2A==}
     dependencies:
-      '@fourze/core': 0.10.11
-      '@fourze/server': 0.10.11
+      '@fourze/core': 0.10.12
+      '@fourze/server': 0.10.12
       unplugin: 0.8.1_vite@3.1.4
     transitivePeerDependencies:
       - chokidar
@@ -1369,10 +1369,10 @@ packages:
       - webpack
     dev: true
 
-  /@fourze/vite/0.10.11_vite@3.1.4:
-    resolution: {integrity: sha512-X8T2oHAMiMhPi1qvY9vDS6DNzXO/VNg8WlwiDlbdBSa/iL8ljvJfcVjO8sPZoLF2grwAfQBSce3TZND1WvVrfw==}
+  /@fourze/vite/0.10.12_vite@3.1.4:
+    resolution: {integrity: sha512-NvGU+Jj1Ort+GUHj5H0vpApzAXS89qi5/iFivjap54ESj/TvBMiLDwEQM1GxM+QjOBMAe+UaSTCBEuMAmBaJaw==}
     dependencies:
-      '@fourze/unplugin': 0.10.11_vite@3.1.4
+      '@fourze/unplugin': 0.10.12_vite@3.1.4
     transitivePeerDependencies:
       - chokidar
       - esbuild
@@ -1905,12 +1905,6 @@ packages:
       - '@vue/composition-api'
       - vue
     dev: false
-
-  /acorn/8.7.1:
-    resolution: {integrity: sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-    dev: true
 
   /acorn/8.8.0:
     resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==}
@@ -3269,7 +3263,7 @@ packages:
     dev: true
 
   /is-extglob/2.1.1:
-    resolution: {integrity: sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=}
+    resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -4514,11 +4508,11 @@ packages:
       webpack:
         optional: true
     dependencies:
-      acorn: 8.7.1
+      acorn: 8.8.0
       chokidar: 3.5.3
       vite: 3.1.4_sass@1.51.0
       webpack-sources: 3.2.3
-      webpack-virtual-modules: 0.4.4
+      webpack-virtual-modules: 0.4.5
     dev: true
 
   /unplugin/0.8.1_vite@3.1.4:
@@ -4673,10 +4667,6 @@ packages:
   /webpack-sources/3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
     engines: {node: '>=10.13.0'}
-    dev: true
-
-  /webpack-virtual-modules/0.4.4:
-    resolution: {integrity: sha512-h9atBP/bsZohWpHnr+2sic8Iecb60GxftXsWNLLLSqewgIsGzByd2gcIID4nXcG+3tNe4GQG3dLcff3kXupdRA==}
     dev: true
 
   /webpack-virtual-modules/0.4.5:
