@@ -32,7 +32,7 @@ jobs:
                   mkdir dist
                   cd dist
                   git init 
-                  git remote add origin https://d-mod:${{ secrets.GITHUB_TOKEN }}@github.com/d-mod/avatar_resource.git
+                  git remote add origin https://d-mod:${{ secrets.DMOD_TOKEN }}@github.com/d-mod/avatar_resource.git
                   git config user.email "kritsu@qq.com"
                   git config user.name "chizuki"
                   git config advice.ignoredHook false
