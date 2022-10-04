@@ -8,7 +8,7 @@ import { presetIcons, presetUno } from "unocss"
 import uno from "unocss/vite"
 
 import fourze from "@fourze/vite"
-import path, { resolve } from "path"
+import { resolve } from "path"
 import presetPalette from "unocss-preset-palette"
 import uncomponents from "unplugin-vue-components/vite"
 import { version } from "./package.json"
@@ -36,12 +36,7 @@ export default defineConfig({
 		jsx(),
 		fourze({
 			logLevel: "info",
-			base: "/",
-			proxy: {
-				"/cover": path.resolve(__dirname, "./dist/cover"),
-				"/image": path.resolve(__dirname, "./dist/image"),
-				"/icon": path.resolve(__dirname, "./dist/icon")
-			}
+			base: "/"
 		}),
 		uncomponents({
 			allowOverrides: true,
@@ -122,6 +117,12 @@ export default defineConfig({
 		open: true,
 		fs: {
 			deny: ["dist/**"]
+		},
+		proxy: {
+			"^/(icon|image|cover)/.*": {
+				target: "https://avatar.kritsu.net",
+				changeOrigin: true
+			}
 		}
 	}
 })
