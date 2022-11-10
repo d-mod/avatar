@@ -3,7 +3,7 @@ import axios from "axios"
 
 export default defineFourze(fourze => {
 	const axiosInstance = axios.create({
-		baseURL: import.meta.env.DEV ? "https://avatar.kritsu.net" : globalThis.location?.origin
+		baseURL: "https://avatar.kritsu.net"
 	})
 
 	const getCollocation = asyncLock<{
