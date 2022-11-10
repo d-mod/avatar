@@ -18,9 +18,9 @@
 	}
 
 	/**
-	@author kritsu
-	@date 2018/9/20 12:03
-	*/
+@author kritsu
+@date 2018/9/20 12:03
+*/
 	export default defineComponent({
 		name: "canvas-box",
 		props: {

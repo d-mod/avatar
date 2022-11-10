@@ -19,9 +19,6 @@ export default defineConfig({
 	esbuild: {
 		exclude: ["node_modules/**", "dist/**"]
 	},
-	build: {
-		emptyOutDir: false
-	},
 	resolve: {
 		alias: {
 			"@": resolve(__dirname, "./src")
@@ -29,13 +26,12 @@ export default defineConfig({
 	},
 	define: {
 		__APP_VERSION__: `"${version}"`,
-		__LAST_MODIIFED__: `${new Date().getTime()}`
+		__LAST_MODIFIED__: `${new Date().getTime()}`
 	},
 	plugins: [
 		vue(),
 		jsx(),
 		fourze({
-			logLevel: "info",
 			base: "/api"
 		}),
 		uncomponents({

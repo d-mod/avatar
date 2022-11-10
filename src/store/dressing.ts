@@ -22,7 +22,7 @@ export const useDressingStore = defineStore("dressing", {
 		}
 	},
 	actions: {
-		async loadProession() {
+		async loadProfession() {
 			if (!this.profession_list?.length) {
 				this.profession_list = await fetch("/api/profession/list").then(r => r.json())
 				this.profession = this.profession_list?.[0]

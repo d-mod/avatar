@@ -5,6 +5,7 @@
 	 * @Last Modified by:   Kritsu
 	 * @Last Modified time: 2021/11/17 18:49:23
 	 */
+	import { classPropType, labelPropType } from "@/components/hooks/types"
 	import { onClickOutside } from "@vueuse/core"
 	import { computed, defineComponent, onDeactivated, ref, renderSlot, Teleport, Transition, watch } from "vue"
 	import { listProps, useSelectionList } from "../../hooks/selection/list"
@@ -22,11 +23,19 @@
 				default: 120
 			},
 			emptyLabel: {
-				type: String
+				type: labelPropType
+			},
+			labelClass: {
+				type: classPropType,
+				default: ""
+			},
+			inputClass: {
+				type: classPropType,
+				default: ""
 			}
 		},
 		setup(props, context) {
-			const { active } = useSelectionList(props, context)
+			const { render } = useSelectionList(props, context)
 
 			const isOpen = ref(false)
 			const triggerRef = ref<HTMLElement>()
@@ -73,11 +82,20 @@
 
 			return () => {
 				const { slots } = context
-
+				function renderLabel() {
+					const children = render()
+					if (!!children) {
+						if (!Array.isArray(children) || children.length > 0) {
+							return <span class={["i-select-input"].concat(props.inputClass)}>{children}</span>
+						}
+					}
+					const emptyLabel = typeof props.emptyLabel == "function" ? props.emptyLabel() : props.emptyLabel
+					return <span class="w-full pl-2 i-select-input i-select-empty-label">{emptyLabel}</span>
+				}
 				return (
 					<div class="i-select" onClick={collapse} style={{ width: props.width == 0 ? 0 : `${props.width}px` }}>
 						<div class={["i-select-trigger"].concat(props.disabled ? "disabled" : "")} ref={triggerRef}>
-							<span class="i-select-label">{active?.value?.key ?? props.emptyLabel}</span>
+							<span class="i-select-label">{renderLabel()}</span>
 							<div class="i-select-down-icon"></div>
 						</div>
 						<Teleport to="body">

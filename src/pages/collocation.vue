@@ -25,7 +25,7 @@
 			profession: "swordman",
 			year: 0,
 			keyword: "",
-			type: false,
+			type: 0,
 			page: 0,
 			size: 16
 		})
@@ -45,7 +45,7 @@
 			refreshing.value = false
 		}
 
-		const alllist = asyncComputed(() => {
+		const allList = asyncComputed(() => {
 			return collocationStore.getList()
 		}, [])
 
@@ -56,7 +56,7 @@
 		const list = computed(() => {
 			let { profession, keyword, size, page, type, year } = Object.assign({}, refreshQuery, loadQuery)
 			const keywords = keyword.split(" ")
-			return alllist.value
+			return allList.value
 				.filter((e: Collocation) => {
 					if (!keywords.every(kw => e.name?.includes(kw) || e.description?.includes(kw))) {
 						return false

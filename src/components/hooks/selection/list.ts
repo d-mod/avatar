@@ -1,53 +1,88 @@
-import { classPropType, valuePropType } from "./types"
-import { computed, provide, ref, SetupContext, ComponentPropsOptions, Ref } from "vue"
-import { AciveClassSymbol, AciveSymbol, InitSymbol, ItemClassSymbol, ModelValueSymbol, Option, UnactiveSymbol } from "./constants"
+import { defineHooks } from "@/components/hooks/define"
+import { syncRef } from "@vueuse/core"
+import { computed, provide, reactive } from "vue"
+import { BaseType, classPropType, labelPropType, valuePropType } from "../types"
+import { ActiveClassSymbol, ChangeActiveSymbol, InitSymbol, IsActiveSymbol, ItemClassSymbol, ItemLabelSymbol, Option, UnactiveSymbol } from "./constants"
 
-export const listProps: ComponentPropsOptions = {
-	value: {
-		type: valuePropType,
-		default: () => null
-	},
+export const listProps = {
 	modelValue: {
 		type: valuePropType,
-		default: () => null
-	},
-	defaultValue: {
-		type: valuePropType,
-		default: () => null
+		default: () => undefined
 	},
 	activeClass: {
-		type: classPropType
+		type: classPropType,
+		default: () => "active"
 	},
 	itemClass: {
-		type: classPropType
+		type: classPropType,
+		default: () => ""
 	},
 	unactiveClass: {
-		type: classPropType
+		type: classPropType,
+		default: () => ""
+	},
+	label: {
+		type: labelPropType,
+		default: () => null
+	},
+
+	/**
+	 *  多选模式
+	 */
+	multiple: {
+		type: Boolean,
+		default: () => false
+	},
+	multipleLimit: {
+		type: Number,
+		default: 0
+	},
+	defaultValue: {
+		type: valuePropType
 	}
 }
 
-export function useSelectionList(props: Readonly<any>, context: SetupContext) {
-	const current = ref<Option>()
+export const useSelectionList = defineHooks(listProps, (props, context) => {
+	const options = reactive<Option[]>([])
 
-	const modelValue = computed(() => props.value ?? props.modelValue)
+	function toArray(value?: BaseType | BaseType[]): BaseType[] {
+		if (value == undefined) {
+			return []
+		}
+		if (props.multiple && Array.isArray(value)) {
+			return value.filter(v => v != null || v != undefined)
+		}
+		return [value]
+	}
 
-	const active = computed<Option | undefined>({
-		set(val: Option | undefined) {
-			context.emit("update:modelValue", val?.value)
-			context.emit("change", val?.value)
-			current.value = val
-		},
+	const actives: BaseType[] = reactive<BaseType[]>([...toArray(props.modelValue ?? props.defaultValue)])
+
+	const currentValue = computed({
 		get() {
-			return options.find(e => e.value.value == modelValue.value)?.value ?? current.value
+			return props.multiple ? actives : actives[0]
+		},
+		set(val) {
+			if (props.multiple) {
+				actives.splice(0, actives.length, ...toArray(val))
+			} else {
+				actives.splice(0, actives.length, val)
+			}
 		}
 	})
 
-	provide(ModelValueSymbol, modelValue)
+	const modelValue = computed({
+		get() {
+			return props.modelValue ?? props.defaultValue
+		},
+		set(val) {
+			context.emit("update:modelValue", val)
+		}
+	})
 
-	provide(AciveSymbol, active)
+	syncRef(currentValue, modelValue, { immediate: true, deep: true })
 
 	provide(
-		AciveClassSymbol,
+		ActiveClassSymbol,
 		computed(() => props.activeClass)
 	)
 
@@ -61,20 +96,62 @@ export function useSelectionList(props: Readonly<any>, context: SetupContext) {
 		computed(() => props.itemClass)
 	)
 
-	const options: Ref<Option>[] = []
+	provide(ItemLabelSymbol, props.label)
 
-	provide(InitSymbol, (option: Ref<Option>) => {
+	function isActive(value: BaseType) {
+		return actives.includes(value)
+	}
+
+	function changeActive(option: BaseType) {
+		if (isActive(option)) {
+			if (props.multiple) {
+				actives.splice(actives.indexOf(option), 1)
+			}
+		} else {
+			if (props.multiple) {
+				if (props.multipleLimit == 0 || props.multipleLimit > actives.length) {
+					actives.push(option)
+				}
+			} else {
+				actives.splice(0, actives.length, option)
+			}
+		}
+		context.emit("change", currentValue.value)
+	}
+
+	provide(IsActiveSymbol, isActive)
+
+	provide(ChangeActiveSymbol, changeActive)
+
+	provide(InitSymbol, (option: Option) => {
+		function remove() {
+			const index = options.findIndex(e => e.id == option.id)
+			if (index > -1) {
+				options.splice(index, 1)
+				context.emit("unload", option)
+			}
+		}
+		for (let i = 0; i < options.length; i++) {
+			if (options[i].value == option.value) {
+				options.splice(i, 1)
+				i--
+			}
+		}
 		options.push(option)
-		if (option.value.value == modelValue.value || active.value == undefined) {
-			current.value = option.value
-		}
-		return () => {
-			options.splice(options.indexOf(option), 1)
-		}
+		context.emit("load", option)
+		return remove
 	})
 
-	return {
-		active,
-		modelValue
+	function render() {
+		const children = options.filter(e => actives.includes(e.value)).map(e => e.render())
+		return props.multiple ? children : children[0]
 	}
-}
+
+	return {
+		options,
+		actives,
+		isActive,
+		changeActive,
+		render
+	}
+})

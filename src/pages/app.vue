@@ -346,7 +346,7 @@
 
 			const route = useRoute()
 
-			store.loadProession().then(async () => {
+			store.loadProfession().then(async () => {
 				let { path: name } = route
 				let query = route.query as Record<string, string>
 				name = name.replace("/", "")
@@ -393,7 +393,7 @@
 				}
 			})
 
-			const lastModified = useDateFormat(__LAST_MODIIFED__, "YYYY-MM-DD HH:mm:ss")
+			const lastModified = useDateFormat(__LAST_MODIFIED__, "YYYY-MM-DD HH:mm:ss")
 
 			const { y } = useWindowScroll()
 			const isMobile = useMediaQuery("(max-width: 640px)")
@@ -511,16 +511,16 @@
 							</div>
 						</div>
 
-						<apt-dialog class="h-30 p-4 w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
-							<div class="h-8 text-dark w-full leading-8">导出</div>
+						<apt-dialog class="w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
+							<div class="font-bold h-12 text-dark mb-4 w-full leading-12">导出</div>
 							<div v-show={!copy_success.value} class="text-red-400">
 								复制失败,请自行复制到剪贴板
 							</div>
-							<div class=" text-primary break-all select-all ">{code.value}</div>
+							<div class=" text-primary text-sm break-all select-all">{code.value}</div>
 						</apt-dialog>
-						<apt-dialog onYes={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
-							<div class="h-8 text-dark w-full leading-8">导入</div>
-							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto w-full word-wrap"></apt-input>
+						<apt-dialog onOk={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
+							<div class="font-bold h-12 text-dark mb-4 w-full leading-12">导入</div>
+							<apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto text-sm w-full word-wrap"></apt-input>
 						</apt-dialog>
 					</div>
 				)

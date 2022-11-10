@@ -1,7 +1,7 @@
 <script lang="tsx">
 	import { useVModel } from "@vueuse/core"
 	import { defineComponent, renderSlot } from "vue"
-	import { valuePropType } from "../../hooks/selection/types"
+	import { valuePropType } from "../../hooks/types"
 	import ISelection from "../selection/index.vue"
 
 	export default defineComponent({

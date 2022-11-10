@@ -1,16 +1,15 @@
 <script lang="tsx">
-	import { defineComponent, renderSlot } from "vue"
-	import { itemProps, useSelectionItem } from "../../hooks/selection/item"
+	import { itemProps, useSelectionItem } from "@/components/hooks/selection/item"
+	import { defineComponent } from "vue"
 
 	export default defineComponent({
 		name: "i-item",
 		props: itemProps,
-		setup(props, { slots }) {
-			const { itemClass, change, current } = useSelectionItem(props)
-
+		setup(props, context) {
+			const { itemClass, change, render } = useSelectionItem(props, context)
 			return () => (
-				<div onClick={change} class={itemClass.value}>
-					{current.value.key ?? renderSlot(slots, "default")}
+				<div key={props.keepAlive && !props.key ? props.value?.toString() : props.key} onClick={change} class={itemClass.value}>
+					{render()}
 				</div>
 			)
 		}

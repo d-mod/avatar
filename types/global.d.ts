@@ -5,7 +5,7 @@ declare global {
 
 	export const __APP_VERSION__: string
 
-	export const __LAST_MODIIFED__: number
+	export const __LAST_MODIFIED__: number
 
 	export interface DressImage {
 		name: string
@@ -75,7 +75,7 @@ declare global {
 		size: number
 		page: number
 		year: number
-		type: string | false
+		type: string | 0
 	}
 	export interface PartValue extends Dress {
 		title?: string
