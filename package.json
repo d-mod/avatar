@@ -1,6 +1,6 @@
 {
 	"name": "davatar",
-	"version": "2.4.9",
+	"version": "2.4.10",
 	"scripts": {
 		"dev": "vite",
 		"dev:mock": "vite dev --mode mock",
