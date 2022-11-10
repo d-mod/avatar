@@ -36,7 +36,7 @@ export default defineConfig({
 		jsx(),
 		fourze({
 			logLevel: "info",
-			base: "/"
+			base: "/api"
 		}),
 		uncomponents({
 			allowOverrides: true,

@@ -3,7 +3,7 @@ import axios from "axios"
 
 export default defineFourze(fourze => {
 	const axiosInstance = axios.create({
-		baseURL: "https://avatar.kritsu.net"
+		baseURL: import.meta.env.DEV ? "https://avatar.kritsu.net" : location.origin
 	})
 
 	const getCollocation = asyncLock<{
@@ -18,18 +18,18 @@ export default defineFourze(fourze => {
 
 	const icons: Record<string, Record<string, DressIcon[]>> = {}
 
-	fourze("/api/profession/list", () => {
+	fourze("/profession/list", () => {
 		return axiosInstance.get("/api/profession.json").then(r => r.data)
 	})
 
-	fourze("/api/collocation/list", async () => {
-		const collecationState = await getCollocation()
-		return collecationState?.list
+	fourze("/collocation/list", async () => {
+		const collocationsState = await getCollocation()
+		return collocationsState?.list
 	})
 
-	fourze("/api/collocation/types", async () => {
-		const collecationState = await getCollocation()
-		return collecationState?.types
+	fourze("/collocation/types", async () => {
+		const collocationsState = await getCollocation()
+		return collocationsState?.types
 	})
 
 	async function getDressList(profession: string, part: string) {
@@ -48,36 +48,76 @@ export default defineFourze(fourze => {
 		return dressList[profession][part]
 	}
 
-	fourze("/api/dress/get/{profession}", async (req, res) => {
-		const profession: string = req.params.profession
-		const query: Record<string, string> = req.query
-		let array = []
-		for (let part in query) {
-			const code = Number(query[part])
-			if (code === -1) {
-				continue
+	fourze(
+		"/dress/get/{profession}",
+		{
+			profession: {
+				type: String,
+				required: true,
+				in: "path"
 			}
-			let list: Dress[] = await getDressList(profession, part)
-			let dress = list.find(e => Number(e.code) === code)
-			if (dress) {
-				array.push(dress)
+		},
+		async req => {
+			const profession = req.params.profession
+			const query = req.query as Record<string, string>
+			const array: Dress[] = []
+			for (let part in query) {
+				const code = Number(query[part])
+				if (code === -1) {
+					continue
+				}
+				let list: Dress[] = await getDressList(profession, part)
+				let dress = list.find(e => Number(e.code) === code)
+				if (dress) {
+					array.push(dress)
+				}
 			}
+			return array
 		}
-		return array
-	})
+	)
 
-	fourze("/api/dress/{profession}/{part}", (req, res) => {
-		const { profession, part } = req.params
-		return getDressList(profession, part)
-	})
-
-	fourze("/api/icon/{profession}/{part}", async (req, res) => {
-		const { profession, part } = req.params
-		if (!icons[profession] || !icons[profession][part]) {
-			let list: DressIcon[] = await axiosInstance.get(`/icon/${profession}/${part}.json`).then(r => r.data)
-			icons[profession] = icons[profession] || {}
-			icons[profession][part] = list
+	fourze(
+		"/dress/{profession}/{part}",
+		{
+			profession: {
+				type: String,
+				required: true,
+				in: "path"
+			},
+			part: {
+				type: String,
+				required: true,
+				in: "path"
+			}
+		},
+		req => {
+			const { profession, part } = req.params
+			return getDressList(profession, part)
 		}
-		return icons[profession][part]
-	})
+	)
+
+	fourze(
+		"/icon/{profession}/{part}",
+		{
+			profession: {
+				type: String,
+				required: true,
+				in: "path"
+			},
+			part: {
+				type: String,
+				required: true,
+				in: "path"
+			}
+		},
+		async req => {
+			const { profession, part } = req.params
+			if (!icons[profession] || !icons[profession][part]) {
+				const list: DressIcon[] = await axiosInstance.get(`/icon/${profession}/${part}.json`).then(r => r.data)
+				icons[profession] = icons[profession] || {}
+				icons[profession][part] = list
+			}
+			return icons[profession][part]
+		}
+	)
 })
