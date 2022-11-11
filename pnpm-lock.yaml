@@ -1,9 +1,9 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@fourze/core': ^0.21.4
-  '@fourze/mock': ^0.21.4
-  '@fourze/vite': ^0.21.4
+  '@fourze/core': ^0.21.5
+  '@fourze/mock': ^0.21.5
+  '@fourze/vite': ^0.21.5
   '@iconify-json/ic': ^1.1.3
   '@types/node': ^17.0.31
   '@unocss/preset-icons': ^0.45.26
@@ -44,9 +44,9 @@ dependencies:
   vue-router: 4.1.5_vue@3.2.40
 
 devDependencies:
-  '@fourze/core': 0.21.4
-  '@fourze/mock': 0.21.4
-  '@fourze/vite': 0.21.4
+  '@fourze/core': 0.21.5
+  '@fourze/mock': 0.21.5
+  '@fourze/vite': 0.21.5
   '@iconify-json/ic': 1.1.3
   '@types/node': 17.0.31
   '@unocss/preset-icons': 0.45.26
@@ -1340,8 +1340,8 @@ packages:
     dev: true
     optional: true
 
-  /@fourze/core/0.21.4:
-    resolution: {integrity: sha512-vcoRh803Ku92TdHejIpFbqMpoeW0uiIAuqi4R1Bct3O8u88iSIpv0AItQv3hSQ3JVufRP24fTVU0nkFDw2QYGw==}
+  /@fourze/core/0.21.5:
+    resolution: {integrity: sha512-6oIjbD0PvRqS+QMZL8FKmNS6kP3t2gLRPhj2OIEcmsh2ddicoLN5WG9Kz2SQaBC+ro7NZSMWRKh03dCsr+AayA==}
     dependencies:
       consola: 2.15.3
       maybe-types: 0.0.3
@@ -1349,34 +1349,34 @@ packages:
       query-string: 7.1.1
     dev: true
 
-  /@fourze/mock/0.21.4:
-    resolution: {integrity: sha512-fYZn7+rYrcE9MYLlMKiQHWjvowrP1M4Sv27gnIkcL6GypIzUes4A7H7r+9tGDjXZuqcCVFlV61CC3kLYJ9oj2A==}
+  /@fourze/mock/0.21.5:
+    resolution: {integrity: sha512-P81aTNjnCgPk6VC3DMjzFolgp+ldAVH8wn9NmwhhX6f3h5xFK0zHzEHKG9+HWTZQw91C8EotZ0EhO6GUWpHTHg==}
     dependencies:
-      '@fourze/core': 0.21.4
+      '@fourze/core': 0.21.5
     dev: true
 
-  /@fourze/server/0.21.4:
-    resolution: {integrity: sha512-ZF//Frif7G4e61C4aKewkreELHZeCNIXX2cr/kPfcJ9Mu8t7ZAX25nTc1gJUHGM+q4W/4kXnSveddxDZcb8Nrw==}
+  /@fourze/server/0.21.5:
+    resolution: {integrity: sha512-cSB9GFR54WmORbYmU51atAUPSvg/rqmHB/c9VQG85TA2nc8ouT/yMa6+J5WeiPLv2AJQoXCzXjCx7ztyUHL/RQ==}
     dependencies:
-      '@fourze/core': 0.21.4
+      '@fourze/core': 0.21.5
       chokidar: 3.5.3
       esbuild: 0.14.54
       mime: 3.0.0
     dev: true
 
-  /@fourze/unplugin/0.21.4:
-    resolution: {integrity: sha512-x1l4D0e99KyOrGcuHvnhZtyDD7F0mhcBUoUb+ox/RzGzsnZbSJ8y3ojq4YgFlmVA83LyCcTZ+eIA0LhLmHuu6g==}
+  /@fourze/unplugin/0.21.5:
+    resolution: {integrity: sha512-qVQqRrkPJeQwrfdhRUfezySdKbBLwLE2p4tU1/igjmGr7SjDFNoo46JbkMjuVugqdQ3f2WhVrposj518Pzqhcw==}
     dependencies:
-      '@fourze/core': 0.21.4
-      '@fourze/mock': 0.21.4
-      '@fourze/server': 0.21.4
+      '@fourze/core': 0.21.5
+      '@fourze/mock': 0.21.5
+      '@fourze/server': 0.21.5
       unplugin: 0.10.2
     dev: true
 
-  /@fourze/vite/0.21.4:
-    resolution: {integrity: sha512-H/GcF+Y/nvqsTg64A79Njz+Ht8cmHUOqw830vKHaBKzdr8kRLE+43wX6TCpqZdFB5vugG2reJWfE6deOt3w/Og==}
+  /@fourze/vite/0.21.5:
+    resolution: {integrity: sha512-EtQDGcYjtO5K/PNIeREg2+dLASrqTCBvC2gAkviIejL1LlNMapYpSS0wp2EAHHmEe6pxZZtzXBT647XhzUj69Q==}
     dependencies:
-      '@fourze/unplugin': 0.21.4
+      '@fourze/unplugin': 0.21.5
     dev: true
 
   /@iconify-json/ic/1.1.3:

@@ -19,6 +19,9 @@ export default defineConfig({
 	esbuild: {
 		exclude: ["node_modules/**", "dist/**"]
 	},
+	build: {
+		emptyOutDir: false
+	},
 	resolve: {
 		alias: {
 			"@": resolve(__dirname, "./src")
