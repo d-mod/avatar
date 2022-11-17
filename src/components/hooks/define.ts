@@ -1,9 +1,9 @@
-import { reactiveComputed } from "@vueuse/core"
-import { ComponentPropsOptions, SetupContext } from "vue"
+import { reactiveComputed } from "@vueuse/core";
+import type { ComponentObjectPropsOptions, ExtractPropTypes, SetupContext } from "vue";
 
-export function defineHooks<P extends object, R>(_: ComponentPropsOptions<P>, setup: (props: P, context: SetupContext) => R) {
-	return (props: P | (() => P), context: SetupContext) => {
-		let p = props instanceof Function ? reactiveComputed(() => props()) : props
-		return setup(p, context)
-	}
+export function defineHooks<R, P = ComponentObjectPropsOptions>(_: P, setup: (props: ExtractPropTypes<P>, context: SetupContext) => R) {
+  return (props: ExtractPropTypes<P> | (() => ExtractPropTypes<P>), context: SetupContext) => {
+    const p = props instanceof Function ? reactiveComputed(() => props()) : props;
+    return setup(p, context);
+  };
 }

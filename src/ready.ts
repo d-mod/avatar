@@ -1,16 +1,17 @@
-window.addEventListener("contextmenu", e => e.preventDefault())
+window.addEventListener("contextmenu", e => e.preventDefault());
 
 window.addEventListener(
-	"beforeinstallprompt",
-	function (event: any) {
-		// 监听到可安装事件，进行触发提醒用户
-		setTimeout(function () {
-			event.prompt()
-			event.userChoice //判断用户是否安装
-				.then(() => {
-					console.log("davatar installed.")
-				})
-		}, 2000)
-	},
-	{ once: true }
-)
+  "beforeinstallprompt",
+  (event: any) => {
+    // 监听到可安装事件，进行触发提醒用户
+    setTimeout(() => {
+      event.prompt();
+      event.userChoice // 判断用户是否安装
+        .then(() => {
+          // eslint-disable-next-line no-console
+          console.log("davatar installed.");
+        });
+    }, 2000);
+  },
+  { once: true }
+);

@@ -1,0 +1,7 @@
+{
+  "extends": ["@curev"],
+  "rules": {
+    "vue/one-component-per-file": "off"
+  }
+}
+
