@@ -7,7 +7,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "@/pages/app.vue";
 
 export default createRouter({
-  history: createWebHistory("/"),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       name: "character",

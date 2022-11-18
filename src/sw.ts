@@ -11,7 +11,9 @@ precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
 
 // to allow work offline
-registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html")));
+registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"),{
+    denylist:[/^\/api\/*/g],
+}));
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error

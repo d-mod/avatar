@@ -2,6 +2,7 @@
   import { useDark, useToggle, useVModel } from "@vueuse/core";
   import type { CSSProperties } from "vue";
   import { defineComponent, renderList } from "vue";
+  import { HiItem, HiSelection } from "hoci";
   import { useDressingStore } from "@/store";
 
   export default defineComponent({
@@ -53,7 +54,7 @@
 
       return () => {
         return (
-          <apt-selection
+          <HiSelection
             value={store.profession}
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
@@ -65,18 +66,18 @@
             </apt-button>
 
             {renderList(store.profession_list ?? [], (prof, index) => (
-              <apt-item title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
+              <HiItem title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
                 <div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
                 <div class="flex-1 text-center" v-show={!isCollapsed.value}>
                   {prof.label}
                 </div>
-              </apt-item>
+              </HiItem>
             ))}
 
             <apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()} class="font-bold text-xl  w-full duration-300 select-none">
               <div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
             </apt-button>
-          </apt-selection>
+          </HiSelection>
         );
       };
     }

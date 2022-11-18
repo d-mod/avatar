@@ -2,6 +2,7 @@
   import { asyncComputed, debouncedWatch, useResizeObserver, useWindowScroll } from "@vueuse/core";
   import qs from "query-string";
   import { computed, defineComponent, nextTick, reactive, ref, renderList, watch } from "vue";
+  import { HiItem } from "hoci";
   import { useDressingStore } from "@/store/dressing";
   import { useCollocationStore } from "@/store/collocation";
 
@@ -145,21 +146,21 @@
               <apt-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></apt-input>
             </div>
             <apt-indices class="my-1" v-model={refreshQuery.profession}>
-              <apt-item value={0} label="全部" />
+              <HiItem value={0} label="全部" />
               {renderList(dressingStore.profession_list ?? [], profession => (
-                <apt-item key={profession.name} label={profession.label} value={profession.name} />
+                <HiItem key={profession.name} label={profession.label} value={profession.name} />
               ))}
             </apt-indices>
             <apt-indices class="my-1" v-model={refreshQuery.type}>
-              <apt-item value={0} label="全部" />
+              <HiItem value={0} label="全部" />
               {renderList(types.value, type => (
-                <apt-item text-dark="black" key={type.name} label={type.label} value={type.name}></apt-item>
+                <HiItem text-dark="black" key={type.name} label={type.label} value={type.name}></HiItem>
               ))}
             </apt-indices>
             <apt-indices class="my-1" v-model={refreshQuery.year}>
-              <apt-item value={0}>全部</apt-item>
+              <HiItem value={0}>全部</HiItem>
               {renderList(collocationStore.years, year => (
-                <apt-item key={year} label={`${year}年`} value={year} />
+                <HiItem key={year} label={`${year}年`} value={year} />
               ))}
             </apt-indices>
           </div>

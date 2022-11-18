@@ -1,7 +1,7 @@
-import { asyncLock, defineFourze } from "@fourze/core";
+import { asyncLock, defineRouter } from "@fourze/core";
 import axios from "axios";
 
-export default defineFourze(fourze => {
+export default defineRouter(router => {
   const axiosInstance = axios.create({
     baseURL: "https://avatar.kritsu.net"
   });
@@ -18,21 +18,21 @@ export default defineFourze(fourze => {
 
   const icons: Record<string, Record<string, DressIcon[]>> = {};
 
-  fourze("/profession/list", () => {
+  router.route("/profession/list", () => {
     return axiosInstance.get("/api/profession.json").then(r => r.data);
   });
 
-  fourze("/collocation/list", async () => {
+  router.route("/collocation/list", async () => {
     const collocationsState = await getCollocation();
     return collocationsState?.list;
   });
 
-  fourze("/collocation/types", async () => {
+  router.route("/collocation/types", async () => {
     const collocationsState = await getCollocation();
     return collocationsState?.types;
   });
 
-  async function getDressList(profession: string, part: string) {
+  async function getDressList(profession: string, part: string): Promise<Dress[]> {
     if (!dressList[profession] || !dressList[profession][part]) {
       let list: Dress[] = await axiosInstance.get(`/api/${profession}/${part}.json`).then(r => r.data);
       list = list.map(e =>
@@ -48,46 +48,47 @@ export default defineFourze(fourze => {
     return dressList[profession][part];
   }
 
-  fourze(
+  router.route(
     "/dress/get/{profession}",
     {
-      profession: {
-        type: String,
-        required: true,
-        in: "path"
+      props: {
+        profession: {
+          type: String,
+          required: true,
+          in: "path"
+        }
       }
     },
     async req => {
       const profession = req.params.profession;
       const query = req.query as Record<string, string>;
-      const array: Dress[] = [];
+      const tasks: Promise<Dress | undefined>[] = [];
       for (const part in query) {
         const code = Number(query[part]);
         if (code === -1) {
           continue;
         }
-        const list: Dress[] = await getDressList(profession, part);
-        const dress = list.find(e => Number(e.code) === code);
-        if (dress) {
-          array.push(dress);
-        }
+        tasks.push(getDressList(profession, part).then(r => r.find(e => Number(e.code) === code)));
       }
-      return array;
+      const array = await Promise.all(tasks);
+      return array.filter(r => !!r);
     }
   );
 
-  fourze(
+  router.route(
     "/dress/{profession}/{part}",
     {
-      profession: {
-        type: String,
-        required: true,
-        in: "path"
-      },
-      part: {
-        type: String,
-        required: true,
-        in: "path"
+      props: {
+        profession: {
+          type: String,
+          required: true,
+          in: "path"
+        },
+        part: {
+          type: String,
+          required: true,
+          in: "path"
+        }
       }
     },
     req => {
@@ -96,18 +97,20 @@ export default defineFourze(fourze => {
     }
   );
 
-  fourze(
+  router.route(
     "/icon/{profession}/{part}",
     {
-      profession: {
-        type: String,
-        required: true,
-        in: "path"
-      },
-      part: {
-        type: String,
-        required: true,
-        in: "path"
+      props: {
+        profession: {
+          type: String,
+          required: true,
+          in: "path"
+        },
+        part: {
+          type: String,
+          required: true,
+          in: "path"
+        }
       }
     },
     async req => {
