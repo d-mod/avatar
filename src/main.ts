@@ -10,6 +10,7 @@ import "@/assets/style/app.scss";
 import "uno.css";
 
 const appContainer = document.createElement("div");
+document.body.appendChild(appContainer);
 
 const app = createApp(RouterView);
 app.use(router);
