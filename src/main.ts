@@ -9,8 +9,10 @@ import store from "@/store";
 import "@/assets/style/app.scss";
 import "uno.css";
 
+const appContainer = document.createElement("div");
+
 const app = createApp(RouterView);
 app.use(router);
 app.use(store);
 
-app.mount("#davatar");
+app.mount(appContainer);

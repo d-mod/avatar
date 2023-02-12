@@ -10,10 +10,13 @@ precacheAndRoute(self.__WB_MANIFEST);
 // clean old assets
 cleanupOutdatedCaches();
 
+let allowlist: RegExp[] = [/^\/api\//g, /^\/icon\//g, /^\/sw.js$/g];
+if (import.meta.env.DEV) {
+  allowlist = [/^\/$/];
+}
+
 // to allow work offline
-registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"),{
-    denylist:[/^\/api\/*/g],
-}));
+registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), { allowlist }));
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
