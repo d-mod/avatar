@@ -1,4 +1,4 @@
-import { asyncLock, defineRouter } from "@fourze/core";
+import { createSingletonPromise, defineRouter } from "@fourze/core";
 import axios from "axios";
 
 export default defineRouter(router => {
@@ -6,7 +6,7 @@ export default defineRouter(router => {
     baseURL: "https://avatar.kritsu.net"
   });
 
-  const getCollocation = asyncLock<{
+  const getCollocation = createSingletonPromise<{
     types: CollocationType[]
     list: Collocation[]
   }>(() => axiosInstance.get("/api/collocation.json").then(r => r.data));
@@ -97,7 +97,7 @@ export default defineRouter(router => {
     }
   );
 
-  router.route(
+  router.get(
     "/icon/{profession}/{part}",
     {
       props: {

@@ -81,6 +81,7 @@ export default defineConfig({
       ]
     }),
     VitePWA({
+      injectRegister: "auto",
       registerType: "autoUpdate",
       strategies: "injectManifest",
       srcDir: "src",
@@ -108,7 +109,8 @@ export default defineConfig({
             sizes: "256x256"
           }
         ]
-      }
+      },
+      workbox: {}
     })
   ],
   server: {
