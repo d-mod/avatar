@@ -35,7 +35,8 @@ export default defineConfig({
     vue(),
     jsx(),
     fourze({
-      base: "/api"
+      base: "/api",
+      timeout: 0
     }),
     uncomponents({
       allowOverrides: true,

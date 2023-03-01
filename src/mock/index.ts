@@ -1,12 +1,15 @@
-import { asyncLock, defineRouter } from "@fourze/core";
+import { createSingletonPromise, defineRouter } from "@fourze/core";
 import axios from "axios";
 
 export default defineRouter(router => {
   const axiosInstance = axios.create({
-    baseURL: "https://avatar.kritsu.net"
+    baseURL: "https://avatar.kritsu.net",
+    headers: {
+      "X-Fourze-Mock": "off"
+    }
   });
 
-  const getCollocation = asyncLock<{
+  const getCollocation = createSingletonPromise<{
     types: CollocationType[]
     list: Collocation[]
   }>(() => axiosInstance.get("/api/collocation.json").then(r => r.data));

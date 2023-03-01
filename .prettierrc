@@ -14,7 +14,7 @@
   "requirePragma": false,
   "proseWrap": "never",
   "htmlWhitespaceSensitivity": "strict",
-  "endOfLine": "crlf",
+  "endOfLine": "auto",
   "jsxBracketSameLine": true
 }
 
