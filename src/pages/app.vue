@@ -3,8 +3,7 @@
   import { computed, defineComponent, reactive, ref, renderList, watch } from "vue";
   import { useRoute } from "vue-router";
 
-  import { useDateFormat, useMediaQuery, useSwipe, useWindowScroll } from "@vueuse/core";
-  import { useRegisterSW } from "virtual:pwa-register/vue";
+  import { useDateFormat, useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
   import Profession from "./profession.vue";
   import Collocation from "./collocation.vue";
   import DEFAULT_SRC from "@/assets/default.png";
@@ -34,8 +33,8 @@
 
       const store = useDressingStore();
 
-      const $weapon_list = computed(() => store.profession?.weapons || []);
-      const $weapon = computed(() => $weapon_list.value.find(e => e.name === code_query.weapon));
+      //   const $weapon_list = computed(() => store.profession?.weapons || []);
+      //   const $weapon = computed(() => $weapon_list.value.find(e => e.name === code_query.weapon));
 
       const current_part = computed(() => {
         let part = code_query.part;
@@ -105,10 +104,10 @@
         }
       }
 
-      function handleSelect(value: any, item: Dress) {
-        keyword.value = item.name;
-        selectDress(item);
-      }
+      // function handleSelect(value: any, item: Dress) {
+      //   keyword.value = item.name;
+      //   selectDress(item);
+      // }
 
       function label(item: Dress) {
         return `${item.name || ""}[${item.code}]`;
@@ -379,20 +378,9 @@
         }
       });
 
-      useRegisterSW({
-        immediate: true,
-        onRegistered(r) {
-          if (r) {
-            setInterval(async () => {
-              await r.update();
-            }, 20000);
-          }
-        }
-      });
-
       const lastModified = useDateFormat(__LAST_MODIFIED__, "YYYY-MM-DD HH:mm:ss");
 
-      const { y } = useWindowScroll();
+      const { y } = useScroll(window);
       const isMobile = useMediaQuery("(max-width: 640px)");
 
       return () => {

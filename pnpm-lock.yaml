@@ -28,12 +28,14 @@ specifiers:
   unocss-preset-palette: ^0.0.5
   unplugin-vue-components: ^0.23.0
   vite: ^4.1.1
-  vite-plugin-pwa: ^0.14.3
+  vite-plugin-pwa: ^0.14.4
   vue: ^3.2.47
   vue-router: ^4.1.5
   workbox-core: ^6.5.4
+  workbox-expiration: ^6.5.4
   workbox-precaching: ^6.5.4
   workbox-routing: ^6.5.4
+  workbox-strategies: ^6.5.4
   workbox-window: ^6.5.4
 
 dependencies:
@@ -44,6 +46,8 @@ dependencies:
   query-string: 7.1.1
   vue: 3.2.47
   vue-router: 4.1.5_vue@3.2.47
+  workbox-expiration: 6.5.4
+  workbox-strategies: 6.5.4
 
 devDependencies:
   '@curev/eslint-config': 0.0.7_qaufaj7tqs2aha52ol5f74v4z4
@@ -68,7 +72,7 @@ devDependencies:
   unocss-preset-palette: 0.0.5_s5hizzaaj6nuxonf27szpvvkjy
   unplugin-vue-components: 0.23.0_vue@3.2.47
   vite: 4.1.1_muh6cjnajnizz7zpb2ijdwntpu
-  vite-plugin-pwa: 0.14.3_xp2zqafvd45jbxqxxvnpcv3lzm
+  vite-plugin-pwa: 0.14.4_xp2zqafvd45jbxqxxvnpcv3lzm
   workbox-core: 6.5.4
   workbox-precaching: 6.5.4
   workbox-routing: 6.5.4
@@ -4395,7 +4399,6 @@ packages:
 
   /idb/7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
-    dev: true
 
   /ignore/5.2.0:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}
@@ -6439,8 +6442,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-pwa/0.14.3_xp2zqafvd45jbxqxxvnpcv3lzm:
-    resolution: {integrity: sha512-o/CEzdHXamdSV4WJ6hp1EQNe+yVvoFf9b5q1nMhOSqKxaW7BaDqAHAwnq8jt21wakDmcaipnuF3/j78AzZJ6wg==}
+  /vite-plugin-pwa/0.14.4_xp2zqafvd45jbxqxxvnpcv3lzm:
+    resolution: {integrity: sha512-M7Ct0so8OlouMkTWgXnl8W1xU95glITSKIe7qswZf1tniAstO2idElGCnsrTJ5NPNSx1XqfTCOUj8j94S6FD7Q==}
     peerDependencies:
       vite: ^3.1.0 || ^4.0.0
       workbox-window: ^6.5.4
@@ -6686,14 +6689,12 @@ packages:
 
   /workbox-core/6.5.4:
     resolution: {integrity: sha512-OXYb+m9wZm8GrORlV2vBbE5EC1FKu71GGp0H4rjmxmF4/HLbMCoTFws87M3dFwgpmg0v00K++PImpNQ6J5NQ6Q==}
-    dev: true
 
   /workbox-expiration/6.5.4:
     resolution: {integrity: sha512-jUP5qPOpH1nXtjGGh1fRBa1wJL2QlIb5mGpct3NzepjGG2uFFBn4iiEBiI9GUmfAFR2ApuRhDydjcRmYXddiEQ==}
     dependencies:
       idb: 7.1.1
       workbox-core: 6.5.4
-    dev: true
 
   /workbox-google-analytics/6.5.4:
     resolution: {integrity: sha512-8AU1WuaXsD49249Wq0B2zn4a/vvFfHkpcFfqAFHNHwln3jK9QUYmzdkKXGIZl9wyKNP+RRX30vcgcyWMcZ9VAg==}
@@ -6745,7 +6746,6 @@ packages:
     resolution: {integrity: sha512-DEtsxhx0LIYWkJBTQolRxG4EI0setTJkqR4m7r4YpBdxtWJH1Mbg01Cj8ZjNOO8etqfA3IZaOPHUxCs8cBsKLw==}
     dependencies:
       workbox-core: 6.5.4
-    dev: true
 
   /workbox-streams/6.5.4:
     resolution: {integrity: sha512-FXKVh87d2RFXkliAIheBojBELIPnWbQdyDvsH3t74Cwhg0fDheL1T8BqSM86hZvC0ZESLsznSYWw+Va+KVbUzg==}

@@ -100,7 +100,7 @@ export default defineRouter(router => {
     }
   );
 
-  router.route(
+  router.get(
     "/icon/{profession}/{part}",
     {
       props: {
