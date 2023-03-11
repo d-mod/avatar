@@ -54,7 +54,8 @@ export default defineConfig({
         presetUno(),
         presetPalette({
           colorMode: {
-            attribute: "data-theme"
+            attribute: "data-theme",
+            selector: ":root"
           },
           cssVarName(name) {
             return name;

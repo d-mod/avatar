@@ -70,7 +70,6 @@ declare global {
   }
 
   export interface CollocationQuery {
-    profession: string;
     keyword: string;
     size: number;
     page: number;

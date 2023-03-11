@@ -59,7 +59,7 @@
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
             active-class="text-primary bg-primary-36"
-            class={["h-100vh overflow-y-auto fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
+            class={["h-100vh fixed left-0 top-0 bg-light float-left  text-dark duration-300 shadow z-999 overflow-hidden"].concat(isCollapsed.value ? "w-12" : "sm:w-64 w-full")}
           >
             <apt-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={() => toggle()}>
               <div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
@@ -84,4 +84,4 @@
   });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped></style>

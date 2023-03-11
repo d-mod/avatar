@@ -5,9 +5,8 @@ import { RouterView } from "vue-router";
 import router from "@/router";
 
 import store from "@/store";
-
-import "@/assets/style/app.scss";
 import "uno.css";
+import "@/assets/style/app.less";
 
 const appContainer = document.createElement("div");
 document.body.appendChild(appContainer);

@@ -5,7 +5,7 @@
 
   import { useDateFormat, useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
   import Profession from "./profession.vue";
-  import Collocation from "./collocation.vue";
+  import CollocationVue from "./collocation.vue";
   import DEFAULT_SRC from "@/assets/default.png";
   import EMPTY_SRC from "@/assets/empty.png";
 
@@ -17,8 +17,7 @@
     name: "App",
     components: {
       CanvasBox,
-      Profession,
-      Collocation
+      Profession
     },
     setup() {
       const code_query = reactive<CodeQuery>({
@@ -385,12 +384,12 @@
 
       return () => {
         return (
-          <div class="bg-neutral">
-            <profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
-            <div class={["flex justify-center duration-300 pr-4 pt-8 relative"].concat(isCollapsed.value ? "pl-16" : "sm:pl-64")}>
+          <div class="bg-neutral overflow-hidden">
+            <Profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
+            <div class={["flex justify-center duration-300 pr-4 pt-8 relative overflow-hidden"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
               <div class="flex flex-wrap  max-w-400 justify-center items-start">
-                <div class="flex flex-wrap">
-                  <div class="bg-light flex-wrap flex shadow w-full justify-center items-center ">
+                <div class="flex">
+                  <div class="bg-light flex-wrap flex shadow w-full w-40vw justify-center items-center ">
                     <div
                       class={"flex h-16 items-center justify-center duration-300 transition"
                         .concat(" ")
@@ -413,14 +412,14 @@
                       </div>
                     </div>
 
-                    <canvas-box
+                    <CanvasBox
                       class={!isMobile.value ? "border-blue-200 border-solid border-1" : ""}
                       loading={loading.value}
                       height={canvas_props.height}
                       width={canvas_props.width}
                       images={images.value}
                       scale={scale.value}
-                    ></canvas-box>
+                    ></CanvasBox>
                     <div class="h-60 w-60 relative">
                       {renderList(parts, (value, part, index) => (
                         <div
@@ -442,31 +441,31 @@
                         </div>
                       ))}
                     </div>
-                    <div class="h-auto justify-end overflow-hidden sm:h-93">
+                    <div class="h-auto w-full justify-end overflow-hidden sm:h-93">
                       <div class="flex h-12 items-center justify-center">
                         <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
                       </div>
-                      <div class=" h-auto  grid  w-75 grid-cols-6  overflow-y-auto  sm:h-75 ">
-                        <span
+                      <div class=" h-auto  w-full grid px-4  gap-4 grid-cols-12 select-img overflow-y-auto  sm:h-75 ">
+                        <div
                           onClick={() => reset(code_query.part)}
-                          class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
+                          class="border-solid border-transparent border-2 h-8 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
                           style={`background-image:url(${DEFAULT_SRC})`}
-                        ></span>
+                        ></div>
                         {renderList(show_list.value, dress => (
-                          <span
-                            class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 duration-100"].concat(
+                          <div
+                            class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark hover:scale-130 duration-100"].concat(
                               isActive(dress) ? "border-primary" : "border-transparent"
                             )}
                             key={dress.hash}
                             style={style(dress)}
                             title={label(dress)}
                             onClick={() => selectDress(dress)}
-                          ></span>
+                          ></div>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <collocation class="bg-light shadow mt-4 w-full" onExport={exports} onImport={apply} />
+                  <CollocationVue class="bg-light shadow w-full" onExport={exports} onImport={apply} />
                 </div>
 
                 <div class="flex flex-wrap my-8 text-center text-base text-dark items-center">
@@ -529,4 +528,7 @@
   }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="less">
+  .select-img {
+  }
+</style>

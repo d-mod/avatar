@@ -1,7 +1,7 @@
 <script lang="tsx">
   import { asyncComputed, debouncedWatch, useResizeObserver, useWindowScroll } from "@vueuse/core";
   import qs from "query-string";
-  import { computed, defineComponent, nextTick, reactive, ref, renderList, watch } from "vue";
+  import { computed, defineComponent, nextTick, reactive, ref, renderList } from "vue";
   import { HiItem } from "hoci";
   import { useDressingStore } from "@/store/dressing";
   import { useCollocationStore } from "@/store/collocation";
@@ -23,7 +23,6 @@
     const refreshing = ref(false);
 
     const refreshQuery = reactive<CollocationQuery>({
-      profession: "swordman",
       year: 0,
       keyword: "",
       type: 0,
@@ -55,7 +54,8 @@
     });
 
     const list = computed(() => {
-      const { profession, keyword, size, page, type, year } = Object.assign({}, refreshQuery, loadQuery);
+      const profession = dressingStore.profession_name;
+      const { keyword, size, page, type, year } = Object.assign({}, refreshQuery, loadQuery);
       const keywords = keyword.split(" ");
       return allList.value
         .filter((e: Collocation) => {
@@ -113,15 +113,6 @@
       };
     }
 
-    watch(
-      () => dressingStore.profession,
-      val => {
-        if (val?.name) {
-          refreshQuery.profession = val.name;
-        }
-      }
-    );
-
     debouncedWatch(refreshQuery, refresh, {
       debounce: 100,
       immediate: true
@@ -145,12 +136,6 @@
             <div class=" mx-auto my-1 sm:mx-0">
               <apt-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></apt-input>
             </div>
-            <apt-indices class="my-1" v-model={refreshQuery.profession}>
-              <HiItem value={0} label="全部" />
-              {renderList(dressingStore.profession_list ?? [], profession => (
-                <HiItem key={profession.name} label={profession.label} value={profession.name} />
-              ))}
-            </apt-indices>
             <apt-indices class="my-1" v-model={refreshQuery.type}>
               <HiItem value={0} label="全部" />
               {renderList(types.value, type => (
@@ -164,7 +149,7 @@
               ))}
             </apt-indices>
           </div>
-          <div onTouchend={load} ref={listRef} class="flex flex-wrap duration-300 collocations">
+          <div onTouchend={load} ref={listRef} class="flex flex-wrap h-120 duration-300 overflow-y-auto collocations clear-scroll">
             {renderList(list.value, item => (
               <div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-24" style={itemStyle}>
                 <div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
@@ -202,7 +187,7 @@
   });
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
   .collocations {
     .item {
       &:hover {
