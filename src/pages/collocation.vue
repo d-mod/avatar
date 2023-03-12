@@ -4,11 +4,11 @@
   import { computed, defineComponent, nextTick, reactive, ref, renderList } from "vue";
   import { HiItem } from "hoci";
   import { useDressingStore } from "@/store/dressing";
-  import { useCollocationStore } from "@/store/collocation";
+  import api from "@/api";
+  import type { Collocation } from "@/api/types";
 
   export default defineComponent((props, { emit }) => {
     const dressingStore = useDressingStore();
-    const collocationStore = useCollocationStore();
 
     const itemSize = {
       width: 150,
@@ -46,34 +46,25 @@
     }
 
     const allList = asyncComputed(() => {
-      return collocationStore.getList();
+      return api.getCollocationList({
+        year: !refreshQuery.year ? undefined : refreshQuery.year,
+        keyword: refreshQuery.keyword,
+        type: !refreshQuery.type ? "" : refreshQuery.type,
+        profession: dressingStore.profession_name
+      });
     }, []);
 
     const types = asyncComputed(() => {
-      return collocationStore.getTypes();
-    });
+      return api.getCollocationTypes();
+    }, []);
+
+    const years = asyncComputed(() => {
+      return api.getCollocationYears();
+    }, []);
 
     const list = computed(() => {
-      const profession = dressingStore.profession_name;
-      const { keyword, size, page, type, year } = Object.assign({}, refreshQuery, loadQuery);
-      const keywords = keyword.split(" ");
-      return allList.value
-        .filter((e: Collocation) => {
-          if (!keywords.every(kw => e.name?.includes(kw) || e.description?.includes(kw))) {
-            return false;
-          }
-          if (profession && e.profession !== profession) {
-            return false;
-          }
-          if (type && e.type !== type) {
-            return false;
-          }
-          if (year && e.year !== year) {
-            return false;
-          }
-          return true;
-        })
-        .slice(0, (page + 1) * size);
+      const { size, page } = Object.assign({}, refreshQuery, loadQuery);
+      return allList.value.slice(0, (page + 1) * size);
     });
 
     const loading = ref(false);
@@ -131,52 +122,54 @@
 
     return () => {
       return (
-        <div>
-          <div class="flex flex-col h-auto px-4 pt-2">
-            <div class=" mx-auto my-1 sm:mx-0">
+        <div class="flex flex-col h-full">
+          <div class="flex flex-col px-4">
+            <div class=" mx-auto my-5 sm:mx-0">
               <apt-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></apt-input>
             </div>
-            <apt-indices class="my-1" v-model={refreshQuery.type}>
+            <apt-indices class="my-2" v-model={refreshQuery.type}>
               <HiItem value={0} label="全部" />
               {renderList(types.value, type => (
                 <HiItem text-dark="black" key={type.name} label={type.label} value={type.name}></HiItem>
               ))}
             </apt-indices>
-            <apt-indices class="my-1" v-model={refreshQuery.year}>
+            <apt-indices class="my-2" v-model={refreshQuery.year}>
               <HiItem value={0}>全部</HiItem>
-              {renderList(collocationStore.years, year => (
+              {renderList(years.value, year => (
                 <HiItem key={year} label={`${year}年`} value={year} />
               ))}
             </apt-indices>
           </div>
-          <div onTouchend={load} ref={listRef} class="flex flex-wrap h-120 duration-300 overflow-y-auto collocations clear-scroll">
-            {renderList(list.value, item => (
-              <div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-24" style={itemStyle}>
-                <div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
-                <div class="h-full w-full z-1 relative">
-                  <div class="h-6 text-xs text-center text-dark w-full bottom-3 leading-6 name overflow-hidden whitespace-nowrap" v-text={item.name}></div>
-                  <div class="text-sm text-white text-center w-full block invisible info">
-                    <div>
-                      <span>作者:</span>
-                      <span class="text-primary" v-text={item.author}></span>
-                    </div>
-                    <div>
-                      <span>热度:</span>
-                      <span v-text={item.amount}></span>
-                    </div>
+          <div class="flex-1 overflow-hidden">
+            <div onTouchend={load} ref={listRef} class="h-120 grid grid-cols-5  duration-300  items-start overflow-y-auto collocations clear-scroll">
+              {renderList(list.value, item => (
+                <div title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-24" style={itemStyle}>
+                  <div style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute"></div>
+                  <div class="h-full w-full z-1 relative">
+                    <div class="h-6 text-xs text-center text-dark w-full bottom-3 leading-6 name overflow-hidden whitespace-nowrap" v-text={item.name}></div>
+                    <div class="text-sm text-white text-center w-full block invisible info">
+                      <div>
+                        <span>作者:</span>
+                        <span class="text-primary" v-text={item.author}></span>
+                      </div>
+                      <div>
+                        <span>热度:</span>
+                        <span v-text={item.amount}></span>
+                      </div>
 
-                    <div class="flex flex-col mx-auto items-center">
-                      <apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={imports(item)} v-text={item.custom ? "下载" : "导入"}></apt-button>
-                      {!item.custom && (
-                        <apt-button class=" bg-white mt-4  hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
-                          导出
-                        </apt-button>
-                      )}
+                      <div class="flex flex-col mx-auto items-center">
+                        <apt-button class=" bg-white rounded mt-4 hover:bg-primary-78 hover:text-white" onClick={imports(item)} v-text={item.custom ? "下载" : "导入"}></apt-button>
+                        {!item.custom && (
+                          <apt-button class=" bg-white rounded  mt-4 hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
+                            导出
+                          </apt-button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <apt-button title="查看更多" class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
             <div class="text-2xl icon-mdi-baseline-keyboard-arrow-down"></div>

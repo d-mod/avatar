@@ -1,9 +1,9 @@
 <script lang="tsx">
   import qs from "query-string";
   import { computed, defineComponent, reactive, ref, renderList, watch } from "vue";
-  import { useRoute } from "vue-router";
 
   import { useDateFormat, useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
+  import { useRoute } from "vue-router";
   import Profession from "./profession.vue";
   import CollocationVue from "./collocation.vue";
   import DEFAULT_SRC from "@/assets/default.png";
@@ -12,6 +12,7 @@
   import CanvasBox from "@/components/canvas-box.vue";
 
   import { useDressingStore } from "@/store";
+  import api from "@/api";
 
   export default defineComponent({
     name: "App",
@@ -205,7 +206,7 @@
         store.setProfessionName(name);
         await refresh();
         // 获取每个部位的时装信息
-        const list = await store.getDress(query);
+        const list = await store.getDress(name, query);
         const tasks = list.map(async item => await selectDress(item));
         await Promise.all(tasks);
       }
@@ -217,9 +218,19 @@
        */
       async function refresh() {
         const part = current_part.value;
+        const profession = store.profession_name;
 
         // 根据职业和部位,获取时装列表
-        const [icon_data, dress_data] = await Promise.all([store.getIcon(part), store.getDressList(part)]);
+        const [icon_data, dress_data] = await Promise.all([
+          api.getDressIcons({
+            profession,
+            part
+          }),
+          api.getDressList({
+            profession,
+            part
+          })
+        ]);
         icons.value = icon_data;
         dress_list.value = dress_data;
       }
@@ -421,10 +432,10 @@
                       scale={scale.value}
                     ></CanvasBox>
                     <div class="h-60 w-60 relative">
-                      {renderList(parts, (value, part, index) => (
+                      {renderList(store.parts, (value, part, index) => (
                         <div
-                          onClick={() => selectPart(part as string)}
-                          onContextmenu={onContextmenu(part as string)}
+                          onClick={() => selectPart(part)}
+                          onContextmenu={onContextmenu(part)}
                           key={part}
                           style={partStyle(index)}
                           class={["text-dark", "text-xs", "absolute", "w-8", "h-8", "border-2", "border-solid", "box-border", "hover:scale-130"].concat(
@@ -441,26 +452,26 @@
                         </div>
                       ))}
                     </div>
-                    <div class="h-auto w-full justify-end overflow-hidden sm:h-93">
+                    <div class="h-auto justify-end overflow-hidden sm:h-93">
                       <div class="flex h-12 items-center justify-center">
                         <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
                       </div>
-                      <div class=" h-auto  w-full grid px-4  gap-4 grid-cols-12 select-img overflow-y-auto  sm:h-75 ">
-                        <div
+                      <div class=" h-auto  w-full  grid grid-cols-12 overflow-y-auto  sm:h-75 ">
+                        <span
                           onClick={() => reset(code_query.part)}
-                          class="border-solid border-transparent border-2 h-8 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
+                          class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
                           style={`background-image:url(${DEFAULT_SRC})`}
-                        ></div>
+                        ></span>
                         {renderList(show_list.value, dress => (
-                          <div
-                            class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark hover:scale-130 duration-100"].concat(
+                          <span
+                            class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 duration-100"].concat(
                               isActive(dress) ? "border-primary" : "border-transparent"
                             )}
                             key={dress.hash}
                             style={style(dress)}
                             title={label(dress)}
                             onClick={() => selectDress(dress)}
-                          ></div>
+                          ></span>
                         ))}
                       </div>
                     </div>
@@ -528,7 +539,4 @@
   }
 </script>
 
-<style scoped lang="less">
-  .select-img {
-  }
-</style>
+<style scoped lang="less"></style>

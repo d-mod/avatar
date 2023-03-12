@@ -24,6 +24,8 @@ declare global {
     profession?: string;
     part: string;
     images: DressImage[];
+    iconX?: number;
+    iconY?: number;
     hash?: string;
   }
 
@@ -49,24 +51,6 @@ declare global {
     label: string;
     sortNumber: number;
     weapons: Weapon[];
-  }
-
-  export interface Collocation {
-    id: string;
-    name: string;
-    description: string;
-    author: string;
-    code: string;
-    profession: string;
-    type: string;
-    year: number;
-    amount: number;
-    custom: boolean;
-  }
-
-  export interface CollocationType {
-    name: string;
-    label: string;
   }
 
   export interface CollocationQuery {

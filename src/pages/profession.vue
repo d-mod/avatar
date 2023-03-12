@@ -1,8 +1,9 @@
 <script lang="tsx">
-  import { useDark, useToggle, useVModel } from "@vueuse/core";
+  import { asyncComputed, useDark, useToggle, useVModel, watchOnce } from "@vueuse/core";
   import type { CSSProperties } from "vue";
   import { defineComponent, renderList } from "vue";
   import { HiItem, HiSelection } from "hoci";
+  import api from "@/api";
   import { useDressingStore } from "@/store";
 
   export default defineComponent({
@@ -18,9 +19,16 @@
     },
     emits: ["apply"],
     setup(props, { emit }) {
-      const store = useDressingStore();
-
       const isCollapsed = useVModel(props, "collapsed", emit);
+      const dressingStore = useDressingStore();
+
+      const list = asyncComputed(() => {
+        return api.getProfessionList();
+      }, []);
+
+      watchOnce(list, () => {
+        dressingStore.setProfession(list.value[0]);
+      });
 
       const toggle = useToggle(isCollapsed);
 
@@ -55,7 +63,6 @@
       return () => {
         return (
           <HiSelection
-            value={store.profession}
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
             active-class="text-primary bg-primary-36"
@@ -65,7 +72,7 @@
               <div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
             </apt-button>
 
-            {renderList(store.profession_list ?? [], (prof, index) => (
+            {renderList(list.value, (prof, index) => (
               <HiItem title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
                 <div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
                 <div class="flex-1 text-center" v-show={!isCollapsed.value}>
