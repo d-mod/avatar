@@ -1,105 +1,6 @@
-import { createQuery, createSingletonPromise, defineRouter } from "@fourze/core";
+import { createQuery, createSingletonPromise, defineRouter, memoize } from "@fourze/core";
 import axios from "axios";
 import type { Collocation, CollocationType } from "@/api/types";
-
-interface CachePromiseItem<R> {
-  value: Promise<R>
-  time: number
-}
-
-interface CachePromiseReturn<R, P extends any[]> {
-  (...args: P): Promise<R>
-  evict: (...args: P) => boolean
-  evictByKey: (key: string) => boolean
-  evictBy: (fn: (item: CachePromiseItem<R>, key: string) => boolean) => boolean
-  evictExpired: (maxAge: number) => boolean
-  clear: () => void
-  set: (key: string, value: Promise<R> | R) => void
-  get(key: string): Promise<R> | undefined
-  raw: (...args: P) => Promise<R>
-  new: (...args: P) => Promise<R>
-}
-
-interface CachePromiseOptions<_, P extends any[]> {
-  serialize?: (...args: P) => string
-  expire?: number
-}
-
-function createCachePromise<R, P extends any[]>(fn: (...args: P) => Promise<R> | R, options: CachePromiseOptions<R, P> = {}): CachePromiseReturn<R, P> {
-  const cache = new Map<string, CachePromiseItem<R>>();
-  const serialize = options.serialize ?? ((...args: P) => JSON.stringify(args));
-  const wrapper = ((...args: P) => {
-    const key = serialize(...args);
-    const item = cache.get(key);
-    if (!item) {
-      return wrapper.new(...args);
-    } else {
-      if (options.expire && Date.now() - item.time > options.expire) {
-        cache.delete(key);
-        return wrapper(...args);
-      }
-      return item.value;
-    }
-  }) as CachePromiseReturn<R, P>;
-
-  wrapper.clear = () => {
-    cache.clear();
-  };
-
-  // q: why not use `wrapper.evict`?
-  // a: because `wrapper.evict` will serialize the arguments again
-  wrapper.evictBy = (fn: (item: CachePromiseItem<R>, key: string) => boolean) => {
-    return Array.from(cache.entries()).some(([key, item]) => {
-      if (fn(item, key)) {
-        return cache.delete(key);
-      }
-      return false;
-    });
-  };
-
-  wrapper.evictByKey = (key: string) => {
-    return cache.delete(key);
-  };
-
-  wrapper.evict = (...args: P) => {
-    const key = serialize(...args);
-    return wrapper.evictByKey(key);
-  };
-
-  wrapper.evictExpired = (maxAge: number) => {
-    return wrapper.evictBy(item => Date.now() - item.time > maxAge);
-  };
-
-  wrapper.set = (key: string, value: Promise<R> | R) => {
-    cache.set(key, {
-      value: Promise.resolve(value),
-      time: Date.now()
-    });
-  };
-
-  wrapper.get = (key: string) => {
-    const item = cache.get(key);
-    if (item) {
-      return item.value;
-    }
-  };
-
-  wrapper.raw = (...args: P) => {
-    return Promise.resolve(fn(...args));
-  };
-
-  wrapper.new = (...args: P) => {
-    const key = serialize(...args);
-    const promise = wrapper.raw(...args);
-    cache.set(key, {
-      value: promise,
-      time: Date.now()
-    });
-    return promise;
-  };
-
-  return wrapper;
-}
 
 export default defineRouter(router => {
   const axiosInstance = axios.create({
@@ -189,7 +90,7 @@ export default defineRouter(router => {
     return Array.from(rs).sort((a, b) => b - a);
   });
 
-  const getDressList = createCachePromise(async (profession: string, part: string) => {
+  const getDressList = memoize(async (profession: string, part: string) => {
     let list: Dress[] = await axiosInstance.get<Dress[]>(`/api/${profession}/${part}.json`).then(r => r.data);
     list = list.map(e =>
       Object.assign(e, {
@@ -201,7 +102,7 @@ export default defineRouter(router => {
     return list;
   });
 
-  const getDressIcons = createCachePromise(async (profession: string, part: string) => {
+  const getDressIcons = memoize(async (profession: string, part: string) => {
     return await axiosInstance.get(`/icon/${profession}/${part}.json`).then(r => r.data);
   });
 
