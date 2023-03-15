@@ -51,7 +51,7 @@ export default defineConfig({
     uno({
       rules: [],
       presets: [
-        presetUno(),
+        presetUno({}),
         presetPalette({
           colorMode: {
             attribute: "data-theme",

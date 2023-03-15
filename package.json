@@ -11,6 +11,7 @@
 		"postinstall": "husky install"
 	},
 	"dependencies": {
+		"@vueuse/components": "^9.13.0",
 		"@vueuse/core": "^9.12.0",
 		"axios": "^1.3.4",
 		"hoci": "^0.0.6",
@@ -18,6 +19,7 @@
 		"query-string": "^7.1.1",
 		"vue": "^3.2.47",
 		"vue-router": "^4.1.5",
+		"vue-virtual-scroller": "2.0.0-beta.8",
 		"workbox-expiration": "^6.5.4",
 		"workbox-strategies": "^6.5.4"
 	},
@@ -50,7 +52,7 @@
 		"rimraf": "^3.0.2",
 		"sass": "^1.51.0",
 		"typescript": "^4.9.5",
-		"unocss": "^0.49.4",
+		"unocss": "^0.50.4",
 		"unocss-preset-palette": "^0.0.5",
 		"unplugin-vue-components": "^0.23.0",
 		"vite": "^4.1.4",

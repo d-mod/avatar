@@ -37,36 +37,41 @@ export default defineRouter(router => {
         }
       }
     },
-    async req => {
-      const collocationsState = await getCollocation();
-      const list = createQuery(collocationsState.list)
-        .where(e => {
-          if (req.data.keyword) {
-            return e.name.includes(req.data.keyword);
-          }
-          return true;
-        })
-        .and(e => {
-          if (req.data.profession) {
-            return e.profession === req.data.profession;
-          }
-          return true;
-        })
-        .and(e => {
-          if (req.data.type) {
-            return e.type === req.data.type;
-          }
-          return true;
-        })
-        .and(e => {
-          if (req.data.year) {
-            return e.year === Number(req.data.year);
-          }
-          return true;
-        })
-        .select();
-      return list.toArray();
-    }
+    memoize(
+      async req => {
+        const collocationsState = await getCollocation();
+        const list = createQuery(collocationsState.list)
+          .where(e => {
+            if (req.data.keyword) {
+              return e.name.includes(req.data.keyword);
+            }
+            return true;
+          })
+          .and(e => {
+            if (req.data.profession) {
+              return e.profession === req.data.profession;
+            }
+            return true;
+          })
+          .and(e => {
+            if (req.data.type) {
+              return e.type === req.data.type;
+            }
+            return true;
+          })
+          .and(e => {
+            if (req.data.year) {
+              return e.year === Number(req.data.year);
+            }
+            return true;
+          })
+          .select();
+        return list.toArray();
+      },
+      {
+        serialize: req => JSON.stringify(req.data)
+      }
+    )
   );
 
   router.route("/collocation/types", async () => {

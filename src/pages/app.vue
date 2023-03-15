@@ -2,10 +2,11 @@
   import qs from "query-string";
   import { computed, defineComponent, reactive, ref, renderList, watch } from "vue";
 
-  import { useDateFormat, useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
+  import { useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
   import { useRoute } from "vue-router";
   import Profession from "./profession.vue";
   import CollocationVue from "./collocation.vue";
+  import FooterVue from "./footer.vue";
   import DEFAULT_SRC from "@/assets/default.png";
   import EMPTY_SRC from "@/assets/empty.png";
 
@@ -388,41 +389,39 @@
         }
       });
 
-      const lastModified = useDateFormat(__LAST_MODIFIED__, "YYYY-MM-DD HH:mm:ss");
-
       const { y } = useScroll(window);
       const isMobile = useMediaQuery("(max-width: 640px)");
 
       return () => {
         return (
-          <div class="bg-neutral overflow-hidden">
+          <div class="bg-neutral h-full overflow-hidden">
             <Profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
-            <div class={["flex justify-center duration-300 pr-4 pt-8 relative overflow-hidden"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
-              <div class="flex flex-wrap  max-w-400 justify-center items-start">
-                <div class="flex">
-                  <div class="bg-light flex-wrap flex shadow w-full w-40vw justify-center items-center ">
-                    <div
-                      class={"flex h-16 items-center justify-center duration-300 transition"
-                        .concat(" ")
-                        .concat(
-                          y.value > 48
-                            ? "z-99 fixed  bg-light shadow-md top-0 ".concat(" ").concat(isCollapsed.value ? "w-[calc(100%-3rem)] left-12" : "sm:w-[calc(100%-16rem)] sm:left-64")
-                            : "w-full my-4 bg-transparent"
-                        )}
-                    >
-                      <div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
-                        <apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
-                          <div class="text-xl icon-mdi-refresh"></div>
-                        </apt-button>
-                        <apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
-                          导入
-                        </apt-button>
-                        <apt-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
-                          导出
-                        </apt-button>
-                      </div>
+            <div class={["duration-300 h-full overflow-hidden lt-sm:overflow-y-auto pt-6 pr-4"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
+              <div class={["flex duration-300 lt-sm:flex-wrap  overflow-hidden bg-light shadow h-[calc(100%-5rem)] lt-sm:h-auto"]}>
+                <div class={isMobile.value ? "w-full" : "w-1/2"}>
+                  <div
+                    class={"flex h-16 items-center justify-center duration-300 transition"
+                      .concat(" ")
+                      .concat(
+                        y.value > 48
+                          ? "z-99 fixed  bg-light shadow-md top-0 ".concat(" ").concat(isCollapsed.value ? "w-[calc(100%-3rem)] left-12" : "sm:w-[calc(100%-16rem)] sm:left-64")
+                          : "w-full my-4 bg-transparent"
+                      )}
+                  >
+                    <div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
+                      <apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
+                        <div class="text-xl icon-mdi-refresh"></div>
+                      </apt-button>
+                      <apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
+                        导入
+                      </apt-button>
+                      <apt-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
+                        导出
+                      </apt-button>
                     </div>
+                  </div>
 
+                  <div class="flex justify-center items-center lt-sm:flex-col">
                     <CanvasBox
                       class={!isMobile.value ? "border-blue-200 border-solid border-1" : ""}
                       loading={loading.value}
@@ -452,50 +451,35 @@
                         </div>
                       ))}
                     </div>
-                    <div class="h-auto justify-end overflow-hidden sm:h-93">
-                      <div class="flex h-12 items-center justify-center">
-                        <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
-                      </div>
-                      <div class=" h-auto  w-full  grid grid-cols-12 overflow-y-auto  sm:h-75 ">
+                  </div>
+                  <div class="bg-hex-ccc h-1px my-4 w-full scale-y-50"></div>
+                  <div class="h-auto justify-end overflow-hidden sm:h-100">
+                    <div class="flex h-12 items-center justify-center">
+                      <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
+                    </div>
+                    <div class=" h-auto  w-full  grid grid-cols-12 overflow-y-auto lt-sm:grid-cols-6  sm:h-75 ">
+                      <span
+                        onClick={() => reset(code_query.part)}
+                        class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
+                        style={`background-image:url(${DEFAULT_SRC})`}
+                      ></span>
+                      {renderList(show_list.value, dress => (
                         <span
-                          onClick={() => reset(code_query.part)}
-                          class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
-                          style={`background-image:url(${DEFAULT_SRC})`}
+                          class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 duration-100"].concat(
+                            isActive(dress) ? "border-primary" : "border-transparent"
+                          )}
+                          key={dress.hash}
+                          style={style(dress)}
+                          title={label(dress)}
+                          onClick={() => selectDress(dress)}
                         ></span>
-                        {renderList(show_list.value, dress => (
-                          <span
-                            class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 duration-100"].concat(
-                              isActive(dress) ? "border-primary" : "border-transparent"
-                            )}
-                            key={dress.hash}
-                            style={style(dress)}
-                            title={label(dress)}
-                            onClick={() => selectDress(dress)}
-                          ></span>
-                        ))}
-                      </div>
+                      ))}
                     </div>
                   </div>
-                  <CollocationVue class="bg-light shadow w-full" onExport={exports} onImport={apply} />
                 </div>
-
-                <div class="flex flex-wrap my-8 text-center text-base text-dark items-center">
-                  <p class="m-0 w-full">
-                    <a class="text-primary" href="//github.com/d-mod/avatar">
-                      DAvatar&nbsp;Ver&nbsp;{__APP_VERSION__}
-                    </a>
-                  </p>
-                  <p class="m-0 text-primary text-xs w-full">最后更新于: {lastModified.value}</p>
-                  <p class="m-0 w-full">
-                    Copyright&nbsp;©&nbsp;2017-present&nbsp;
-                    <a class="text-primary" href="//github.com/chizukicn">
-                      Chizuki
-                    </a>
-                    .
-                  </p>
-                  <p class="m-0 w-full">All&nbsp;rights&nbsp;reserved.</p>
-                </div>
+                <CollocationVue class="w-1/2 lt-sm:w-full" onExport={exports} onImport={apply} />
               </div>
+              <FooterVue />
             </div>
 
             <apt-dialog class="w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
