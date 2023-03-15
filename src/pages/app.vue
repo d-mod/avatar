@@ -53,25 +53,12 @@
 
       const weapon = ref("");
 
-      const parts = reactive<PartList>({
-        hair: createDefault("hair"),
-        cap: createDefault("cap"),
-        face: createDefault("face"),
-        //   weapon: createDefault("weapon","武器"),
-        neck: createDefault("neck"),
-        coat: createDefault("coat"),
-        skin: createDefault("skin"),
-        belt: createDefault("belt"),
-        pants: createDefault("pants"),
-        shoes: createDefault("shoes")
-      });
-
       const images = computed(() => {
         const profession_name = store.profession_name;
 
         const images: DressImage[] = [];
-        for (const part in parts) {
-          const array = parts[part].images || [];
+        for (const part in store.parts) {
+          const array = store.parts[part].images || [];
           let p: string | undefined = part;
           if (p === "weapon") {
             p = code_query.weapon;
@@ -101,6 +88,7 @@
         // 如果图标不存在,则使用默认图标
         if (event && event.target) {
           const image = event.target as HTMLImageElement;
+          image.setAttribute("data-src", image.src);
           image.src = DEFAULT_SRC;
         }
       }
@@ -182,7 +170,7 @@
 
       function isActive(dress: Dress) {
         const { code, part } = dress;
-        return !!part && code === parts[part].code;
+        return !!part && code === store.parts[part].code;
       }
 
       const loading = ref(false);
@@ -193,7 +181,7 @@
        *
        */
       async function apply({ name, query = {} }: CodeTemplate = {}) {
-        for (const p in parts) {
+        for (const p in store.parts) {
           // 如果该部位为武器,则替换为具体的武器子类
           if (!query[p]) {
             // 如果参数中不存在该部位代码,则重置该部位
@@ -260,11 +248,11 @@
           reset(part);
           return;
         }
-        if (!part || !parts[part]) {
+        if (!part || !store.parts[part]) {
           // 确认具体的子武器种类
           part = "weapon";
         }
-        parts[part] = Object.assign({ title: parts[part].title }, item);
+        store.parts[part] = Object.assign({ title: store.parts[part].title }, item);
       }
 
       function onContextmenu(part: string) {
@@ -279,7 +267,7 @@
        *
        */
       function reset(part: string) {
-        parts[part] = createDefault(part);
+        store.parts[part] = createDefault(part);
       }
 
       async function clear() {
@@ -331,8 +319,8 @@
         if (!result) {
           const name = store.profession_name;
           const query: Record<string, string> = {};
-          for (const p in parts) {
-            const { code } = parts[p];
+          for (const p in store.parts) {
+            const { code } = store.parts[p];
             if (validateCode(code)) {
               const part = (p === "weapon" ? weapon.value : p) || p;
               query[part] = code;
