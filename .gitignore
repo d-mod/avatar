@@ -6,3 +6,4 @@ dist-ssr
 .vscode
 components.d.ts
 dev-dist
+.env.development

@@ -1,7 +1,7 @@
 <script lang="tsx">
-  import { debouncedWatch, syncRef } from "@vueuse/core";
+  import { syncRef } from "@vueuse/core";
   import type { PropType } from "vue";
-  import { computed, defineComponent, reactive, ref } from "vue";
+  import { computed, defineComponent, reactive, ref, watch } from "vue";
 
   interface Point {
     x: number
@@ -65,7 +65,7 @@
 
       const movable = ref(false);
 
-      debouncedWatch([() => props.images, () => props.scale], draw, { debounce: 10 });
+      watch([() => props.images, () => props.scale], draw);
 
       const loading = ref(props.loading);
 
@@ -107,7 +107,15 @@
 
           let images = Array.from(props.images);
 
-          images.sort((a, b) => a.z - b.z);
+          images.sort((a, b) => {
+            if (a.z === b.z) {
+              return 0;
+            }
+            if (a.z < 0) {
+              return 1;
+            }
+            return a.z - b.z;
+          });
 
           const tasks = images.map(async e => {
             if (!e.img) {
@@ -125,6 +133,9 @@
           let w = 0;
           let h = 0;
           for (const image of images) {
+            if (image.width * image.height === 1) {
+              continue;
+            }
             x = Math.min(image.x, x);
             y = Math.min(image.y, y);
             w = Math.max(image.width, w);

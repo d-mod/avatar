@@ -31,6 +31,7 @@ export default defineConfig({
     __APP_VERSION__: `"${version}"`,
     __LAST_MODIFIED__: `${new Date().getTime()}`
   },
+  envPrefix: "APP_",
   plugins: [
     vue(),
     jsx(),
@@ -123,7 +124,7 @@ export default defineConfig({
     },
     proxy: {
       "^/(icon|image|cover)/.*": {
-        target: "https://avatar.kritsu.net",
+        target: "http://localhost:8080",
         changeOrigin: true
       }
     }

@@ -51,19 +51,21 @@
 
       const toggleDark = useToggle(isDark);
 
-      function changeProfession(prof: Profession) {
-        emit("apply", prof);
-
-        gtag("event", "select-profession", { label: prof.label, name: prof.name });
-        if (props.isMobile) {
-          toggle(true);
+      function changeProfession(name: string) {
+        const prof = list.value.find(item => item.name === name);
+        if (prof) {
+          emit("apply", prof);
+          gtag("event", "select-profession", { label: prof.label, name: prof.name });
+          if (props.isMobile) {
+            toggle(true);
+          }
         }
       }
 
       return () => {
         return (
           <HiSelection
-            modelValue={dressingStore.profession}
+            modelValue={dressingStore.profession_name}
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
             active-class="text-primary bg-primary-36"
@@ -76,7 +78,7 @@
             </apt-button>
 
             {renderList(list.value, (prof, index) => (
-              <HiItem title={prof.label} key={index} value={prof} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
+              <HiItem title={prof.label} key={index} value={prof.name} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
                 <div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
                 <div class="flex-1 text-center" v-show={!isCollapsed.value}>
                   {prof.label}

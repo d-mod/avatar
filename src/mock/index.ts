@@ -4,7 +4,7 @@ import type { Collocation, CollocationType } from "@/api/types";
 
 export default defineRouter(router => {
   const axiosInstance = axios.create({
-    baseURL: "https://avatar.kritsu.net",
+    baseURL: import.meta.env.APP_API_URL,
     headers: {
       "X-Fourze-Mock": "off"
     }
