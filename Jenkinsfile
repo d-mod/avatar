@@ -1,9 +1,10 @@
 pipeline {
+  agent any
   stages {
     stage('Build') {
       node('nodejs'){
-        sh 'pnpm install'
-        sh 'pnpm run build'
+        bat 'pnpm install'
+        bat 'pnpm run build'
       }
     }
   }
