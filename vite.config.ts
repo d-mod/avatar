@@ -124,7 +124,7 @@ export default defineConfig({
     },
     proxy: {
       "^/(icon|image|cover)/.*": {
-        target: "http://localhost:8080",
+        target: "https://avatar.kritsu.net",
         changeOrigin: true
       }
     }
