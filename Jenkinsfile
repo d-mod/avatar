@@ -1,10 +1,14 @@
 pipeline {
   agent any
+
   stages {
     stage('Build') {
-      node('nodejs'){
-        bat 'pnpm install'
-        bat 'pnpm run build'
+      steps {
+        nodejs('node'){
+          bat 'pnpm config set registry https://registry.npmmirror.com'
+          bat 'pnpm install'
+          bat 'pnpm run build'
+        }
       }
     }
   }
