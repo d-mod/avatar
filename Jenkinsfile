@@ -15,7 +15,7 @@ pipeline {
       steps {
         script {
           if(fileExists("${NGINX_ROOT}\\avatar\\assets")){
-            bat "mkdir ${NGINX_ROOT}\\avatar\\assets"
+            bat "rd /s /q ${NGINX_ROOT}\\avatar\\assets"
           }
         }
         bat "xcopy /e /i /y ${WORKSPACE}\\dist ${NGINX_ROOT}\\avatar"
