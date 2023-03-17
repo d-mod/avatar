@@ -33,10 +33,10 @@
           case "primary":
             return "bg-primary text-white hover:bg-primary-78";
           case "outline":
-            return "bg-light rounded-sm border-primary border-1 border-solid text-primary hover:text-light hover:bg-primary-78";
+            return "rounded-sm border-primary border-1 border-solid text-primary hover:text-light hover:bg-primary-78";
           case "normal":
           default:
-            return "bg-light rounded-sm text-primary hover:bg-primary-12";
+            return "rounded-sm bg-thin text-primary hover:bg-primary-12";
         }
       });
 
@@ -73,8 +73,6 @@
     line-height: 32px;
 
     font-size: 12px;
-    color: var(--primary);
-    background: var(--white);
     border-radius: 4px;
     display: flex;
     justify-content: center;

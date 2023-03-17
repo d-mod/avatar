@@ -67,18 +67,18 @@
           <HiSelection
             modelValue={dressingStore.profession_name}
             onChange={changeProfession}
-            item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative"
-            active-class="text-primary bg-primary-36"
-            class={["h-full fixed left-0 top-0 bottom-0 bg-light float-left  text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto"].concat(
-              isCollapsed.value ? "w-12" : "sm:w-64 w-full"
+            item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative hover:text-primary hover:bg-primary-12"
+            active-class="text-primary bg-primary-24"
+            class={["h-full fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto"].concat(
+              isCollapsed.value ? "w-12" : "sm:w-64 w-full px-4"
             )}
           >
-            <apt-button title={isCollapsed.value ? "展开" : "收起"} class=" font-bold h-8 text-center text-xl w-full duration-300 select-none" onClick={() => toggle()}>
+            <apt-button title={isCollapsed.value ? "展开" : "收起"} class=" bg-transparent font-bold text-center text-xl min-h-8 w-full duration-300 select-none" onClick={() => toggle()}>
               <div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
             </apt-button>
 
             {renderList(list.value, (prof, index) => (
-              <HiItem title={prof.label} key={index} value={prof.name} class={["hover:text-primary hover:bg-primary-12"].concat(isCollapsed.value ? "justify-center" : "px-8")}>
+              <HiItem title={prof.label} key={index} value={prof.name} class={isCollapsed.value ? "justify-center" : "px-8 rounded"}>
                 <div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
                 <div class="flex-1 text-center" v-show={!isCollapsed.value}>
                   {prof.label}
@@ -86,7 +86,7 @@
               </HiItem>
             ))}
 
-            <apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()} class="font-bold text-xl  w-full duration-300 select-none">
+            <apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()} class="bg-transparent font-bold  text-xl w-full duration-300 select-none">
               <div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
             </apt-button>
           </HiSelection>

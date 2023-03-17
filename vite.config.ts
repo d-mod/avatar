@@ -63,6 +63,10 @@ export default defineConfig({
           },
           colors: {
             primary: "#4fb3ff",
+            thin: {
+              light: "#eff0f1",
+              dark: "#2a2a2a"
+            },
             light: {
               light: "#f7f8f9",
               dark: "#1a1a1a"
@@ -124,7 +128,7 @@ export default defineConfig({
     },
     proxy: {
       "^/(icon|image|cover)/.*": {
-        target: "https://avatar.kritsu.net",
+        target: "https://avatar.dcalc.cn",
         changeOrigin: true
       }
     }

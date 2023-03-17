@@ -184,6 +184,9 @@
        *
        */
       async function apply({ name, query = {} }: CodeTemplate = {}) {
+        if (isMobile.value) {
+          backTop();
+        }
         for (const p in store.parts) {
           // 如果该部位为武器,则替换为具体的武器子类
           if (!query[p]) {
@@ -380,13 +383,20 @@
         }
       });
 
-      const { y } = useScroll(window);
+      const mainContainer = ref<HTMLElement>();
+      const { y } = useScroll(mainContainer, { behavior: "smooth" });
+
+      const showBackTop = computed(() => y.value > screen.availHeight / 2);
+
+      function backTop() {
+        y.value = 0;
+      }
 
       return () => {
         return (
           <div class="bg-neutral h-full overflow-hidden">
             <Profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
-            <div class={["duration-300 h-full overflow-hidden lt-sm:overflow-y-auto pt-6 pr-4"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
+            <div ref={mainContainer} class={["duration-300 h-full overflow-hidden lt-sm:overflow-y-auto pt-6 pr-4"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
               <div class={["flex duration-300 lt-sm:flex-wrap  overflow-hidden bg-light shadow h-[calc(100%-5rem)] lt-sm:h-auto"]}>
                 <div class={isMobile.value ? "w-full" : "w-1/2"}>
                   <div
@@ -398,14 +408,14 @@
                           : "w-full my-4 bg-transparent"
                       )}
                   >
-                    <div class="border-primary  flex border-1 rounded-1 overflow-hidden items-center">
-                      <apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="重置" onClick={clear} size="normal" color="gray">
+                    <div class="flex space-x-1 border-1 rounded-1 overflow-hidden items-center">
+                      <apt-button class="cursor-pointer border-#f1f2f3" title="重置" onClick={clear} size="normal" color="gray">
                         <div class="text-xl icon-mdi-refresh"></div>
                       </apt-button>
-                      <apt-button class="border-r-primary cursor-pointer border-r-1 border-0" title="导入" onClick={imports} size="normal">
+                      <apt-button class="cursor-pointer border-#f1f2f3" title="导入" onClick={imports} size="normal">
                         导入
                       </apt-button>
-                      <apt-button class="cursor-pointer" onClick={() => exports()} title="导出" type="info" size="normal">
+                      <apt-button class="cursor-pointer border-#f1f2f3" onClick={() => exports()} title="导出" type="info" size="normal">
                         导出
                       </apt-button>
                     </div>
@@ -447,7 +457,7 @@
                     <div class="flex h-12 items-center justify-center">
                       <apt-input class="rounded-1 h-8 w-60" placeholder="搜索" v-model={keyword.value}></apt-input>
                     </div>
-                    <div class=" h-75  w-full grid grid-cols-12 overflow-y-auto lt-sm:grid-cols-6 ">
+                    <div class=" h-75  w-full grid grid-cols-12 overflow-y-auto overflow-x-hidden lt-sm:grid-cols-6 ">
                       <span
                         onClick={() => reset(code_query.part)}
                         class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none lt-sm:scale-100 hover:scale-130"
@@ -468,6 +478,9 @@
                   </div>
                 </div>
                 <CollocationVue class="w-1/2 lt-sm:w-full" onExport={exports} onImport={apply} />
+                <apt-button onClick={backTop} v-show={showBackTop.value} class="rounded-full bg-12 h-12 right-4 bottom-4 w-12 z-8 fixed overflow-hidden" type="primary">
+                  <div class="text-xl icon-mdi-arrow-upward"></div>
+                </apt-button>
               </div>
               <FooterVue />
             </div>
