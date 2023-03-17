@@ -25,11 +25,14 @@
       const code_query = reactive<CodeQuery>({
         part: "skin"
       });
+      const isMobile = useMediaQuery("(max-width: 640px)");
 
-      const canvas_props = reactive({
-        width: 300,
-        height: 300,
-        scale: 100
+      const canvas_props = computed(() => {
+        return {
+          scale: 100,
+          width: 240,
+          height: 240
+        };
       });
 
       const store = useDressingStore();
@@ -45,7 +48,7 @@
         return part;
       });
 
-      const scale = computed(() => canvas_props.scale / 100);
+      const scale = computed(() => canvas_props.value.scale / 100);
 
       const keyword = ref("");
 
@@ -378,7 +381,6 @@
       });
 
       const { y } = useScroll(window);
-      const isMobile = useMediaQuery("(max-width: 640px)");
 
       return () => {
         return (
@@ -409,23 +411,23 @@
                     </div>
                   </div>
 
-                  <div class="flex justify-center items-center lt-sm:flex-col">
+                  <div class="flex justify-center items-center">
                     <CanvasBox
                       class={!isMobile.value ? "border-blue-200 border-solid border-1" : ""}
                       loading={loading.value}
-                      height={canvas_props.height}
-                      width={canvas_props.width}
+                      height={canvas_props.value.height}
+                      width={canvas_props.value.width}
                       images={images.value}
                       scale={scale.value}
                     ></CanvasBox>
-                    <div class="h-60 w-60 relative">
+                    <div class="h-60 w-60 duration-300 lt-sm:h-auto relative">
                       {renderList(store.parts, (value, part, index) => (
                         <div
                           onClick={() => selectPart(part)}
                           onContextmenu={onContextmenu(part)}
                           key={part}
                           style={partStyle(index)}
-                          class={["text-dark", "text-xs", "absolute", "w-8", "h-8", "border-2", "border-solid", "box-border", "hover:scale-130"].concat(
+                          class={["text-dark", "text-xs", "absolute", "lt-sm:static", "w-8", "h-8", "m-1", "border-2", "border-solid", "box-border", "hover:scale-130", "lt-sm:hover:scale-100"].concat(
                             part === code_query.part ? "border-#ff4081" : "border-transparent"
                           )}
                         >
@@ -443,17 +445,17 @@
                   <div class="bg-hex-ccc h-1px my-4 w-full scale-y-50"></div>
                   <div class="h-auto justify-end overflow-hidden sm:h-100">
                     <div class="flex h-12 items-center justify-center">
-                      <apt-input placeholder="搜索" v-model={keyword.value}></apt-input>
+                      <apt-input class="rounded-1 h-8 w-60" placeholder="搜索" v-model={keyword.value}></apt-input>
                     </div>
-                    <div class=" h-auto  w-full  grid grid-cols-12 overflow-y-auto lt-sm:grid-cols-6  sm:h-75 ">
+                    <div class=" h-75  w-full grid grid-cols-12 overflow-y-auto lt-sm:grid-cols-6 ">
                       <span
                         onClick={() => reset(code_query.part)}
-                        class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none hover:scale-130 "
+                        class="border-solid border-transparent border-2 h-8 m-3 text-xs text-dark w-8 duration-100 box-border select-none lt-sm:scale-100 hover:scale-130"
                         style={`background-image:url(${DEFAULT_SRC})`}
                       ></span>
                       {renderList(show_list.value, dress => (
                         <span
-                          class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 duration-100"].concat(
+                          class={["w-8 h-8 border-2 border-solid box-border select-none text-xs text-dark m-3 hover:scale-130 lt-sm:scale-100  duration-100"].concat(
                             isActive(dress) ? "border-primary" : "border-transparent"
                           )}
                           key={dress.hash}
