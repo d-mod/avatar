@@ -72,8 +72,6 @@
         return api.getCollocationYears();
       }, []);
 
-      const loading = ref(false);
-
       function imports(collocation: Collocation) {
         return () => {
           const { profession, code } = collocation;
@@ -86,12 +84,6 @@
 
       function exports({ profession, code }: Collocation) {
         return () => emit("export", `${profession}?${code}`);
-      }
-
-      async function load() {
-        loading.value = true;
-        loadQuery.page = loadQuery.page + 1;
-        loading.value = false;
       }
 
       function style(item: Collocation) {
@@ -121,7 +113,7 @@
 
       return () => {
         return (
-          <div class="flex flex-col">
+          <div class="flex flex-col h-full">
             <div class="flex flex-col px-4" ref={actionRef}>
               <div class=" mx-auto my-5 sm:mx-0">
                 <apt-input placeholder="搜索" onKeyup_native={refresh} action-icon="search" class="rounded-1 h-8 w-60" v-model={refreshQuery.keyword}></apt-input>
@@ -139,7 +131,10 @@
                 ))}
               </apt-indices>
             </div>
-            <VirtualListVue style={virtualListStyle.value} class="grid grid-cols-5 duration-300 overflow-x-hidden overflow-y-auto collocation-list clear-scroll lt-sm:grid-cols-2">
+            <VirtualListVue
+              style={virtualListStyle.value}
+              class="min-h-58 grid duration-300 overflow-x-hidden overflow-y-auto collocation-list clear-scroll lt-sm:grid-cols-2 sm:grid-cols-3 xl:grid-cols-5"
+            >
               {renderList(list.value, (item, index) => (
                 <div key={index} title={item.description} class="py-3 duration-400 item relative box-border hover:bg-dark-24" style={itemStyle}>
                   <div v-intersection-observer={[onIntersectionObserver, ".collocation-list"]} style={style(item)} class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute lazy-bg"></div>
@@ -168,9 +163,6 @@
                 </div>
               ))}
             </VirtualListVue>
-            <apt-button title="查看更多" class="text-xl w-full duration-200 hover:bg-primary-24" onClick={load} full-width>
-              <div class="text-2xl icon-mdi-baseline-keyboard-arrow-down"></div>
-            </apt-button>
           </div>
         );
       };

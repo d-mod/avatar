@@ -17,7 +17,7 @@
         default: () => false
       }
     },
-    emits: ["apply"],
+    emits: ["apply", "update:collapsed"],
     setup(props, { emit }) {
       const isCollapsed = useVModel(props, "collapsed", emit);
       const dressingStore = useDressingStore();
@@ -69,7 +69,7 @@
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative hover:text-primary hover:bg-primary-12"
             active-class="text-primary bg-primary-24"
-            class={["h-full fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto"].concat(
+            class={["h-full pt-2 fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto"].concat(
               isCollapsed.value ? "w-12" : "sm:w-64 w-full px-4"
             )}
           >

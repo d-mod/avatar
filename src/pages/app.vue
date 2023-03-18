@@ -394,10 +394,10 @@
 
       return () => {
         return (
-          <div class="bg-neutral h-full overflow-hidden">
+          <div class="bg-neutral h-full">
             <Profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
-            <div ref={mainContainer} class={["duration-300 h-full overflow-hidden lt-sm:overflow-y-auto pt-6 pr-4"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
-              <div class={["flex duration-300 lt-sm:flex-wrap  overflow-hidden bg-light shadow h-[calc(100%-5rem)] lt-sm:h-auto"]}>
+            <div ref={mainContainer} class={["duration-300 h-full lt-sm:overflow-y-auto pt-6 pr-4"].concat(isCollapsed.value ? "pl-16" : "sm:pl-72")}>
+              <div class={["flex duration-300 lt-sm:flex-wrap overflow-auto  bg-light shadow h-[calc(100%-5rem)] lt-sm:h-auto"]}>
                 <div class={isMobile.value ? "w-full" : "w-1/2"}>
                   <div
                     class={"flex h-16 items-center justify-center duration-300 transition"
@@ -409,13 +409,13 @@
                       )}
                   >
                     <div class="flex space-x-1 border-1 rounded-1 overflow-hidden items-center">
-                      <apt-button class="cursor-pointer border-#f1f2f3" title="重置" onClick={clear} size="normal" color="gray">
+                      <apt-button class="rounded-lg" title="重置" onClick={clear} size="normal" color="gray">
                         <div class="text-xl icon-mdi-refresh"></div>
                       </apt-button>
-                      <apt-button class="cursor-pointer border-#f1f2f3" title="导入" onClick={imports} size="normal">
+                      <apt-button class="rounded-lg" title="导入" onClick={imports} size="normal">
                         导入
                       </apt-button>
-                      <apt-button class="cursor-pointer border-#f1f2f3" onClick={() => exports()} title="导出" type="info" size="normal">
+                      <apt-button class="rounded-lg" onClick={() => exports()} title="导出" type="info" size="normal">
                         导出
                       </apt-button>
                     </div>
@@ -430,14 +430,14 @@
                       images={images.value}
                       scale={scale.value}
                     ></CanvasBox>
-                    <div class="h-60 w-60 duration-300 lt-sm:h-auto relative">
+                    <div class="h-60 w-60 duration-300 lt-xl:h-auto relative">
                       {renderList(store.parts, (value, part, index) => (
                         <div
                           onClick={() => selectPart(part)}
                           onContextmenu={onContextmenu(part)}
                           key={part}
                           style={partStyle(index)}
-                          class={["text-dark", "text-xs", "absolute", "lt-sm:static", "w-8", "h-8", "m-1", "border-2", "border-solid", "box-border", "hover:scale-130", "lt-sm:hover:scale-100"].concat(
+                          class={["text-dark", "text-xs", "absolute", "lt-xl:static", "w-8", "h-8", "m-1", "border-2", "border-solid", "box-border", "hover:scale-130", "lt-sm:hover:scale-100"].concat(
                             part === code_query.part ? "border-#ff4081" : "border-transparent"
                           )}
                         >
