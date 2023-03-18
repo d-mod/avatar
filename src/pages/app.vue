@@ -486,14 +486,14 @@
             </div>
 
             <apt-dialog class="w-80 relative" cancel-button={false} v-model:visible={showDialog.exports}>
-              <div class="font-bold h-12 text-dark mb-4 w-full leading-12">导出</div>
+              <div class="font-bold h-12 text-dark w-full leading-12">导出</div>
               <div v-show={!copy_success.value} class="text-red-400">
                 复制失败,请自行复制到剪贴板
               </div>
               <div class=" text-primary text-sm break-all select-all">{code.value}</div>
             </apt-dialog>
             <apt-dialog onOk={imports_done} class="p-4 w-80" v-model:visible={showDialog.imports}>
-              <div class="font-bold h-12 text-dark mb-4 w-full leading-12">导入</div>
+              <div class="font-bold h-12 text-dark w-full leading-12">导入</div>
               <apt-input multiline v-model={code.value} placeholder="请输入代码" class="h-auto text-sm w-full word-wrap"></apt-input>
             </apt-dialog>
           </div>

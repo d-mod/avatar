@@ -36,6 +36,9 @@
       closeOnCancel: {
         type: Boolean,
         default: () => true
+      },
+      buttonClass: {
+        type: String
       }
     },
     emits: ["close", "ok", "cancel", "update:visible"],
@@ -64,16 +67,20 @@
         if (props.okButton || props.cancelButton) {
           const buttons: JSX.Element[] = [];
           if (props.cancelButton) {
-            buttons.push(<apt-button onClick={onCancelClick}>{props.cancelButton}</apt-button>);
+            buttons.push(
+              <apt-button class={props.buttonClass} onClick={onCancelClick}>
+                {props.cancelButton}
+              </apt-button>
+            );
           }
           if (props.okButton) {
             buttons.push(
-              <apt-button type="primary" onClick={onYesClick}>
+              <apt-button class={props.buttonClass} type="primary" onClick={onYesClick}>
                 {props.okButton}
               </apt-button>
             );
           }
-          return <div class="flex space-x-2 mt-8 justify-end">{buttons}</div>;
+          return <div class="flex space-x-2 mt-4 justify-end">{buttons}</div>;
         }
       }
 
@@ -83,7 +90,7 @@
             <div v-show={visible.value} class={["dialog-mask bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300 ease-in-out"]}>
               <div ref={dialogRef} class={["bg-light h-auto shadow-sm rounded px-6 py-4 dialog relative", props.class]}>
                 <div class="w-full">
-                  <div class="h-auto min-h-32"> {renderSlot(slots, "default")}</div>
+                  <div class="h-auto"> {renderSlot(slots, "default")}</div>
                   {renderAction()}
                 </div>
               </div>
