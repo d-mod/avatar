@@ -8,7 +8,7 @@
 		"serve": "vite preview",
 		"lint": "eslint --ext .js,.jsx,.ts,.tsx,.vue src",
 		"bump": "bumpp package.json --commit \"release: v\" --push --tag",
-		"postinstall": "husky install"
+		"prepare": "npx simple-git-hooks"
 	},
 	"dependencies": {
 		"@vueuse/components": "^9.13.0",
@@ -22,6 +22,9 @@
 		"vue-virtual-scroller": "2.0.0-beta.8",
 		"workbox-expiration": "^6.5.4",
 		"workbox-strategies": "^6.5.4"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "npx lint-staged"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx,vue}": [
@@ -45,12 +48,12 @@
 		"@vitejs/plugin-vue-jsx": "^3.0.0",
 		"bumpp": "^7.1.1",
 		"eslint": "^8.27.0",
-		"husky": "^8.0.1",
 		"less": "^4.1.3",
 		"lint-staged": "^13.0.3",
 		"prettier": "^2.6.2",
 		"rimraf": "^3.0.2",
 		"sass": "^1.51.0",
+		"simple-git-hooks": "^2.8.1",
 		"typescript": "^5.0.4",
 		"unocss": "^0.50.4",
 		"unocss-preset-palette": "^0.0.5",
