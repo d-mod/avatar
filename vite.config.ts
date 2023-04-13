@@ -100,20 +100,27 @@ export default defineConfig({
           {
             src: "icon_32.webp",
             sizes: "32x32",
-            type: "images/webp"
+            type: "images/webp",
+            purpose: "any maskable"
           },
 
           {
             src: "icon_48.png",
-            sizes: "48x48"
+            sizes: "48x48",
+            type: "image/png",
+            purpose: "any maskable"
           },
           {
             src: "icon_128.png",
-            sizes: "128x128"
+            sizes: "128x128",
+            type: "image/png",
+            purpose: "any maskable"
           },
           {
             src: "icon_256.png",
-            sizes: "256x256"
+            sizes: "256x256",
+            type: "image/png",
+            purpose: "any maskable"
           }
         ]
       },
