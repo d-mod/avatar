@@ -1,5 +1,5 @@
 if (import.meta.env.PROD) {
-  if (navigator.language === "zh-CN" && location.host === "avatar.kritsu.net") {
-    location.href = "https://avatar.dcalc.cn";
+  if (navigator.language === "zh-CN" && (location.host === "avatar.kritsu.net" || location.host === "avatar.dcalc.cn")) {
+    location.href = "https://avatar.dnftools.com";
   }
 }

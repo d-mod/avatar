@@ -94,9 +94,15 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts",
       manifest: {
-        name: "davatar",
-        short_name: "davatar",
+        name: "纸娃娃系统",
+        short_name: "纸娃娃",
         icons: [
+          {
+            src: "icon_32.png",
+            sizes: "32x32",
+            type: "image/png",
+            purpose: "any maskable"
+          },
           {
             src: "icon_32.webp",
             sizes: "32x32",
