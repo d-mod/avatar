@@ -90,6 +90,9 @@ devDependencies:
   simple-git-hooks:
     specifier: ^2.8.1
     version: 2.8.1
+  tslx:
+    specifier: ^0.0.1
+    version: registry.npmjs.org/tslx@0.0.1
   typescript:
     specifier: ^5.0.4
     version: 5.0.4
@@ -7075,4 +7078,10 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: true
+
+  registry.npmjs.org/tslx@0.0.1:
+    resolution: {integrity: sha512-8W8lLy9Pz/LGYo9wQWNPlbf/HA1gXDPtmqmBL8iumrRUvlORUgdOSAxC1VmVLswmDrvtBEajyIJv0WI9jV0DJA==, registry: https://registry.npmmirror.com/, tarball: https://registry.npmjs.org/tslx/-/tslx-0.0.1.tgz}
+    name: tslx
+    version: 0.0.1
     dev: true

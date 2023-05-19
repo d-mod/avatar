@@ -4,12 +4,9 @@ import jsx from "@vitejs/plugin-vue-jsx";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-import { icons } from "@iconify-json/ic";
-import { presetIcons, presetUno } from "unocss";
 import uno from "unocss/vite";
 
 import fourze from "@fourze/vite";
-import presetPalette from "unocss-preset-palette";
 import uncomponents from "unplugin-vue-components/vite";
 import { version } from "./package.json";
 
@@ -49,44 +46,7 @@ export default defineConfig({
         }
       ]
     }),
-    uno({
-      rules: [],
-      presets: [
-        presetUno({}),
-        presetPalette({
-          colorMode: {
-            attribute: "data-theme",
-            selector: ":root"
-          },
-          cssVarName(name) {
-            return name;
-          },
-          colors: {
-            primary: "#4fb3ff",
-            thin: {
-              light: "#eff0f1",
-              dark: "#2a2a2a"
-            },
-            light: {
-              light: "#f7f8f9",
-              dark: "#1a1a1a"
-            },
-            dark: {
-              light: "#1a1a1a",
-              dark: "#f7f8f9"
-            },
-            neutral: {
-              light: "#e3e4e5",
-              dark: "#232323"
-            }
-          }
-        }),
-        presetIcons({
-          prefix: "icon-",
-          collections: { mdi: () => icons }
-        })
-      ]
-    }),
+    uno(),
     VitePWA({
       injectRegister: "auto",
       registerType: "autoUpdate",
@@ -141,7 +101,7 @@ export default defineConfig({
     },
     proxy: {
       "^/(icon|image|cover)/.*": {
-        target: "https://avatar.dcalc.cn",
+        target: "https://avatar.dnftools.com",
         changeOrigin: true
       }
     }

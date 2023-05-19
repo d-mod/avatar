@@ -3,6 +3,7 @@
   import type { CSSProperties } from "vue";
   import { defineComponent, renderList } from "vue";
   import { HiItem, HiSelection } from "hoci";
+  import { cls } from "tslx";
   import api from "@/api";
   import { useDressingStore } from "@/store";
 
@@ -20,6 +21,7 @@
     emits: ["apply", "update:collapsed"],
     setup(props, { emit }) {
       const isCollapsed = useVModel(props, "collapsed", emit);
+
       const dressingStore = useDressingStore();
 
       const list = asyncComputed(() => {
@@ -69,7 +71,8 @@
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative hover:text-primary hover:bg-primary-12"
             active-class="text-primary bg-primary-24"
-            class={["h-full pt-2 fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto"].concat(
+            class={cls(
+              "h-full pt-2 fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto",
               isCollapsed.value ? "w-12" : "sm:w-64 w-full px-4"
             )}
           >
@@ -79,7 +82,12 @@
 
             {renderList(list.value, (prof, index) => (
               <HiItem title={prof.label} key={index} value={prof.name} class={isCollapsed.value ? "justify-center" : "px-8 rounded"}>
-                <div class={!isCollapsed.value && "absolute"} style={profIcon(index)}></div>
+                <div
+                  class={cls({
+                    absolute: !isCollapsed.value
+                  })}
+                  style={profIcon(index)}
+                ></div>
                 <div class="flex-1 text-center" v-show={!isCollapsed.value}>
                   {prof.label}
                 </div>
@@ -87,7 +95,7 @@
             ))}
 
             <apt-button title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()} class="bg-transparent font-bold  text-xl w-full duration-300 select-none">
-              <div class={["w-6 h-6 bg-center bg-no-repeat text-dark"].concat(isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
+              <div class={cls(["w-6 h-6 bg-center bg-no-repeat text-dark"], isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
             </apt-button>
           </HiSelection>
         );
