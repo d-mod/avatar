@@ -15,7 +15,7 @@ jobs:
             - name: Install pnpm
               uses: pnpm/action-setup@v2
               with:
-                  version: 7
+                  version: 8.6.0
 
             - name: Set node version to 16.x
               uses: actions/setup-node@v3
@@ -31,7 +31,7 @@ jobs:
               run: |
                   mkdir dist
                   cd dist
-                  git init 
+                  git init
                   git remote add origin https://d-mod:${{ secrets.DMOD_TOKEN }}@github.com/d-mod/avatar_resource.git
                   git config user.email "kritsu@qq.com"
                   git config user.name "chizuki"
@@ -41,6 +41,6 @@ jobs:
             - run: |
                   cd dist
                   git checkout -b gh-pages
-                  git add -A 
-                  git commit -m "deploy" 
+                  git add -A
+                  git commit -m "deploy"
                   git push -f origin gh-pages
