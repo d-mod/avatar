@@ -38,8 +38,8 @@
 	},
 	"devDependencies": {
 		"@curev/eslint-config": "^0.0.11",
-		"@fourze/core": "^0.28.0",
-		"@fourze/vite": "^0.28.0",
+		"@fourze/core": "^0.27.12",
+		"@fourze/vite": "^0.27.12",
 		"@iconify-json/ic": "^1.1.13",
 		"@types/node": "^17.0.31",
 		"@unocss/preset-icons": "^0.53.1",
