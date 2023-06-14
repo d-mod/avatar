@@ -37,7 +37,7 @@
 		]
 	},
 	"devDependencies": {
-		"@curev/eslint-config": "^0.0.7",
+		"@curev/eslint-config": "^0.0.11",
 		"@fourze/core": "^0.27.10",
 		"@fourze/vite": "^0.27.10",
 		"@iconify-json/ic": "^1.1.3",
