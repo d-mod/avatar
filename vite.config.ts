@@ -34,7 +34,8 @@ export default defineConfig({
     jsx(),
     fourze({
       base: "/api",
-      timeout: 0
+      timeout: 0,
+      swagger: false
     }),
     uncomponents({
       allowOverrides: true,

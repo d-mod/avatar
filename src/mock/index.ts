@@ -42,28 +42,17 @@ export default defineRouter(router => {
         const collocationsState = await getCollocation();
         const list = createQuery(collocationsState.list)
           .where(e => {
+            let rs = true;
             if (req.data.keyword) {
-              return e.name.includes(req.data.keyword);
+              rs &&= e.name.includes(req.data.keyword);
             }
-            return true;
-          })
-          .and(e => {
             if (req.data.profession) {
-              return e.profession === req.data.profession;
+              rs &&= e.profession === req.data.profession;
             }
-            return true;
-          })
-          .and(e => {
             if (req.data.type) {
-              return e.type === req.data.type;
+              rs &&= e.type === req.data.type;
             }
-            return true;
-          })
-          .and(e => {
-            if (req.data.year) {
-              return e.year === Number(req.data.year);
-            }
-            return true;
+            return rs;
           })
           .select();
         return list.toArray();
