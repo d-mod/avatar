@@ -56,7 +56,7 @@
           year: !refreshQuery.year ? undefined : refreshQuery.year,
           keyword: refreshQuery.keyword,
           type: !refreshQuery.type ? "" : refreshQuery.type,
-          profession: dressingStore.profession_name
+          profession: dressingStore.currentProfessionName
         });
       }, []);
 

@@ -2,7 +2,7 @@
   import qs from "query-string";
   import { computed, defineComponent, reactive, ref, renderList, watch } from "vue";
 
-  import { useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
+  import { until, useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
   import { useRoute } from "vue-router";
   import Profession from "./profession.vue";
   import CollocationVue from "./collocation.vue";
@@ -57,7 +57,7 @@
       const weapon = ref("");
 
       const images = computed(() => {
-        const profession_name = store.profession_name;
+        const profession_name = store.currentProfessionName;
 
         const images: DressImage[] = [];
         for (const part in store.parts) {
@@ -198,7 +198,7 @@
           return;
         }
         // 切换职业
-        store.setProfessionName(name);
+        store.currentProfessionName = name;
         await refresh();
         // 获取每个部位的时装信息
         const list = await store.getDress(name, query);
@@ -213,7 +213,7 @@
        */
       async function refresh() {
         const part = current_part.value;
-        const profession = store.profession_name;
+        const profession = store.currentProfessionName;
 
         // 根据职业和部位,获取时装列表
         const [icon_data, dress_data] = await Promise.all([
@@ -277,7 +277,7 @@
       }
 
       async function clear() {
-        await apply(store.profession);
+        await apply(store.currentProfession);
       }
 
       const showDialog = reactive({
@@ -323,7 +323,7 @@
 
       async function exports(result?: string) {
         if (!result) {
-          const name = store.profession_name;
+          const name = store.currentProfessionName;
           const query: Record<string, string> = {};
           for (const p in store.parts) {
             const { code } = store.parts[p];
@@ -348,24 +348,26 @@
 
       const route = useRoute();
 
-      store.loadProfession().then(async () => {
-        let { path: name } = route;
-        let query = route.query as Record<string, string>;
-        name = name.replace("/", "");
-        if (Object.keys(query).length === 0) {
-          query = store.profession?.query ?? {};
-        }
+      until(() => store.professionList)
+        .changed()
+        .then(async () => {
+          let { path: name } = route;
+          let query = route.query as Record<string, string>;
+          name = name.replace("/", "");
+          if (Object.keys(query).length === 0) {
+            query = store.currentProfession?.query ?? {};
+          }
 
-        let item: CodeTemplate = {};
-        if (name?.length) {
-          // 如果路由带有参数,则自动载入代码
-          item = { name, query };
-        } else if (store.profession) {
-          // 如果没有则载入默认的职业装扮
-          item = store.profession;
-        }
-        await apply(item);
-      });
+          let item: CodeTemplate = {};
+          if (name?.length) {
+            // 如果路由带有参数,则自动载入代码
+            item = { name, query };
+          } else if (store.currentProfession) {
+            // 如果没有则载入默认的职业装扮
+            item = store.currentProfession;
+          }
+          await apply(item);
+        });
 
       const isCollapsed = ref(true);
 

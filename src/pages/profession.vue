@@ -1,10 +1,9 @@
 <script lang="tsx">
-  import { asyncComputed, useDark, useToggle, useVModel, watchOnce } from "@vueuse/core";
+  import { useDark, useToggle, useVModel } from "@vueuse/core";
   import type { CSSProperties } from "vue";
   import { defineComponent, renderList } from "vue";
   import { HiItem, HiSelection } from "hoci";
   import { cls } from "tslx";
-  import api from "@/api";
   import { useDressingStore } from "@/store";
 
   export default defineComponent({
@@ -23,14 +22,6 @@
       const isCollapsed = useVModel(props, "collapsed", emit);
 
       const dressingStore = useDressingStore();
-
-      const list = asyncComputed(() => {
-        return api.getProfessionList();
-      }, []);
-
-      watchOnce(list, () => {
-        dressingStore.setProfession(list.value[0]);
-      });
 
       const toggle = useToggle(isCollapsed);
 
@@ -54,7 +45,7 @@
       const toggleDark = useToggle(isDark);
 
       function changeProfession(name: string) {
-        const prof = list.value.find(item => item.name === name);
+        const prof = dressingStore.professionList.find(item => item.name === name);
         if (prof) {
           emit("apply", prof);
           gtag("event", "select-profession", { label: prof.label, name: prof.name });
@@ -67,12 +58,12 @@
       return () => {
         return (
           <HiSelection
-            modelValue={dressingStore.profession_name}
+            modelValue={dressingStore.currentProfessionName}
             onChange={changeProfession}
             item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative hover:text-primary hover:bg-primary-12"
             active-class="text-primary bg-primary-24"
             class={cls(
-              "h-full pt-2 fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden lt-sm:overflow-y-auto",
+              "h-full pt-2 fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden overflow-y-auto",
               isCollapsed.value ? "w-12" : "sm:w-64 w-full px-4"
             )}
           >
@@ -80,7 +71,7 @@
               <div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
             </apt-button>
 
-            {renderList(list.value, (prof, index) => (
+            {renderList(dressingStore.professionList, (prof, index) => (
               <HiItem title={prof.label} key={index} value={prof.name} class={isCollapsed.value ? "justify-center" : "px-8 rounded"}>
                 <div
                   class={cls({

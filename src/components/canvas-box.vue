@@ -51,7 +51,7 @@
       }
     },
     setup(props) {
-      const canvas = ref<HTMLCanvasElement>();
+      const canvasRef = ref<HTMLCanvasElement>();
 
       const startOffset: Point = reactive({
         x: 0,
@@ -158,7 +158,7 @@
           offsetY = Math.max(0, offsetY);
           offsetY = Math.min(props.height - h, offsetY);
 
-          const context = canvas.value?.getContext("2d");
+          const context = canvasRef.value?.getContext("2d");
 
           if (context) {
             const scale = props.scale;
@@ -213,7 +213,7 @@
           <div style={canvasStyle.value} class="relative">
             <apt-loading loading={loading.value} />
             <canvas
-              ref={canvas}
+              ref={canvasRef}
               style={canvasStyle.value}
               class={[props.canvasClass].concat("cursor-move", "select-none")}
               width={props.width}

@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { stringifyUrl } from "query-string";
+import { computed, reactive, ref } from "vue";
+import { asyncComputed } from "@vueuse/core";
 import EMPTY_SRC from "@/assets/empty.png";
 import api from "@/api";
 
@@ -9,7 +11,7 @@ export interface DressingState {
   icons: Record<string, Record<string, DressIcon[]>>
   parts: PartList
 }
-const part_titles: Record<string, string> = {
+const part_titles = {
   hair: "头部",
   cap: "帽子",
   face: "脸部",
@@ -19,7 +21,7 @@ const part_titles: Record<string, string> = {
   belt: "腰带",
   pants: "下装",
   shoes: "鞋"
-};
+} as Record<string, string>;
 
 function createDefault(part: string): PartValue {
   return {
@@ -32,79 +34,67 @@ function createDefault(part: string): PartValue {
   };
 }
 
-export const useDressingStore = defineStore("dressing", {
-  state: (): DressingState => {
-    return {
-      profession_list: undefined,
-      profession: undefined,
-      icons: {},
-      parts: {
-        hair: createDefault("hair"),
-        cap: createDefault("cap"),
-        face: createDefault("face"),
-        //   weapon: createDefault("weapon","武器"),
-        neck: createDefault("neck"),
-        coat: createDefault("coat"),
-        skin: createDefault("skin"),
-        belt: createDefault("belt"),
-        pants: createDefault("pants"),
-        shoes: createDefault("shoes")
-      }
-    };
-  },
-  getters: {
-    profession_name(): string {
-      return this.profession?.name ?? "swordman";
-    }
-  },
-  actions: {
-    async loadProfession() {
-      this.profession_list = await api.getProfessionList();
-      const last_profession = localStorage.getItem("last-profession") ?? this.profession_list[0].name;
-      if (last_profession) {
-        this.setProfessionName(last_profession);
-      }
-      return this.profession_list;
-    },
+export const useDressingStore = defineStore("dressing", () => {
+  const parts = reactive(
+    Object.fromEntries(
+      Object.keys(part_titles).map(part => {
+        return [part, createDefault(part)];
+      })
+    ) as PartList
+  );
 
-    async setProfession(profession: Profession) {
-      this.profession = profession;
-      localStorage.setItem("last-profession", profession.name);
-    },
-    setProfessionName(name: string) {
-      this.profession = this.profession_list?.find(e => e.name === name);
-    },
-    async getIcon(part: string): Promise<DressIcon[]> {
-      return fetch(`/api/icon/${this.profession_name}/${part}`).then(r => r.json());
-    },
-    async getDressList(part: string): Promise<Dress[]> {
-      const profession = this.profession_name;
-      return await fetch(`/api/dress/${profession}/${part}`).then(r => r.json());
-    },
-    async getDress(profession: string, query: Record<string, string>): Promise<Dress[]> {
-      return await fetch(
-        stringifyUrl({
-          url: `/api/dress/get/${this.profession_name}`,
-          query
-        })
-      ).then(r => r.json());
-    },
-    resetPart(part: string) {
-      this.parts[part] = createDefault(part);
-    },
-    selectDress(item: Dress) {
-      let { part } = item;
+  const professionList = asyncComputed(async () => {
+    return await api.getProfessionList();
+  }, []);
 
-      const num = Number(item.code);
-      if (isNaN(num) || num === -1) {
-        this.resetPart(part);
-        return;
-      }
-      if (!part || !this.parts[part]) {
-        // 确认具体的子武器种类
-        part = "weapon";
-      }
-      this.parts[part] = Object.assign({ title: this.parts[part].title }, item);
-    }
+  const currentProfessionName = ref("swordman");
+
+  const currentProfession = computed(() => {
+    return professionList.value?.find(profession => profession.name === currentProfessionName.value);
+  });
+
+  async function getDressList(part: string): Promise<Dress[]> {
+    const profession = currentProfessionName.value;
+    const r = await fetch(`/api/dress/${profession}/${part}`);
+    return await r.json();
   }
+
+  async function getDress(profession: string, query: Record<string, string>): Promise<Dress[]> {
+    const r = await fetch(
+      stringifyUrl({
+        url: `/api/dress/get/${profession}`,
+        query
+      })
+    );
+    return await r.json();
+  }
+
+  function selectDress(item: Dress) {
+    const { part } = item;
+
+    const num = Number(item.code);
+    if (isNaN(num) || num === -1) {
+      resetPart(part);
+      return;
+    }
+    if (!part || !parts[part]) {
+      return;
+    }
+    parts[part] = item;
+  }
+
+  function resetPart(part: string) {
+    parts[part] = createDefault(part);
+  }
+
+  return {
+    professionList,
+    parts,
+    currentProfessionName,
+    currentProfession,
+    getDressList,
+    getDress,
+    selectDress,
+    resetPart
+  };
 });

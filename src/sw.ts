@@ -6,7 +6,7 @@ import { ExpirationPlugin } from "workbox-expiration";
 
 declare let self: ServiceWorkerGlobalScope;
 const DAY_IN_SECONDS = 24 * 60 * 60;
-const MONTH_IN_SECONDS = DAY_IN_SECONDS * 30;
+const WEEK_IN_SECONDS = DAY_IN_SECONDS * 7;
 // self.__WB_MANIFEST is default injection point
 precacheAndRoute(self.__WB_MANIFEST);
 
@@ -20,7 +20,7 @@ registerRoute(
     plugins: [
       new ExpirationPlugin({
         maxEntries: Infinity,
-        maxAgeSeconds: MONTH_IN_SECONDS
+        maxAgeSeconds: WEEK_IN_SECONDS
       })
     ]
   })
@@ -33,7 +33,7 @@ registerRoute(
     plugins: [
       new ExpirationPlugin({
         maxEntries: Infinity,
-        maxAgeSeconds: MONTH_IN_SECONDS
+        maxAgeSeconds: WEEK_IN_SECONDS
       })
     ]
   })
@@ -46,7 +46,7 @@ registerRoute(
     plugins: [
       new ExpirationPlugin({
         maxEntries: Infinity,
-        maxAgeSeconds: MONTH_IN_SECONDS
+        maxAgeSeconds: WEEK_IN_SECONDS
       })
     ]
   })
