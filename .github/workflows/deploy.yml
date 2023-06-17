@@ -33,6 +33,7 @@ jobs:
                   cd dist
                   git init
                   git remote add origin https://d-mod:${{ secrets.DMOD_TOKEN }}@github.com/d-mod/avatar_resource.git
+                  git remote set-url --add origin https://chizukicn:${{secrets.GITEA_TOKEN}}@git.dnftools.com/davatar/avatar_resource.git
                   git config user.email "chizukicn@outlook.com"
                   git config user.name "chizuki"
                   git config advice.ignoredHook false
