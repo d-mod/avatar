@@ -1,40 +1,40 @@
 <script lang="tsx">
-  import { createApp, defineComponent } from "vue";
+import { createApp, defineComponent } from "vue";
 
-  const Toast = defineComponent({
-    name: "IToast",
-    props: {
-      message: String
-    },
+const Toast = defineComponent({
+  name: "IToast",
+  props: {
+    message: String
+  },
 
-    setup(props) {
-      return () => {
-        return (
-          <div class="i-toast">
-            <div class="i-toast-content" v-text={props.message}></div>
-          </div>
-        );
-      };
-    }
-  });
-
-  export async function showToast(message: string, timeout = 3000) {
-    const toast = document.createElement("div");
-    toast.className = "i-toast-wrapper";
-    const app = createApp(Toast, { message });
-    app.mount(toast);
-    document.body.appendChild(toast);
-
-    await new Promise<void>(resolve => {
-      setTimeout(() => {
-        app.unmount();
-        document.body.removeChild(toast);
-        resolve();
-      }, timeout);
-    });
+  setup(props) {
+    return () => {
+      return (
+        <div class="i-toast">
+          <div class="i-toast-content">{props.message}</div>
+        </div>
+      );
+    };
   }
+});
 
-  export default Toast;
+export async function showToast(message: string, timeout = 3000) {
+  const toast = document.createElement("div");
+  toast.className = "i-toast-wrapper";
+  const app = createApp(Toast, { message });
+  app.mount(toast);
+  document.body.appendChild(toast);
+
+  await new Promise<void>(resolve => {
+    setTimeout(() => {
+      app.unmount();
+      document.body.removeChild(toast);
+      resolve();
+    }, timeout);
+  });
+}
+
+export default Toast;
 </script>
 
 <style lang="scss">

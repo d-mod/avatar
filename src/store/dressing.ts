@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { stringifyUrl } from "query-string";
+import queryString from "query-string";
 import { computed, reactive, ref } from "vue";
 import { asyncComputed } from "@vueuse/core";
 import EMPTY_SRC from "@/assets/empty.png";
@@ -11,7 +11,8 @@ export interface DressingState {
   icons: Record<string, Record<string, DressIcon[]>>
   parts: PartList
 }
-const part_titles = {
+
+export const PART_TITLES = {
   hair: "头部",
   cap: "帽子",
   face: "脸部",
@@ -30,14 +31,14 @@ function createDefault(part: string): PartValue {
     icon: EMPTY_SRC,
     images: [],
     code: "-1",
-    title: part_titles[part]
+    title: PART_TITLES[part]
   };
 }
 
 export const useDressingStore = defineStore("dressing", () => {
   const parts = reactive(
     Object.fromEntries(
-      Object.keys(part_titles).map(part => {
+      Object.keys(PART_TITLES).map(part => {
         return [part, createDefault(part)];
       })
     ) as PartList
@@ -61,7 +62,7 @@ export const useDressingStore = defineStore("dressing", () => {
 
   async function getDress(profession: string, query: Record<string, string>): Promise<Dress[]> {
     const r = await fetch(
-      stringifyUrl({
+      queryString.stringifyUrl({
         url: `/api/dress/get/${profession}`,
         query
       })
@@ -73,7 +74,7 @@ export const useDressingStore = defineStore("dressing", () => {
     const { part } = item;
 
     const num = Number(item.code);
-    if (isNaN(num) || num === -1) {
+    if (Number.isNaN(num) || num === -1) {
       resetPart(part);
       return;
     }
@@ -95,6 +96,7 @@ export const useDressingStore = defineStore("dressing", () => {
     getDressList,
     getDress,
     selectDress,
-    resetPart
+    resetPart,
+    createDefault
   };
 });
