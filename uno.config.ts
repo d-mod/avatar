@@ -13,7 +13,7 @@ export default defineConfig({
       cssVarName(name) {
         return name;
       },
-      colors: {
+      themeColors: {
         primary: "#4fb3ff",
         thin: {
           light: "#eff0f1",

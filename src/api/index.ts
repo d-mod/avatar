@@ -19,8 +19,8 @@ export default defineRequest(axios => {
     async getCollocationList(request: CollocationRequest) {
       return await axios
         .get<Collocation[]>("/collocation/list", {
-          params: request
-        })
+        params: request
+      })
         .then(r => r.data);
     },
     async getCollocationTypes() {
@@ -35,19 +35,19 @@ export default defineRequest(axios => {
     async getDressList(request: DressListRequest) {
       return await axios
         .get<Dress[]>(`/dress/${request.profession}/${request.part}`, {
-          params: {
-            keyword: request.keyword
-          }
-        })
+        params: {
+          keyword: request.keyword
+        }
+      })
         .then(r => r.data);
     },
     async getDressDetail(code: string) {
       return await axios
         .get<Dress>("/dress/detail", {
-          params: {
-            code
-          }
-        })
+        params: {
+          code
+        }
+      })
         .then(r => r.data);
     },
     async getDressIcons(request: { profession: string; part: string }) {

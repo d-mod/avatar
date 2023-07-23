@@ -1,28 +1,28 @@
 <script lang="tsx">
-  import { useVModel } from "@vueuse/core";
-  import { defineComponent } from "vue";
-  export default defineComponent({
-    props: {
-      loading: {
-        type: Boolean,
-        default: () => false
-      },
-      spinClass: {
-        type: String,
-        default: () => "n-loading-default-spin text-primary"
-      }
+import { useVModel } from "@vueuse/core";
+import { defineComponent } from "vue";
+export default defineComponent({
+  props: {
+    loading: {
+      type: Boolean,
+      default: () => false
     },
-    setup(props) {
-      const loading = useVModel(props, "loading");
-      return () => {
-        return (
-          <div class={"bg-light h-full w-full z-99 absolute items-center justify-center".concat(" ").concat(loading.value ? "flex" : "hidden")}>
-            <div class={props.spinClass}></div>
-          </div>
-        );
-      };
+    spinClass: {
+      type: String,
+      default: () => "n-loading-default-spin text-primary"
     }
-  });
+  },
+  setup(props) {
+    const loading = useVModel(props, "loading");
+    return () => {
+      return (
+        <div class={"bg-light h-full w-full z-99 absolute items-center justify-center".concat(" ").concat(loading.value ? "flex" : "hidden")}>
+          <div class={props.spinClass}></div>
+        </div>
+      );
+    };
+  }
+});
 </script>
 
 <style lang="scss">

@@ -53,9 +53,9 @@ export default defineComponent({
 
     const allList = asyncComputed(() => {
       return api.getCollocationList({
-        year: !refreshQuery.year ? undefined : refreshQuery.year,
+        year: refreshQuery.year || undefined,
         keyword: refreshQuery.keyword,
-        type: !refreshQuery.type ? "" : refreshQuery.type,
+        type: refreshQuery.type || "",
         profession: dressingStore.currentProfessionName
       });
     }, []);

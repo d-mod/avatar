@@ -19,7 +19,7 @@ registerRoute(
     cacheName: "avatar-image",
     plugins: [
       new ExpirationPlugin({
-        maxEntries: Infinity,
+        maxEntries: Number.POSITIVE_INFINITY,
         maxAgeSeconds: WEEK_IN_SECONDS
       })
     ]
@@ -32,7 +32,7 @@ registerRoute(
     cacheName: "avatar-icon-api",
     plugins: [
       new ExpirationPlugin({
-        maxEntries: Infinity,
+        maxEntries: Number.POSITIVE_INFINITY,
         maxAgeSeconds: WEEK_IN_SECONDS
       })
     ]
@@ -45,7 +45,7 @@ registerRoute(
     cacheName: "avatar-api",
     plugins: [
       new ExpirationPlugin({
-        maxEntries: Infinity,
+        maxEntries: Number.POSITIVE_INFINITY,
         maxAgeSeconds: WEEK_IN_SECONDS
       })
     ]
