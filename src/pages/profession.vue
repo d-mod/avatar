@@ -58,12 +58,12 @@ export default defineComponent({
     return () => {
       return (
         <HiSelection
-          active-class="text-primary bg-primary-24"
+          active-class="text-primary bg-primary/24"
           class={cls(
             "h-full pt-2 fixed left-0 top-0 bottom-0 bg-light float-left space-y-1 text-dark duration-300 shadow z-999 overflow-hidden overflow-y-auto",
             isCollapsed.value ? "w-12" : "sm:w-64 w-full px-4"
           )}
-          item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative hover:text-primary hover:bg-primary-12"
+          item-class="odd:flex-row-reverse text-sm flex-1 h-12 flex items-center cursor-pointer select-none  duration-200 relative hover:text-primary hover:bg-primary/12"
           modelValue={dressingStore.currentProfessionName}
           onChange={changeProfession}
         >
@@ -78,8 +78,7 @@ export default defineComponent({
                   absolute: !isCollapsed.value
                 })}
                 style={profIcon(index)}
-              >
-              </div>
+              ></div>
               <div class="flex-1 text-center" v-show={!isCollapsed.value}>
                 {prof.label}
               </div>
