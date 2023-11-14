@@ -102,7 +102,7 @@ export default defineConfig({
     },
     proxy: {
       "^/(icon|image|cover)/.*": {
-        target: "https://dfavatar.netlify.app",
+        target: "https://avatar.dnftools.com",
         changeOrigin: true
       }
     }

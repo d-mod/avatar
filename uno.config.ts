@@ -4,15 +4,13 @@ import { icons } from "@iconify-json/ic";
 
 export default defineConfig({
   presets: [
-    presetUno({}),
+    presetUno(),
     presetPalette({
       colorMode: {
         attribute: "data-theme",
         selector: ":root"
       },
-      cssVarName(name) {
-        return name;
-      },
+      cssVarName: "color-[name]",
       themeColors: {
         primary: "#4fb3ff",
         thin: {

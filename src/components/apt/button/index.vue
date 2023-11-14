@@ -98,7 +98,7 @@ export default defineComponent({
     }
 
     &.outline {
-      border: 1px solid var(--primary);
+      border: 1px solid var(--color-primary);
     }
   }
 
