@@ -21,8 +21,8 @@ dependencies:
     specifier: ^2.1.7
     version: 2.1.7(typescript@5.3.2)(vue@3.3.8)
   query-string:
-    specifier: ^8.1.0
-    version: 8.1.0
+    specifier: ^9.1.0
+    version: 9.1.0
   tslx:
     specifier: ^0.1.1
     version: 0.1.1
@@ -108,7 +108,7 @@ devDependencies:
     version: 0.57.7(postcss@8.4.31)(rollup@2.79.1)(vite@5.0.2)
   unocss-preset-palette:
     specifier: ^0.3.2
-    version: 0.3.2(@unocss/core@0.57.3)(@unocss/preset-mini@0.57.7)
+    version: 0.3.2(@unocss/core@0.57.7)(@unocss/preset-mini@0.57.7)
   unplugin-vue-components:
     specifier: ^0.25.2
     version: 0.25.2(rollup@2.79.1)(vue@3.3.8)
@@ -2751,10 +2751,6 @@ packages:
     dependencies:
       '@unocss/core': 0.57.7
       unconfig: 0.3.11
-    dev: true
-
-  /@unocss/core@0.57.3:
-    resolution: {integrity: sha512-o6snDo5vwAenIqA+wjjI6BUsftJXXSqrPHYqplb+QX5bLfxW/OU1xhBRlnhiP0BOGGZXqgGEETU1ym8MM9bLwA==}
     dev: true
 
   /@unocss/core@0.57.7:
@@ -6338,9 +6334,9 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /query-string@8.1.0:
-    resolution: {integrity: sha512-BFQeWxJOZxZGix7y+SByG3F36dA0AbTy9o6pSmKFcFz7DAj0re9Frkty3saBn3nHo3D0oZJ/+rx3r8H8r8Jbpw==}
-    engines: {node: '>=14.16'}
+  /query-string@9.1.0:
+    resolution: {integrity: sha512-t6dqMECpCkqfyv2FfwVS1xcB6lgXW/0XZSaKdsCNGYkqMO76AFiJEg4vINzoDKcZa6MS7JX+OHIjwh06K5vczw==}
+    engines: {node: '>=18'}
     dependencies:
       decode-uri-component: 0.4.1
       filter-obj: 5.1.0
@@ -7284,13 +7280,13 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  /unocss-preset-palette@0.3.2(@unocss/core@0.57.3)(@unocss/preset-mini@0.57.7):
+  /unocss-preset-palette@0.3.2(@unocss/core@0.57.7)(@unocss/preset-mini@0.57.7):
     resolution: {integrity: sha512-txTrC3iydHTVCiQC0ZTlvIJ5T0hW34nkIM7cLiokzXF9W429WJLA+LKhGbvPm5BNKYyYFVhwuAxskZfO19z0FA==}
     peerDependencies:
       '@unocss/core': <1
       '@unocss/preset-mini': <1
     dependencies:
-      '@unocss/core': 0.57.3
+      '@unocss/core': 0.57.7
       '@unocss/preset-mini': 0.57.7
       csstype: 3.1.2
     dev: true
@@ -7708,6 +7704,7 @@ packages:
 
   /workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 7.0.0
       workbox-core: 7.0.0
