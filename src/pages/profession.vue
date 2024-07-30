@@ -72,7 +72,7 @@ export default defineComponent({
           </apt-button>
 
           {renderList(dressingStore.professionList, (prof, index) => (
-            <HiItem class={isCollapsed.value ? "justify-center" : "px-8 rounded"} key={index} title={prof.label} value={prof.name}>
+            <HiItem class={isCollapsed.value ? "justify-center" : "px-8 rounded"} key={index} value={prof.name}>
               <div
                 class={cls({
                   absolute: !isCollapsed.value
