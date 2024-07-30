@@ -2,7 +2,7 @@
   "name": "davatar",
   "type": "module",
   "version": "2.7.5",
-  "packageManager": "pnpm@9.5.0",
+  "packageManager": "pnpm@9.6.0",
   "scripts": {
     "dev": "vite",
     "dev:mock": "vite dev --mode mock",
@@ -62,8 +62,8 @@
   },
   "pnpm": {
     "overrides": {
-      "is-core-module": "npm:@nolyfill/is-core-module@^1",
-      "string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@^1"
+      "is-core-module": "npm:@nolyfill/is-core-module@^1.0.39",
+      "string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@^1.0.28"
     }
   },
   "simple-git-hooks": {
