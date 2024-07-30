@@ -6,7 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 import uno from "unocss/vite";
 
-import fourze from "@fourze/vite";
+import { createFourzeVitePlugin } from "@fourze/vite";
 import uncomponents from "unplugin-vue-components/vite";
 import { version } from "./package.json";
 
@@ -32,7 +32,7 @@ export default defineConfig({
   plugins: [
     vue(),
     jsx(),
-    fourze({
+    createFourzeVitePlugin({
       base: "/api",
       timeout: 0,
       swagger: false
