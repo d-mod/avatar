@@ -11,21 +11,21 @@ export default defineComponent(() => {
         <div>
           <p class="flex flex-wrap m-0 w-full items-center justify-center">
             <a class="text-primary" href="//github.com/d-mod/avatar">
-                DAvatar&nbsp;Ver&nbsp;
+              DAvatar&nbsp;Ver&nbsp;
               {__APP_VERSION__}
             </a>
             <span class="text-primary ml-4">
-                最后更新于:
+              最后更新于:
               {lastModified.value}
             </span>
           </p>
           <p class="m-0 w-full">
             <span>
-                Copyright © 2017-present
+              Copyright © 2017-present
               <a class="mx-1 text-primary" href="//github.com/chizukicn">
-                  Chizuki
+                Chizuki
               </a>
-                .
+              .
             </span>
             <span> All&nbsp;rights&nbsp;reserved.</span>
           </p>

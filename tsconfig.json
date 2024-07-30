@@ -1,20 +1,26 @@
 {
-	"compilerOptions": {
-		"target": "esnext",
-		"useDefineForClassFields": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"strict": true,
-		"jsx": "preserve",
-		"sourceMap": true,
-		"resolveJsonModule": true,
-		"esModuleInterop": true,
-		"baseUrl": "./",
-		"paths": {
-			"@/*": ["src/*"]
-		},
-		"lib": ["esnext", "dom"],
-		"experimentalDecorators": true
-	},
-	"include": ["**/*.ts", "**/*.d.ts", "components.d.ts", "**/*.vue"]
+  "compilerOptions": {
+    "target": "esnext",
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "useDefineForClassFields": true,
+    "baseUrl": "./",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "resolveJsonModule": true,
+    "types": [
+      "vite/client",
+      "vue/jsx"
+    ],
+    "strict": true,
+    "declaration": false,
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts", "**/*.d.ts", "components.d.ts", "**/*.vue", "eslint.config.js"]
 }

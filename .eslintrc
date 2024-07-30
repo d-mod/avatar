@@ -1,8 +1,0 @@
-{
-  "extends": ["@curev"],
-  "rules": {
-    "vue/one-component-per-file": "off",
-    "unicorn/prefer-spread":"off"
-  }
-}
-

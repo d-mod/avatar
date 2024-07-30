@@ -4,24 +4,24 @@ import type { PropType } from "vue";
 import { computed, defineComponent, reactive, ref, watch } from "vue";
 
 interface Point {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
 interface Image {
-  url: string
-  x: number
-  y: number
-  z: number
-  width: number
-  height: number
-  img?: HTMLImageElement
+  url: string;
+  x: number;
+  y: number;
+  z: number;
+  width: number;
+  height: number;
+  img?: HTMLImageElement;
 }
 
 /**
 @author Chizuki
 @date 2018/9/20 12:03
-*/
+ */
 export default defineComponent({
   name: "CanvasBox",
   props: {
@@ -80,7 +80,7 @@ export default defineComponent({
     const time = ref(0);
 
     async function loadImage(src: string, now: number): Promise<HTMLImageElement | undefined> {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         if (now !== time.value) {
           resolve(undefined);
           return;
@@ -117,7 +117,7 @@ export default defineComponent({
           return a.z - b.z;
         });
 
-        const tasks = images.map(async e => {
+        const tasks = images.map(async (e) => {
           if (!e.img) {
             e.img = await loadImage(e.url, now);
             e.width = e.img?.width ?? e.width;
@@ -142,7 +142,7 @@ export default defineComponent({
           h = Math.max(image.height, h);
         }
 
-        images = images.map(e => {
+        images = images.map((e) => {
           return {
             ...e,
             x: e.x - x,
@@ -164,7 +164,7 @@ export default defineComponent({
           const scale = props.scale;
           context.clearRect(0, 0, width, height);
 
-          images.forEach(e => {
+          images.forEach((e) => {
             const lx = Math.round((e.x + offsetX) * scale);
             const ly = Math.round((e.y + offsetY) * scale);
             const lw = Math.round(e.width * scale);
@@ -222,7 +222,8 @@ export default defineComponent({
             onMousedown={mouseDown}
             onMouseup={mouseUp}
             onMousemove={mouseMove}
-          ></canvas>
+          >
+          </canvas>
         </div>
       );
     };

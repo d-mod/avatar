@@ -1,0 +1,27 @@
+name: ci
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+      - name: Setup ni
+        run: npm add -g @antfu/ni
+      - name: Install Dependencies
+        run: nci
+      - name: Typecheck
+        run: nr typecheck

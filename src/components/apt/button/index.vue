@@ -1,10 +1,10 @@
 <script lang="tsx">
 /**
-   * @Author: chizuki
-   * @Date:   2021/11/16 23:07:51
-   * @Last Modified by:   chizuki
-   * @Last Modified time: 2021/11/17 18:49:42
-   */
+ * @Author: chizuki
+ * @Date:   2021/11/16 23:07:51
+ * @Last Modified by:   chizuki
+ * @Last Modified time: 2021/11/17 18:49:42
+ */
 import { computed, defineComponent, h, renderSlot } from "vue";
 
 export default defineComponent({
