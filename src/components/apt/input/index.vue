@@ -36,13 +36,15 @@ export default defineComponent({
     const className = "bg-light border-solid rounded-md outline-none  border-1 border-hex-c0c0c0 h-7 break-all text-dark py-1 px-2 w-50 i-input box-border focus:border-primary focus:text-primary";
 
     return () => {
-      return props.multiline ? (
-        <div class={className} contenteditable placeholder={props.placeholder} onInput={onInput}>
-          {modelValue.value}
-        </div>
-      ) : (
-        <input class={className} placeholder={props.placeholder} v-model={modelValue.value} />
-      );
+      return props.multiline
+        ? (
+          <div class={className} contenteditable placeholder={props.placeholder} onInput={onInput}>
+            {modelValue.value}
+          </div>
+          )
+        : (
+          <input class={className} placeholder={props.placeholder} v-model={modelValue.value} />
+          );
     };
   }
 });

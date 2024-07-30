@@ -90,7 +90,10 @@ export default defineComponent({
           <div v-show={visible.value} class={["dialog-mask bg-#00000066 w-full h-full fixed top-0 left-0 z-999 flex justify-center items-center duration-300 ease-in-out"]}>
             <div ref={dialogRef} class={["bg-light h-auto shadow-sm rounded px-6 py-4 dialog relative", props.class]}>
               <div class="w-full">
-                <div class="h-auto"> {renderSlot(slots, "default")}</div>
+                <div class="h-auto">
+                  {" "}
+                  {renderSlot(slots, "default")}
+                </div>
                 {renderAction()}
               </div>
             </div>

@@ -2,7 +2,7 @@ import { createQuery, createSingletonPromise, defineRouter, memoize } from "@fou
 import axios from "axios";
 import type { Collocation, CollocationType } from "@/api/types";
 
-export default defineRouter(router => {
+export default defineRouter((router) => {
   const axiosInstance = axios.create({
     baseURL: import.meta.env.APP_API_URL,
     headers: {
@@ -11,12 +11,12 @@ export default defineRouter(router => {
   });
 
   const getCollocation = createSingletonPromise<{
-    types: CollocationType[]
-    list: Collocation[]
-  }>(() => axiosInstance.get("/api/collocation.json").then(r => r.data));
+    types: CollocationType[];
+    list: Collocation[];
+  }>(() => axiosInstance.get("/api/collocation.json").then((r) => r.data));
 
   router.route("/profession/list", () => {
-    return axiosInstance.get("/api/profession.json").then(r => r.data);
+    return axiosInstance.get("/api/profession.json").then((r) => r.data);
   });
 
   router.route(
@@ -38,10 +38,10 @@ export default defineRouter(router => {
       }
     },
     memoize(
-      async req => {
+      async (req) => {
         const collocationsState = await getCollocation();
         const list = createQuery(collocationsState.list)
-          .where(e => {
+          .where((e) => {
             let rs = true;
             if (req.data.keyword) {
               rs &&= e.name.includes(req.data.keyword);
@@ -58,7 +58,7 @@ export default defineRouter(router => {
         return list.toArray();
       },
       {
-        serialize: req => JSON.stringify(req.data)
+        serialize: (req) => JSON.stringify(req.data)
       }
     )
   );
@@ -67,26 +67,26 @@ export default defineRouter(router => {
     const collocationsState = await getCollocation();
     const list = createQuery(collocationsState.list);
     const types = list
-      .select(e => e.type)
+      .select((e) => e.type)
       .distinct()
       .toArray();
-    return collocationsState.types.filter(e => types.includes(e.name));
+    return collocationsState.types.filter((e) => types.includes(e.name));
   });
 
   router.route("/collocation/years", async () => {
     const collocationsState = await getCollocation();
     const list = createQuery(collocationsState.list);
     const rs = list
-      .select(e => e.year)
-      .where(r => !!r)
+      .select((e) => e.year)
+      .where((r) => !!r)
       .select()
       .distinct();
     return Array.from(rs).sort((a, b) => b - a);
   });
 
   const getDressList = memoize(async (profession: string, part: string) => {
-    let list: Dress[] = await axiosInstance.get<Dress[]>(`/api/${profession}/${part}.json`).then(r => r.data);
-    list = list.map(e =>
+    let list: Dress[] = await axiosInstance.get<Dress[]>(`/api/${profession}/${part}.json`).then((r) => r.data);
+    list = list.map((e) =>
       Object.assign(e, {
         profession,
         part,
@@ -97,7 +97,7 @@ export default defineRouter(router => {
   });
 
   const getDressIcons = memoize(async (profession: string, part: string) => {
-    return await axiosInstance.get(`/icon/${profession}/${part}.json`).then(r => r.data);
+    return await axiosInstance.get(`/icon/${profession}/${part}.json`).then((r) => r.data);
   });
 
   router.route(
@@ -111,7 +111,7 @@ export default defineRouter(router => {
         }
       }
     },
-    async req => {
+    async (req) => {
       const profession = req.params.profession;
       const query = req.query as Record<string, string>;
       const tasks: Promise<Dress | undefined>[] = [];
@@ -120,10 +120,10 @@ export default defineRouter(router => {
         if (code === -1) {
           continue;
         }
-        tasks.push(getDressList(profession, part).then(r => r.find(e => Number(e.code) === code)));
+        tasks.push(getDressList(profession, part).then((r) => r.find((e) => Number(e.code) === code)));
       }
       const array = await Promise.all(tasks);
-      return array.filter(r => !!r);
+      return array.filter((r) => !!r);
     }
   );
 
@@ -143,7 +143,7 @@ export default defineRouter(router => {
         }
       }
     },
-    req => {
+    (req) => {
       const { profession, part } = req.params;
       return getDressList(profession, part);
     }
@@ -165,7 +165,7 @@ export default defineRouter(router => {
         }
       }
     },
-    async req => {
+    async (req) => {
       const { profession, part } = req.params;
       return getDressIcons(profession, part);
     }

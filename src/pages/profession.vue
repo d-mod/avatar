@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { useDark, useToggle, useVModel } from "@vueuse/core";
-import { type CSSProperties } from "vue";
+import type { CSSProperties } from "vue";
 import { defineComponent, renderList } from "vue";
 import { HiItem, HiSelection } from "hoci";
 import { cls } from "tslx";
@@ -45,7 +45,7 @@ export default defineComponent({
     const toggleDark = useToggle(isDark);
 
     function changeProfession(name: string) {
-      const prof = dressingStore.professionList.find(item => item.name === name);
+      const prof = dressingStore.professionList.find((item) => item.name === name);
       if (prof) {
         emit("apply", prof);
         gtag("event", "select-profession", { label: prof.label, name: prof.name });
@@ -78,7 +78,8 @@ export default defineComponent({
                   absolute: !isCollapsed.value
                 })}
                 style={profIcon(index)}
-              ></div>
+              >
+              </div>
               <div class="flex-1 text-center" v-show={!isCollapsed.value}>
                 {prof.label}
               </div>

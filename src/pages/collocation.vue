@@ -6,8 +6,9 @@ import { HiItem } from "hoci";
 import { vIntersectionObserver } from "@vueuse/components";
 import { useDressingStore } from "@/store/dressing";
 import api from "@/api";
-import { type Collocation } from "@/api/types";
+import type { Collocation } from "@/api/types";
 import VirtualListVue from "@/components/virtual-list.vue";
+
 export default defineComponent({
   directives: {
     intersectionObserver: vIntersectionObserver
@@ -94,9 +95,9 @@ export default defineComponent({
     }
 
     /**
-       * 当元素进入视口时，移除lazy-bg 显示背景图
-       * @param param0
-       */
+     * 当元素进入视口时，移除lazy-bg 显示背景图
+     * @param param0
+     */
     function onIntersectionObserver([{ isIntersecting, target }]: IntersectionObserverEntry[]): void {
       if (isIntersecting) {
         target.classList.remove("lazy-bg");
@@ -120,13 +121,13 @@ export default defineComponent({
             </div>
             <apt-indices class="my-2" v-model={refreshQuery.type}>
               <HiItem label="全部" value={0} />
-              {renderList(types.value, type => (
+              {renderList(types.value, (type) => (
                 <HiItem key={type.name} label={type.label} text-dark="black" value={type.name}></HiItem>
               ))}
             </apt-indices>
             <apt-indices class="my-2" v-model={refreshQuery.year}>
               <HiItem value={0}>全部</HiItem>
-              {renderList(years.value, year => (
+              {renderList(years.value, (year) => (
                 <HiItem key={year} label={`${year}年`} value={year} />
               ))}
             </apt-indices>
@@ -153,7 +154,7 @@ export default defineComponent({
                       </apt-button>
                       {!item.custom && (
                         <apt-button class=" bg-white rounded  mt-4 hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
-                            导出
+                          导出
                         </apt-button>
                       )}
                     </div>

@@ -6,10 +6,10 @@ import EMPTY_SRC from "@/assets/empty.png";
 import api from "@/api";
 
 export interface DressingState {
-  profession_list?: Profession[]
-  profession?: Profession
-  icons: Record<string, Record<string, DressIcon[]>>
-  parts: PartList
+  profession_list?: Profession[];
+  profession?: Profession;
+  icons: Record<string, Record<string, DressIcon[]>>;
+  parts: PartList;
 }
 
 export const PART_TITLES = {
@@ -38,7 +38,7 @@ function createDefault(part: string): PartValue {
 export const useDressingStore = defineStore("dressing", () => {
   const parts = reactive(
     Object.fromEntries(
-      Object.keys(PART_TITLES).map(part => {
+      Object.keys(PART_TITLES).map((part) => {
         return [part, createDefault(part)];
       })
     ) as PartList
@@ -51,7 +51,7 @@ export const useDressingStore = defineStore("dressing", () => {
   const currentProfessionName = ref("swordman");
 
   const currentProfession = computed(() => {
-    return professionList.value?.find(profession => profession.name === currentProfessionName.value);
+    return professionList.value?.find((profession) => profession.name === currentProfessionName.value);
   });
 
   async function getDressList(part: string): Promise<Dress[]> {

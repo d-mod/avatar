@@ -55,7 +55,7 @@ registerRoute(
 // to allow work offline
 registerRoute(new NavigationRoute(createHandlerBoundToURL("index.html"), {}));
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line ts/ban-ts-comment
 // @ts-expect-error
 self.skipWaiting();
 clientsClaim();

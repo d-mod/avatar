@@ -1,76 +1,77 @@
 {
-	"name": "davatar",
-	"version": "2.7.5",
-	"type": "module",
+  "name": "davatar",
+  "type": "module",
+  "version": "2.7.5",
   "packageManager": "pnpm@9.5.0",
-	"scripts": {
-		"dev": "vite",
-		"dev:mock": "vite dev --mode mock",
-		"build": "rimraf dist/assets/* && vite build",
-		"serve": "vite preview",
-		"lint": "eslint --ext .js,.jsx,.ts,.tsx,.vue src",
-		"bump": "bumpp package.json --commit \"release: v\" --push --tag",
-		"up:deps": "taze major",
-		"prepare": "npx simple-git-hooks",
-		"up:polyfill": "nolyfill install",
-		"typecheck": "vue-tsc --noEmit"
-	},
-	"dependencies": {
-		"@vueuse/components": "^10.11.0",
-		"@vueuse/core": "^10.11.0",
-		"axios": "^1.7.2",
-		"hoci": "^0.6.0",
-		"pinia": "^2.2.0",
-		"query-string": "^9.1.0",
-		"tslx": "^0.1.1",
-		"vue": "^3.4.34",
-		"vue-router": "^4.4.0",
-		"vue-virtual-scroller": "2.0.0-beta.8",
-		"workbox-expiration": "^7.1.0",
-		"workbox-strategies": "^7.1.0"
-	},
-	"simple-git-hooks": {
-		"pre-commit": "npx lint-staged"
-	},
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx,vue}": [
-			"pnpm typecheck"
-		]
-	},
-	"devDependencies": {
-		"@curev/eslint-config": "^0.3.7",
-		"@fourze/core": "^0.30.2",
-		"@fourze/vite": "^0.30.2",
-		"@iconify-json/ic": "^1.1.17",
-		"@types/node": "^20.14.13",
-		"@unocss/preset-icons": "^0.61.8",
-		"@vitejs/plugin-vue": "^5.1.1",
-		"@vitejs/plugin-vue-jsx": "^4.0.0",
-		"bumpp": "^9.4.1",
-		"eslint": "^8.57.0",
-		"less": "^4.2.0",
-		"lint-staged": "^15.2.7",
-		"nolyfill": "^1.0.39",
-		"prettier": "^3.3.3",
-		"rimraf": "^6.0.1",
-		"sass": "^1.77.8",
-		"simple-git-hooks": "^2.11.1",
-		"taze": "^0.16.3",
-		"typescript": "^5.5.4",
-		"unocss": "^0.61.8",
-		"unocss-preset-palette": "^0.3.6",
-		"unplugin-vue-components": "^0.27.3",
-		"vite": "^5.3.5",
-		"vite-plugin-pwa": "^0.20.1",
-		"workbox-core": "^7.1.0",
-		"workbox-precaching": "^7.1.0",
-		"workbox-routing": "^7.1.0",
-		"workbox-window": "^7.1.0"
-	},
-	"pnpm": {
-		"overrides": {
-			"is-core-module": "npm:@nolyfill/is-core-module@^1",
-			"string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@^1"
-		}
-	}
+  "scripts": {
+    "dev": "vite",
+    "dev:mock": "vite dev --mode mock",
+    "build": "rimraf dist/assets/* && vite build",
+    "serve": "vite preview",
+    "lint": "eslint --cache  src",
+    "bump": "bumpp package.json --commit \"release: v\" --push --tag",
+    "up:deps": "taze major",
+    "prepare": "npx simple-git-hooks",
+    "up:polyfill": "nolyfill install",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@vueuse/components": "^10.11.0",
+    "@vueuse/core": "^10.11.0",
+    "axios": "^1.7.2",
+    "hoci": "^0.6.0",
+    "pinia": "^2.2.0",
+    "query-string": "^9.1.0",
+    "tslx": "^0.1.1",
+    "vue": "^3.4.34",
+    "vue-router": "^4.4.0",
+    "vue-virtual-scroller": "2.0.0-beta.8",
+    "workbox-expiration": "^7.1.0",
+    "workbox-strategies": "^7.1.0"
+  },
+  "devDependencies": {
+    "@curev/eslint-config": "^0.3.7",
+    "@fourze/core": "^0.30.2",
+    "@fourze/vite": "^0.30.2",
+    "@iconify-json/ic": "^1.1.17",
+    "@types/node": "^20.14.13",
+    "@unocss/preset-icons": "^0.61.8",
+    "@vitejs/plugin-vue": "^5.1.1",
+    "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "bumpp": "^9.4.1",
+    "eslint": "^8.57.0",
+    "less": "^4.2.0",
+    "lint-staged": "^15.2.7",
+    "nolyfill": "^1.0.39",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "sass": "^1.77.8",
+    "simple-git-hooks": "^2.11.1",
+    "taze": "^0.16.3",
+    "typescript": "^5.5.4",
+    "unocss": "^0.61.8",
+    "unocss-preset-palette": "^0.3.6",
+    "unplugin-vue-components": "^0.27.3",
+    "vite": "^5.3.5",
+    "vite-plugin-pwa": "^0.20.1",
+    "vue-tsc": "^2.0.29",
+    "workbox-core": "^7.1.0",
+    "workbox-precaching": "^7.1.0",
+    "workbox-routing": "^7.1.0",
+    "workbox-window": "^7.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "is-core-module": "npm:@nolyfill/is-core-module@^1",
+      "string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@^1"
+    }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue}": [
+      "npx eslint --fix --cache"
+    ]
+  }
 }

@@ -71,7 +71,7 @@ export default defineComponent({
         if (!p) {
           continue;
         }
-        array.forEach(e => (e.url = `/image/${professionName}/${p}/${e.name}`));
+        array.forEach((e) => (e.url = `/image/${professionName}/${p}/${e.name}`));
         images.push(...array);
       }
 
@@ -85,10 +85,10 @@ export default defineComponent({
     }
 
     /**
-       *
-       * 图标加载出错的处理
-       *
-       */
+     *
+     * 图标加载出错的处理
+     *
+     */
     function error(event: Event) {
       // 如果图标不存在,则使用默认图标
       if (event && event.target) {
@@ -110,7 +110,7 @@ export default defineComponent({
     function style(item: Dress) {
       const name = `${item.part}/${item.code}.png`;
 
-      const index = icons.value.findIndex(e => e.name === name);
+      const index = icons.value.findIndex((e) => e.name === name);
       if (index > -1) {
         const info = icons.value[index];
         return {
@@ -138,7 +138,7 @@ export default defineComponent({
       };
     }
 
-    const keywordList = computed(() => keyword.value.split(" ").filter(e => e.length > 0));
+    const keywordList = computed(() => keyword.value.split(" ").filter((e) => e.length > 0));
 
     const showList = computed(() => {
       let list: Dress[] = [];
@@ -148,10 +148,10 @@ export default defineComponent({
     });
 
     /**
-       *
-       * 匹配符合条件的时装
-       *
-       */
+     *
+     * 匹配符合条件的时装
+     *
+     */
     function match(item: Dress) {
       const keywords = keywordList.value;
       for (const keyword of keywords) {
@@ -177,10 +177,10 @@ export default defineComponent({
     const loading = ref(false);
 
     /**
-       *
-       * 加载时装
-       *
-       */
+     *
+     * 加载时装
+     *
+     */
     async function apply({ name, query = {} }: CodeTemplate = {}) {
       if (isMobile.value) {
         backTop();
@@ -200,15 +200,15 @@ export default defineComponent({
       await refresh();
       // 获取每个部位的时装信息
       const list = await store.getDress(name, query);
-      const tasks = list.map(async item => await selectDress(item));
+      const tasks = list.map(async (item) => await selectDress(item));
       await Promise.all(tasks);
     }
 
     /**
-       *
-       * 刷新
-       *
-       */
+     *
+     * 刷新
+     *
+     */
     async function refresh() {
       const part = currentPart.value;
       const profession = store.currentProfessionName;
@@ -229,10 +229,10 @@ export default defineComponent({
     }
 
     /**
-       *
-       * 选择部位
-       *
-       */
+     *
+     * 选择部位
+     *
+     */
     async function selectPart(part: string) {
       if (codeQuery.part !== part) {
         codeQuery.part = part;
@@ -240,10 +240,10 @@ export default defineComponent({
       }
     }
     /**
-       *
-       * 选择时装
-       *
-       */
+     *
+     * 选择时装
+     *
+     */
     async function selectDress(item: Dress) {
       let { part } = item;
 
@@ -267,9 +267,9 @@ export default defineComponent({
     }
 
     /**
-       * 重置部位
-       *
-       */
+     * 重置部位
+     *
+     */
     function reset(part: string) {
       store.parts[part] = store.createDefault(part);
     }
@@ -290,8 +290,8 @@ export default defineComponent({
     const codeRE = /.*\?(.*=&)*/;
 
     /**
-       * 导入时装代码
-       */
+     * 导入时装代码
+     */
     async function imports() {
       try {
         const text = await navigator.clipboard.readText();
@@ -371,7 +371,7 @@ export default defineComponent({
 
     const { isSwiping, direction } = useSwipe(document.documentElement);
 
-    watch(isSwiping, val => {
+    watch(isSwiping, (val) => {
       if (val) {
         switch (direction.value) {
           case "left":
@@ -412,10 +412,10 @@ export default defineComponent({
                       <div class="text-xl icon-mdi-refresh"></div>
                     </apt-button>
                     <apt-button class="rounded-lg" size="normal" title="导入" onClick={imports}>
-                        导入
+                      导入
                     </apt-button>
                     <apt-button class="rounded-lg" size="normal" title="导出" type="info" onClick={() => exports()}>
-                        导出
+                      导出
                     </apt-button>
                   </div>
                 </div>
@@ -453,13 +453,15 @@ export default defineComponent({
                         onClick={() => selectPart(part)}
                         onContextmenu={onContextmenu(part)}
                       >
-                        {validateCode(value.code) ? (
-                          <img class="flex h-7 m-0  w-7 duration-100 select-none " draggable="false" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} />
-                        ) : (
-                          <div class="flex h-7 m-0 text-xs  text-green-200 w-7  duration-100 items-center justify-center select-none" title={value.title}>
-                            {value.title}
-                          </div>
-                        )}
+                        {validateCode(value.code)
+                          ? (
+                            <img class="flex h-7 m-0  w-7 duration-100 select-none " draggable="false" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} />
+                            )
+                          : (
+                            <div class="flex h-7 m-0 text-xs  text-green-200 w-7  duration-100 items-center justify-center select-none" title={value.title}>
+                              {value.title}
+                            </div>
+                            )}
                       </div>
                     ))}
                   </div>
@@ -476,7 +478,7 @@ export default defineComponent({
                       onClick={() => reset(codeQuery.part)}
                     >
                     </span>
-                    {renderList(showList.value, dress => (
+                    {renderList(showList.value, (dress) => (
                       <span
                         class={cls(
                           "w-8 h-8 cursor-pointer inline-block border-2 border-solid box-border select-none text-xs text-dark hover:scale-130 lt-sm:scale-100  duration-100",
@@ -503,7 +505,7 @@ export default defineComponent({
           <apt-dialog cancel-button={false} class="w-80 relative" v-model:visible={showDialog.exports}>
             <div class="font-bold h-12 text-dark w-full leading-12">导出</div>
             <div class="text-red-400" v-show={!copiedSuccess.value}>
-                复制失败,请自行复制到剪贴板
+              复制失败,请自行复制到剪贴板
             </div>
             <div class=" text-primary text-sm break-all select-all">{code.value}</div>
           </apt-dialog>

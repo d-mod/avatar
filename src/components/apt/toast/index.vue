@@ -25,7 +25,7 @@ export async function showToast(message: string, timeout = 3000) {
   app.mount(toast);
   document.body.appendChild(toast);
 
-  await new Promise<void>(resolve => {
+  await new Promise<void>((resolve) => {
     setTimeout(() => {
       app.unmount();
       document.body.removeChild(toast);
