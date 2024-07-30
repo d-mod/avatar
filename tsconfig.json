@@ -6,15 +6,17 @@
 		"moduleResolution": "node",
 		"strict": true,
 		"jsx": "preserve",
-		"sourceMap": true,
+		"sourceMap": false,
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "declaration": false,
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["src/*"]
 		},
-		"lib": ["esnext", "dom"],
-		"experimentalDecorators": true
+		"lib": ["esnext", "dom"]
 	},
-	"include": ["**/*.ts", "**/*.d.ts", "components.d.ts", "**/*.vue"]
+	"include": ["**/*.ts", "**/*.d.ts", "components.d.ts", "**/*.vue", "eslint.config.js"]
 }

@@ -1,7 +1,7 @@
 {
 	"name": "davatar",
 	"version": "2.7.5",
-  "type": "module",
+	"type": "module",
 	"scripts": {
 		"dev": "vite",
 		"dev:mock": "vite dev --mode mock",
@@ -11,7 +11,8 @@
 		"bump": "bumpp package.json --commit \"release: v\" --push --tag",
 		"up:deps": "taze major",
 		"prepare": "npx simple-git-hooks",
-    "typecheck": "vue-tsc --noEmit"
+		"up:polyfill": "nolyfill install",
+		"typecheck": "vue-tsc --noEmit"
 	},
 	"dependencies": {
 		"@vueuse/components": "^10.11.0",
@@ -32,11 +33,7 @@
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx,vue}": [
-			"prettier --write",
-			"eslint --fix"
-		],
-		"*.{css,less,scss}": [
-			"prettier --write"
+			"pnpm typecheck"
 		]
 	},
 	"devDependencies": {
@@ -52,6 +49,7 @@
 		"eslint": "^8.57.0",
 		"less": "^4.2.0",
 		"lint-staged": "^15.2.7",
+		"nolyfill": "^1.0.39",
 		"prettier": "^3.3.3",
 		"rimraf": "^6.0.1",
 		"sass": "^1.77.8",
@@ -67,5 +65,11 @@
 		"workbox-precaching": "^7.1.0",
 		"workbox-routing": "^7.1.0",
 		"workbox-window": "^7.1.0"
+	},
+	"pnpm": {
+		"overrides": {
+			"is-core-module": "npm:@nolyfill/is-core-module@^1",
+			"string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@^1"
+		}
 	}
 }
