@@ -39,7 +39,7 @@
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "bumpp": "^9.7.1",
-    "eslint": "^8.57.1",
+    "eslint": "^9.13.0",
     "less": "^4.2.0",
     "lint-staged": "^15.2.10",
     "nolyfill": "^1.0.39",
