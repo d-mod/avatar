@@ -34,7 +34,7 @@
     "@fourze/core": "^0.31.2",
     "@fourze/vite": "^0.31.2",
     "@iconify-json/ic": "^1.2.2",
-    "@types/node": "^20.19.1",
+    "@types/node": "^22.15.32",
     "@unocss/eslint-plugin": "^66.2.3",
     "@unocss/preset-icons": "^66.2.3",
     "@vitejs/plugin-vue": "^5.2.4",
