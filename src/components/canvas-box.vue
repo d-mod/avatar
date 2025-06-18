@@ -1,7 +1,7 @@
 <script lang="tsx">
-import { syncRef } from "@vueuse/core";
 import type { PropType } from "vue";
-import { computed, defineComponent, reactive, ref, watch } from "vue";
+import { syncRef } from "@vueuse/core";
+import { computed, defineComponent, reactive, ref, shallowRef, watch } from "vue";
 
 interface Point {
   x: number;
@@ -51,7 +51,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const canvasRef = ref<HTMLCanvasElement>();
+    const canvasRef = shallowRef<HTMLCanvasElement>();
 
     const startOffset: Point = reactive({
       x: 0,

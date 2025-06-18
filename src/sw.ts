@@ -1,8 +1,8 @@
-import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
+import { ExpirationPlugin } from "workbox-expiration";
+import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from "workbox-precaching";
 import { NavigationRoute, registerRoute } from "workbox-routing";
 import { CacheFirst } from "workbox-strategies";
-import { ExpirationPlugin } from "workbox-expiration";
 
 declare let self: ServiceWorkerGlobalScope;
 const DAY_IN_SECONDS = 24 * 60 * 60;

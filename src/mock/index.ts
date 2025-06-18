@@ -1,6 +1,6 @@
+import type { Collocation, CollocationType } from "@/api/types";
 import { createQuery, createSingletonPromise, defineRouter, memoize } from "@fourze/core";
 import axios from "axios";
-import type { Collocation, CollocationType } from "@/api/types";
 
 export default defineRouter((router) => {
   const axiosInstance = axios.create({

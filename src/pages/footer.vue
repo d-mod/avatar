@@ -7,14 +7,14 @@ export default defineComponent(() => {
 
   return () => {
     return (
-      <div class="flex flex-wrap h-20 text-center text-dark text-sm py-4 lt-sm:h-auto items-center justify-center">
+      <div class="h-20 flex flex-wrap items-center justify-center py-4 text-center text-sm text-dark lt-sm:h-auto">
         <div>
-          <p class="flex flex-wrap m-0 w-full items-center justify-center">
+          <p class="m-0 w-full flex flex-wrap items-center justify-center">
             <a class="text-primary" href="//github.com/d-mod/avatar">
               DAvatar&nbsp;Ver&nbsp;
               {__APP_VERSION__}
             </a>
-            <span class="text-primary ml-4">
+            <span class="ml-4 text-primary">
               最后更新于:
               {lastModified.value}
             </span>

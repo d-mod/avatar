@@ -1,21 +1,21 @@
 <script lang="tsx">
-import queryString from "query-string";
-import { computed, defineComponent, reactive, ref, renderList, watch } from "vue";
-
 import { until, useMediaQuery, useScroll, useSwipe } from "@vueuse/core";
-import { useRoute } from "vue-router";
+import queryString from "query-string";
 
 import { cls } from "tslx";
-import Profession from "./profession.vue";
-import CollocationVue from "./collocation.vue";
-import FooterVue from "./footer.vue";
+import { computed, defineComponent, reactive, ref, renderList, shallowRef, watch } from "vue";
+
+import { useRoute } from "vue-router";
+import api from "@/api";
 import DEFAULT_SRC from "@/assets/default.png";
 import EMPTY_SRC from "@/assets/empty.png";
-
 import CanvasBox from "@/components/canvas-box.vue";
-
 import { useDressingStore } from "@/store";
-import api from "@/api";
+
+import CollocationVue from "./collocation.vue";
+
+import FooterVue from "./footer.vue";
+import Profession from "./profession.vue";
 
 export default defineComponent({
   name: "App",
@@ -287,7 +287,7 @@ export default defineComponent({
 
     const code = ref("");
 
-    const codeRE = /.*\?(.*=&)*/;
+    const codeRE = /\?(\w+=\w+(?:&\w+=\w+)*)$/;
 
     /**
      * 导入时装代码
@@ -383,7 +383,7 @@ export default defineComponent({
       }
     });
 
-    const mainContainer = ref<HTMLElement>();
+    const mainContainer = shallowRef<HTMLElement>();
     const { y } = useScroll(mainContainer, { behavior: "smooth" });
 
     const showBackTop = computed(() => y.value > screen.availHeight / 2);
@@ -394,10 +394,10 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class="bg-neutral h-full">
+        <div class="h-full bg-neutral">
           <Profession is-mobile={isMobile.value} v-model:collapsed={isCollapsed.value} onApply={apply} />
           <div class={cls("duration-300 h-full lt-sm:overflow-y-auto pt-6 pr-4", isCollapsed.value ? "pl-16" : "sm:pl-72")} ref={mainContainer}>
-            <div class="flex duration-300 lt-sm:flex-wrap overflow-auto  bg-light shadow h-[calc(100%-5rem)] lt-sm:h-auto">
+            <div class="h-[calc(100%-5rem)] flex overflow-auto bg-light shadow duration-300 lt-sm:h-auto lt-sm:flex-wrap">
               <div class={isMobile.value ? "w-full" : "w-1/2"}>
                 <div
                   class={cls(
@@ -407,9 +407,9 @@ export default defineComponent({
                       : "w-full my-4 bg-transparent"
                   )}
                 >
-                  <div class="flex space-x-1 border-1 rounded-1 overflow-hidden items-center">
+                  <div class="flex items-center overflow-hidden border-1 rounded-1 space-x-1">
                     <apt-button class="rounded-lg" color="gray" size="normal" title="重置" onClick={clear}>
-                      <div class="text-xl icon-mdi-refresh"></div>
+                      <div class="icon-mdi-refresh text-xl"></div>
                     </apt-button>
                     <apt-button class="rounded-lg" size="normal" title="导入" onClick={imports}>
                       导入
@@ -420,7 +420,7 @@ export default defineComponent({
                   </div>
                 </div>
 
-                <div class="flex justify-center items-center">
+                <div class="flex items-center justify-center">
                   <CanvasBox
                     class={!isMobile.value ? "border-blue-200 border-solid border-1" : ""}
                     height={canvasProps.value.height}
@@ -430,7 +430,7 @@ export default defineComponent({
                     width={canvasProps.value.width}
                   >
                   </CanvasBox>
-                  <div class="h-60 w-60 duration-300 lt-xl:h-auto relative">
+                  <div class="relative h-60 w-60 duration-300 lt-xl:h-auto">
                     {renderList(store.parts, (value, part, index) => (
                       <div
                         class={cls(
@@ -455,25 +455,25 @@ export default defineComponent({
                       >
                         {validateCode(value.code)
                           ? (
-                            <img class="flex h-7 m-0  w-7 duration-100 select-none " draggable="false" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} />
+                              <img class="m-0 h-7 w-7 flex select-none duration-100" draggable="false" src={value.icon ?? DEFAULT_SRC} title={label(value)} onError={error} />
                             )
                           : (
-                            <div class="flex h-7 m-0 text-xs  text-green-200 w-7  duration-100 items-center justify-center select-none" title={value.title}>
-                              {value.title}
-                            </div>
+                              <div class="m-0 h-7 w-7 flex select-none items-center justify-center text-xs text-green-200 duration-100" title={value.title}>
+                                {value.title}
+                              </div>
                             )}
                       </div>
                     ))}
                   </div>
                 </div>
-                <div class="bg-hex-ccc h-1px my-4 w-full scale-y-50"></div>
+                <div class="my-4 h-1px w-full scale-y-50 bg-hex-ccc"></div>
                 <div class="h-auto justify-end overflow-hidden sm:h-100">
-                  <div class="flex h-12 items-center justify-center sm:justify-start sm:pl-7">
-                    <apt-input class="rounded-1 h-8 w-60" placeholder="搜索" v-model={keyword.value}></apt-input>
+                  <div class="h-12 flex items-center justify-center sm:justify-start sm:pl-7">
+                    <apt-input class="h-8 w-60 rounded-1" placeholder="搜索" v-model={keyword.value}></apt-input>
                   </div>
-                  <div class=" h-75  w-full grid gap-3 p-3  justify-center  items-center  grid-cols-[repeat(auto-fill,2rem)]  col-auto overflow-y-auto overflow-x-hidden ">
+                  <div class="grid col-auto grid-cols-[repeat(auto-fill,2rem)] h-75 w-full items-center justify-center gap-3 overflow-x-hidden overflow-y-auto p-3">
                     <span
-                      class="border-solid cursor-pointer inline-block border-transparent border-2 h-8 text-xs text-dark w-8 duration-100 box-border select-none lt-sm:scale-100 hover:scale-130"
+                      class="box-border inline-block h-8 w-8 cursor-pointer select-none border-2 border-transparent border-solid text-xs text-dark duration-100 hover:scale-130 lt-sm:scale-100"
                       style={`background-image:url(${DEFAULT_SRC})`}
                       onClick={() => reset(codeQuery.part)}
                     >
@@ -495,23 +495,23 @@ export default defineComponent({
                 </div>
               </div>
               <CollocationVue class="w-1/2 lt-sm:w-full" onExport={exports} onImport={apply} />
-              <apt-button class="rounded-full bg-12 h-12 right-4 bottom-4 w-12 z-8 fixed overflow-hidden" type="primary" v-show={showBackTop.value} onClick={backTop}>
-                <div class="text-xl icon-mdi-arrow-upward"></div>
+              <apt-button class="bg-12 fixed bottom-4 right-4 z-8 h-12 w-12 overflow-hidden rounded-full" type="primary" v-show={showBackTop.value} onClick={backTop}>
+                <div class="icon-mdi-arrow-upward text-xl"></div>
               </apt-button>
             </div>
             <FooterVue />
           </div>
 
-          <apt-dialog cancel-button={false} class="w-80 relative" v-model:visible={showDialog.exports}>
-            <div class="font-bold h-12 text-dark w-full leading-12">导出</div>
+          <apt-dialog cancel-button={false} class="relative w-80" v-model:visible={showDialog.exports}>
+            <div class="h-12 w-full text-dark font-bold leading-12">导出</div>
             <div class="text-red-400" v-show={!copiedSuccess.value}>
               复制失败,请自行复制到剪贴板
             </div>
-            <div class=" text-primary text-sm break-all select-all">{code.value}</div>
+            <div class="select-all break-all text-sm text-primary">{code.value}</div>
           </apt-dialog>
-          <apt-dialog class="p-4 w-80" v-model:visible={showDialog.imports} onOk={importsDone}>
-            <div class="font-bold h-12 text-dark w-full leading-12">导入</div>
-            <apt-input class="h-auto text-sm w-full word-wrap" multiline placeholder="请输入代码" v-model={code.value}></apt-input>
+          <apt-dialog class="w-80 p-4" v-model:visible={showDialog.imports} onOk={importsDone}>
+            <div class="h-12 w-full text-dark font-bold leading-12">导入</div>
+            <apt-input class="word-wrap h-auto w-full text-sm" multiline placeholder="请输入代码" v-model={code.value}></apt-input>
           </apt-dialog>
         </div>
       );
