@@ -38,12 +38,12 @@ export default defineComponent({
     return () => {
       return props.multiline
         ? (
-          <div class={className} contenteditable placeholder={props.placeholder} onInput={onInput}>
-            {modelValue.value}
-          </div>
+            <div class={className} contenteditable placeholder={props.placeholder} onInput={onInput}>
+              {modelValue.value}
+            </div>
           )
         : (
-          <input class={className} placeholder={props.placeholder} v-model={modelValue.value} />
+            <input class={className} placeholder={props.placeholder} v-model={modelValue.value} />
           );
     };
   }

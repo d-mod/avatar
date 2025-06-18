@@ -1,9 +1,9 @@
 <script lang="tsx">
-import { useDark, useToggle, useVModel } from "@vueuse/core";
 import type { CSSProperties } from "vue";
-import { defineComponent, renderList } from "vue";
+import { useDark, useToggle, useVModel } from "@vueuse/core";
 import { HiItem, HiSelection } from "hoci";
 import { cls } from "tslx";
+import { defineComponent, renderList } from "vue";
 import { useDressingStore } from "@/store";
 
 export default defineComponent({
@@ -67,7 +67,7 @@ export default defineComponent({
           modelValue={dressingStore.currentProfessionName}
           onChange={changeProfession}
         >
-          <apt-button class=" bg-transparent font-bold text-center text-xl min-h-8 w-full duration-300 select-none" title={isCollapsed.value ? "展开" : "收起"} onClick={() => toggle()}>
+          <apt-button class="min-h-8 w-full select-none bg-transparent text-center text-xl font-bold duration-300" title={isCollapsed.value ? "展开" : "收起"} onClick={() => toggle()}>
             <div class={isCollapsed.value ? "icon-mdi-add" : "icon-mdi-baseline-minus"} />
           </apt-button>
 
@@ -86,7 +86,7 @@ export default defineComponent({
             </HiItem>
           ))}
 
-          <apt-button class="bg-transparent font-bold  text-xl w-full duration-300 select-none" title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()}>
+          <apt-button class="w-full select-none bg-transparent text-xl font-bold duration-300" title={isDark.value ? "浅色模式" : "深色模式"} onClick={() => toggleDark()}>
             <div class={cls(["w-6 h-6 bg-center bg-no-repeat text-dark"], isDark.value ? "icon-mdi-outline-dark-mode" : "icon-mdi-outline-light-mode")}></div>
           </apt-button>
         </HiSelection>

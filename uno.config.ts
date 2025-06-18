@@ -1,6 +1,6 @@
+import { icons } from "@iconify-json/ic";
 import { defineConfig, presetIcons, presetUno } from "unocss";
 import presetPalette from "unocss-preset-palette";
-import { icons } from "@iconify-json/ic";
 
 export default defineConfig({
   presets: [

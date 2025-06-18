@@ -1,7 +1,7 @@
 <script lang="tsx">
 import { useVModel } from "@vueuse/core";
-import { defineComponent, renderSlot } from "vue";
 import { HiSelection } from "hoci";
+import { defineComponent, renderSlot } from "vue";
 
 export default defineComponent({
   name: "IIndices",

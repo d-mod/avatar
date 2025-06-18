@@ -1,20 +1,20 @@
 <script lang="tsx">
-import { asyncComputed } from "@vueuse/core";
-import queryString from "query-string";
-import { computed, defineComponent, reactive, ref, renderList } from "vue";
-import { HiItem } from "hoci";
-import { vIntersectionObserver } from "@vueuse/components";
-import { useDressingStore } from "@/store/dressing";
-import api from "@/api";
 import type { Collocation } from "@/api/types";
+import { vIntersectionObserver } from "@vueuse/components";
+import { asyncComputed } from "@vueuse/core";
+import { HiItem } from "hoci";
+import queryString from "query-string";
+import { computed, defineComponent, reactive, ref, renderList, shallowRef } from "vue";
+import api from "@/api";
 import VirtualListVue from "@/components/virtual-list.vue";
+import { useDressingStore } from "@/store/dressing";
 
 export default defineComponent({
   directives: {
     intersectionObserver: vIntersectionObserver
   },
   emits: ["import", "export"],
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     const dressingStore = useDressingStore();
 
     const itemSize = {
@@ -96,7 +96,6 @@ export default defineComponent({
 
     /**
      * 当元素进入视口时，移除lazy-bg 显示背景图
-     * @param param0
      */
     function onIntersectionObserver([{ isIntersecting, target }]: IntersectionObserverEntry[]): void {
       if (isIntersecting) {
@@ -104,7 +103,7 @@ export default defineComponent({
       }
     }
 
-    const actionRef = ref<HTMLElement>();
+    const actionRef = shallowRef<HTMLElement>();
 
     const virtualListStyle = computed(() => {
       return {
@@ -114,10 +113,10 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class="flex flex-col h-full">
+        <div class="h-full flex flex-col">
           <div class="flex flex-col px-4" ref={actionRef}>
-            <div class=" mx-auto my-5 sm:mx-0">
-              <apt-input action-icon="search" class="rounded-1 h-8 w-60" placeholder="搜索" v-model={refreshQuery.keyword} onKeyup_native={refresh}></apt-input>
+            <div class="mx-auto my-5 sm:mx-0">
+              <apt-input action-icon="search" class="h-8 w-60 rounded-1" placeholder="搜索" v-model={refreshQuery.keyword} onKeyup_native={refresh}></apt-input>
             </div>
             <apt-indices class="my-2" v-model={refreshQuery.type}>
               <HiItem label="全部" value={0} />
@@ -132,13 +131,13 @@ export default defineComponent({
               ))}
             </apt-indices>
           </div>
-          <VirtualListVue class="min-h-58 grid duration-300 overflow-x-hidden overflow-y-auto collocation-list clear-scroll grid-cols-[repeat(auto-fill,140px)]" style={virtualListStyle.value}>
+          <VirtualListVue class="collocation-list clear-scroll grid grid-cols-[repeat(auto-fill,140px)] min-h-58 overflow-x-hidden overflow-y-auto duration-300" style={virtualListStyle.value}>
             {renderList(list.value, (item, index) => (
-              <div class="py-3 duration-400 item relative box-border hover:bg-dark-24" key={index} style={itemStyle} title={item.description}>
-                <div class="bg-bottom bg-no-repeat w-full top-0 z-0 absolute lazy-bg" style={style(item)} v-intersection-observer={[onIntersectionObserver, ".collocation-list"]}></div>
-                <div class="h-full w-full z-1 relative">
-                  <div class="h-6 text-xs text-center text-dark w-full bottom-3 leading-6 name overflow-hidden whitespace-nowrap">{item.name}</div>
-                  <div class="text-sm text-white text-center w-full block invisible info">
+              <div class="item hover:bg-dark-24 relative box-border py-3 duration-400" key={index} style={itemStyle} title={item.description}>
+                <div class="lazy-bg absolute top-0 z-0 w-full bg-bottom bg-no-repeat" style={style(item)} v-intersection-observer={[onIntersectionObserver, ".collocation-list"]}></div>
+                <div class="relative z-1 h-full w-full">
+                  <div class="name bottom-3 h-6 w-full overflow-hidden whitespace-nowrap text-center text-xs text-dark leading-6">{item.name}</div>
+                  <div class="info invisible block w-full text-center text-sm text-white">
                     <div>
                       <span>作者:</span>
                       <span class="text-primary">{item.author}</span>
@@ -148,12 +147,12 @@ export default defineComponent({
                       <span>{item.amount}</span>
                     </div>
 
-                    <div class="flex flex-col mx-auto items-center">
-                      <apt-button class=" bg-white rounded mt-4 hover:bg-primary-78 hover:text-white" onClick={imports(item)}>
+                    <div class="mx-auto flex flex-col items-center">
+                      <apt-button class="hover:bg-primary-78 mt-4 rounded bg-white hover:text-white" onClick={imports(item)}>
                         {item.custom ? "下载" : "导入"}
                       </apt-button>
                       {!item.custom && (
-                        <apt-button class=" bg-white rounded  mt-4 hover:bg-primary-78 hover:text-white" onClick={exports(item)}>
+                        <apt-button class="hover:bg-primary-78 mt-4 rounded bg-white hover:text-white" onClick={exports(item)}>
                           导出
                         </apt-button>
                       )}

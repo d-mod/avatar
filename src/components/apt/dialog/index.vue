@@ -1,6 +1,6 @@
 <script lang="tsx">
 import { onClickOutside, useVModel } from "@vueuse/core";
-import { Teleport, Transition, defineComponent, h, ref, renderSlot } from "vue";
+import { defineComponent, h, renderSlot, shallowRef, Teleport, Transition } from "vue";
 
 import NButton from "../button/index.vue";
 
@@ -43,7 +43,7 @@ export default defineComponent({
   },
   emits: ["close", "ok", "cancel", "update:visible"],
   setup(props, { emit, slots }) {
-    const dialogRef = ref<HTMLElement>();
+    const dialogRef = shallowRef<HTMLElement>();
 
     const visible = useVModel(props, "visible", emit);
 
@@ -80,7 +80,7 @@ export default defineComponent({
             </apt-button>
           );
         }
-        return <div class="flex space-x-2 mt-4 justify-end">{buttons}</div>;
+        return <div class="mt-4 flex justify-end space-x-2">{buttons}</div>;
       }
     }
 
