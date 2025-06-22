@@ -12,6 +12,7 @@ interface ImportMetaEnv {
    *  应用服务地址
    */
   readonly APP_API_URL: string;
+  readonly APP_API_PREFIX: string;
 
   PROD: boolean;
   DEV: boolean;

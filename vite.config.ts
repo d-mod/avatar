@@ -1,13 +1,13 @@
 import { resolve } from "node:path";
+import { createFourzeVitePlugin } from "@fourze/vite";
 import vue from "@vitejs/plugin-vue";
 import jsx from "@vitejs/plugin-vue-jsx";
-import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
-
 import uno from "unocss/vite";
 
-import { createFourzeVitePlugin } from "@fourze/vite";
 import uncomponents from "unplugin-vue-components/vite";
+
+import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 import { version } from "./package.json";
 
 // https://vitejs.dev/config/
@@ -35,7 +35,8 @@ export default defineConfig({
     createFourzeVitePlugin({
       base: "/api",
       timeout: 0,
-      swagger: false
+      swagger: false,
+      mock: false
     }),
     uncomponents({
       allowOverrides: true,
@@ -102,6 +103,10 @@ export default defineConfig({
     },
     proxy: {
       "^/(icon|image|cover)/.*": {
+        target: "https://avatar.dnftools.com",
+        changeOrigin: true
+      },
+      "^/v1": {
         target: "https://avatar.dnftools.com",
         changeOrigin: true
       }

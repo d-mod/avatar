@@ -2,7 +2,7 @@ import type { AxiosInstance } from "axios";
 import axios from "axios";
 
 const commonInstance = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.APP_API_PREFIX,
   timeout: 10000
 });
 
