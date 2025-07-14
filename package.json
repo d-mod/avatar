@@ -38,7 +38,7 @@
     "@unocss/eslint-plugin": "^66.3.3",
     "@unocss/preset-icons": "^66.3.3",
     "@vitejs/plugin-vue": "^5.2.4",
-    "@vitejs/plugin-vue-jsx": "^4.2.0",
+    "@vitejs/plugin-vue-jsx": "^5.0.1",
     "bumpp": "^10.2.0",
     "eslint": "^9.31.0",
     "less": "^4.3.0",
