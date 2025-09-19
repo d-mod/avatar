@@ -37,7 +37,7 @@
     "@types/node": "^20.19.17",
     "@unocss/eslint-plugin": "^66.5.1",
     "@unocss/preset-icons": "^66.5.1",
-    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^4.2.0",
     "bumpp": "^10.2.3",
     "eslint": "^9.35.0",
