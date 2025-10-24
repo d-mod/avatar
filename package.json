@@ -52,7 +52,7 @@
     "typescript": "^5.9.3",
     "unocss": "^66.5.4",
     "unocss-preset-palette": "^0.4.0",
-    "unplugin-vue-components": "^28.8.0",
+    "unplugin-vue-components": "^30.0.0",
     "vite": "^6.4.1",
     "vite-plugin-pwa": "^1.1.0",
     "vue-tsc": "^2.2.12",
