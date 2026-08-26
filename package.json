@@ -25,7 +25,7 @@
     "tslx": "^0.3.0",
     "vue": "^3.5.29",
     "vue-router": "^4.6.4",
-    "vue-virtual-scroller": "2.0.0-beta.8",
+    "vue-virtual-scroller": "3.0.5",
     "workbox-expiration": "^7.4.0",
     "workbox-strategies": "^7.4.0"
   },
